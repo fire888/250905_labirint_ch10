@@ -16,13 +16,13 @@ export const pipelineInit = async (root: Root) => {
         loader,
         phisics,
         lab,
-        audio,
+        //audio,
         materials,
         deviceData,
         particles,
-        energySystem,
-        antigravSystem,
-        antigravLast,
+        //energySystem,
+        //antigravSystem,
+        //antigravLast,
     } = root
 
     loader.init()
@@ -49,11 +49,11 @@ export const pipelineInit = async (root: Root) => {
     await lab.init(root)
     await lab.build(LEVELS[0])
 
-    energySystem.init(root, lab.positionsEnergy)
-    antigravSystem.init(root, lab.positionsAntigravs)
-    antigravLast.init(root, new THREE.Vector3(
-        LEVELS[0].positionTeleporter[0], 0, LEVELS[0].positionTeleporter[1]
-    ))
+    //energySystem.init(root, lab.positionsEnergy)
+    //antigravSystem.init(root, lab.positionsAntigravs)
+    //antigravLast.init(root, new THREE.Vector3(
+    //    LEVELS[0].positionTeleporter[0], 0, LEVELS[0].positionTeleporter[1]
+    //))
 
     if (!IS_DEV_START_ORBIT) {
         studio.setFogNearFar(.2, 1)
@@ -64,11 +64,11 @@ export const pipelineInit = async (root: Root) => {
     studio.add(particles.m)
 
     ui.init(root)
-    ui.setEnergyLevel(0)
+    //ui.setEnergyLevel(0)
 
-    materials.changeWallMaterial(LEVELS[0].theme.materialWalls)
-    materials.changeRoadMaterial(LEVELS[0].theme.materialRoad)
-    materials.changeDesertMaterial(LEVELS[0].theme.materialGround)
+    //materials.changeWallMaterial(LEVELS[0].theme.materialWalls)
+    //materials.changeRoadMaterial(LEVELS[0].theme.materialRoad)
+    //materials.changeDesertMaterial(LEVELS[0].theme.materialGround)
 
     if (IS_DEV_START_ORBIT) {
         await ui.hideStartScreenForce()
@@ -76,9 +76,9 @@ export const pipelineInit = async (root: Root) => {
         await ui.hideStartScreen()
     }
 
-    audio.init(root)
-    ticker.on(audio.update.bind(audio))
-    audio.playAmbient()
+    //audio.init(root)
+    //ticker.on(audio.update.bind(audio))
+    //audio.playAmbient()
     
     controls.init(root, IS_DEV_START_ORBIT)
     ticker.on(controls.update.bind(controls))

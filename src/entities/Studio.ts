@@ -71,10 +71,10 @@ export class Studio {
         this.fog = new THREE.Fog(0x0e2535, .2, 1000)
         this.addFog()
 
-        this.amb = new THREE.AmbientLight(0x897fa0, 3) 
+        this.amb = new THREE.AmbientLight(0xffffff, .5) 
         this.scene.add(this.amb)
 
-        this.dirLight = new DirectionalLight(0x97e6eb, 30)
+        this.dirLight = new DirectionalLight(0xffffff, 15)
         this.dirLight.position.set(-3, 3, -2)
         this.scene.add(this.dirLight)
 
