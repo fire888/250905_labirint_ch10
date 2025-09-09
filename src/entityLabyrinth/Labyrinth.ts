@@ -1,24 +1,7 @@
 import { Root } from "../index"
 import { _M, A3 } from "../geometry/_m"
-import { createScheme } from "./scheme"
-import { calcDataAreas } from "./logicSegment"
-import { createArea00 } from "geometry/area00/area00"
-import { tileMapWall } from "geometry/tileMapWall"
 import * as THREE from "three"
 import { IArrayForBuffers, SegmentType, IArea, ILevelConf, TSchemeElem, TLabData } from "types/GeomTypes";
-import { pause } from "helpers/htmlHelpers"
-import { buildExamples } from "./buildExamples"
-import { IS_DEBUG_SHOW_BUILD_HOUSES_EXAMPLES } from "constants/CONSTANTS"
-import { buildHouse00 } from "../geometry/house00/buildHouse00"
-import { buildHouse01 } from "../geometry/house01/buildHouse01"
-
-const COLOR_FLOOR: A3 = _M.hexToNormalizedRGB('090810')
-const COLLISION_NAME_KEY = 'LAB_COLLISION'
-
-type THousesGeomeries = {
-    geometry: THREE.BufferGeometry,
-    vCollide: number[]
-}
 
 export class Labyrinth {
     _root: Root
@@ -30,133 +13,164 @@ export class Labyrinth {
 
     constructor() {}
     async init (root: Root) {
-        this._root = root
+        this._root = root        
     }
 
     async build (conf: ILevelConf) {
-        if (IS_DEBUG_SHOW_BUILD_HOUSES_EXAMPLES) {
-            buildExamples(this._root)
+        const width = 512
+        const height = 512
+
+        const size = width * height
+        const data: number[] = []
+
+        const sizePolygon = 3
+
+        for ( let i = 0; i < size; i += 3) {
+            const center = [Math.random() * 100, Math.random() * 100, Math.random() * 100]
+
+            const p1 = [
+                center[0] + Math.random() * sizePolygon, 
+                center[1] + Math.random() * sizePolygon, 
+                center[2] + Math.random() * sizePolygon,
+                1,
+            ]
+            const p2 = [
+                center[0] + Math.random() * sizePolygon, 
+                center[1] + Math.random() * sizePolygon, 
+                center[2] + Math.random() * sizePolygon,
+                1,
+            ]
+            const p3 = [
+                center[0] + Math.random() * sizePolygon, 
+                center[1] + Math.random() * sizePolygon, 
+                center[2] + Math.random() * sizePolygon,
+                1,             
+            ]
+            data.push( ...p1, ...p2, ...p3)
         }
 
-        console.log('[MESSAGE:] START SCHEME')
-        let d = Date.now()
-        //const scheme: TSchemeElem[] = createScheme(this._root, conf)
-        //this._labSheme = calcDataAreas(scheme, conf)
-        console.log('[TIME:] COMPLETE SCHEME:', ((Date.now() - d) / 1000).toFixed(2))
+        // used the buffer to create a DataTexture
 
-        console.log('[MESSAGE:] START CALCULATE HOUSES')
-        d = Date.now()
-        // const houses: IArrayForBuffers[] = []
-        // for (let i = 0; i < this._labSheme.areasData.length; ++i) {
-        //     try {
-        //         if (this._labSheme.areasData[i].typeSegment === SegmentType.HOUSE_00) {
-        //             const houseData: IArrayForBuffers = buildHouse00(this._labSheme.areasData[i].perimeterInner)
-        //             houses.push(houseData) 
-        //         }
-        //         if (this._labSheme.areasData[i].typeSegment === SegmentType.HOUSE_01) {
-        //             const houseData: IArrayForBuffers = buildHouse01(this._labSheme.areasData[i].perimeterInner)
-        //             houses.push(houseData)                    
-        //         }
-        //     } catch (e) {   
-        //         console.error('[ERROR:] CALCULATE HOUSES', e)
-        //     }
-        // }
+        const tArr = new Float32Array(data)
+        const texture = new THREE.DataTexture(tArr, width, height, THREE.RGBAFormat, THREE.FloatType )
+        texture.needsUpdate = true
+        console.log('texture', texture)
 
-        // const housesMergedGeometries: {
-        //     geometry: THREE.BufferGeometry,
-        //     vCollide: number[]
-        // }[] = []
+        const mat = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide })
+        const geo = new THREE.PlaneGeometry(50, 50, 1, 1)
+        const mesh = new THREE.Mesh(geo, mat)
+        mesh.position.y = 25
+        this._root.studio.add(mesh)
+
+
+        const verts = []
+        for (let i = 0; i < size * 3; ++i) {
+            verts.push(0, 0, 0)
+        }
+        const geomMMM = _M.createBufferGeometry({ v: verts })
+        // const matGGG = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
+        // matGGG.onBeforeCompile = (shader: any) => {
+        //     shader.uniforms.positionTexture = { value: texture };
+        //     shader.vertexShader = `
+        //         uniform sampler2D positionTexture;
+        //         ${shader.vertexShader}
+        //     `.replace(
+        //         `#include <begin_vertex>`,
+        //         `#include <begin_vertex>
+                
+        //         int vertID = gl_VertexID;
+        //         // ivec2 uv = ivec2(col, vertID);
+                
+        //         vec4 posData = texelFetch(positionTexture, uv, 0);
+                
+        //         transformed = posData.rgb;
+        //         `
+        //     );
+        // const meshMMM = new THREE.Mesh(geomMMM, matGGG)
+        // this._root.studio.add(meshMMM)
+
+        // под WebGL2: чтобы были доступны gl_VertexID / texelFetch / textureSize
+        const matM = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+        //matM.glslVersion = THREE.GLSL3;
+
+        matM.onBeforeCompile = (shader:any) => {
+        shader.uniforms.positionTexture = { value: texture };
+        // опционально: если знаете ширину, можно передать её uniform'ом.
+        // shader.uniforms.texSize = { value: new THREE.Vector2(texture.image.width, texture.image.height) };
+
+        shader.vertexShader = `
+            uniform highp sampler2D positionTexture;
+            ${shader.vertexShader}
+        `.replace(
+            '#include <begin_vertex>',
+            `#include <begin_vertex>
+            // вычисляем integer-координаты пикселя по индексу вершины
+            ivec2 size = textureSize(positionTexture, 0);   // (width, height)
+            int idx = gl_VertexID;
+            int x = idx % size.x;
+            int y = idx / size.x;
+            ivec2 texel = ivec2(x, y);
+
+            vec3 pos = texelFetch(positionTexture, texel, 0).xyz * vec3(.1);
+            transformed = pos; // three.js ожидает писать в transformed
+            `
+        );
+        };
+
+        const meshMMM = new THREE.Mesh(geomMMM, matM)
+        this._root.studio.add(meshMMM)
+
+
+
+
+
+
+        // matG.onBeforeCompile = (shader: any) => {
+        // shader.uniforms.positionTexture = { value: texture };
+        // shader.vertexShader = `
+        //     uniform sampler2D positionTexture;
+        //     ${shader.vertexShader}
+        // `.replace(
+        //     `#include <begin_vertex>`,
+        //     `#include <begin_vertex>
+            
+            
+        //     //ivec2 uv = ivec2(col, vertID);
+            
+        //     vec4 posData = texelFetch(positionTexture, uv, 0);
+            
+        //     transformed = posData.rgb;
+            
+        //     `
+        // );
         
-        // let countVerticies = 0
-        // let v = []
-        // let c = []
-        // let uv = []
-        // let forceMat = []
-        // let vCollide = []
-
-        // for (let i = 0; i < houses.length; ++i) {
-        //     countVerticies += houses[i].v.length / 3
-        //     for (let j = 0; j < houses[i].v.length; j += 3) {
-        //         v.push(houses[i].v[j], houses[i].v[j + 1], houses[i].v[j + 2])
-        //     }
-        //     for (let j = 0; j < houses[i].c.length; j += 3) {
-        //         c.push(houses[i].c[j], houses[i].c[j + 1], houses[i].c[j + 2])
-        //     }
-        //     for (let j = 0; j < houses[i].uv.length; j += 2) {
-        //         uv.push(houses[i].uv[j], houses[i].uv[j + 1])
-        //     }
-        //     for (let j = 0; j < houses[i].forceMat.length; j += 1) {
-        //         forceMat.push(houses[i].forceMat[j])
-        //     }
-        //     for (let j = 0; j < houses[i].vCollide.length; j += 3) {
-        //         vCollide.push(houses[i].vCollide[j], houses[i].vCollide[j + 1], houses[i].vCollide[j + 2])
-        //     }
-
-        //     if (
-        //         !houses[i + 1] ||
-        //         countVerticies + houses[i + 1].v.length / 3  > 200000
-        //     ) {
-        //         housesMergedGeometries.push({
-        //             geometry: _M.createBufferGeometry({ v, c, uv, forceMat }),
-        //             vCollide
-        //         })
-
-        //         v = []
-        //         c = []
-        //         uv = []
-        //         forceMat = []
-        //         vCollide = []
-        //         countVerticies = 0
-        //     }
+        // console.log(shader.vertexShader);
         // }
-        console.log('[TIME:] COMPLETE CALCULATE HOUSES', ((Date.now() - d) / 1000).toFixed(2))
+
+        // материал
+
+        // const meshG = new THREE.Mesh(g, matG);
+        // this._root.studio.add(meshG);
 
 
-        console.log('[MESSAGE:] START ADD HOUSES')
-        d = Date.now()
-        // for (let i = 0; i < conf.repeats.length; ++i) {
-        //     const offset = conf.repeats[i]
-        //     this._buildStrict(housesMergedGeometries, offset[0], offset[1])  
+
+
+
+
+
+        // test MESH 
+        // const v: number[] = []
+        // for (let i = 0; i < data.length; i += 4) {
+        //     v.push(data[i], data[i + 1], data[i + 2])
         // }
-        console.log('[TIME:] COMPLETE ADD HOUSES:', ((Date.now() - d) / 1000).toFixed(2))
+        // const g = _M.createBufferGeometry({ v })
+        // const matPlane = new THREE.MeshLambertMaterial({flatShading: true, wireframe: !true})
+        // const meshPlane = new THREE.Mesh(g, matPlane)
+        // this._root.studio.add(meshPlane)
 
-
-        console.log('[MESSAGE:] START ADD ROADS ')
-        // d = Date.now()
-        // for (let i = 0; i < conf.repeats.length; ++i) {
-        //     const offset = conf.repeats[i]
-        //     this._buildRoads(this._labSheme.areasData, offset[0], offset[1])
-        // }
-        console.log('[TIME:] COMPLETE ADD ROADS', ((Date.now() - d) / 1000).toFixed(2))
     }
 
     async clear () {
-        this._houses.forEach(h => {
-            h.parent.remove(h)
-            h.geometry.dispose()
-        })
-        this._houses = []
-        this._labSheme = {
-            areasData: [],
-            positionsEnergy: [],
-            positionsAntigravs: []
-        }
-
-        this._collisionsNames.forEach(n => this._root.phisics.removeMeshFromCollision(n))
-        this._collisionsNames = [] 
-
-        this._roads.forEach(h => {
-            h.parent.remove(h)
-            h.geometry.dispose()
-        })
-        this._roads = []
-
-        for (let i = 0; i < this._stricts.length; ++i) {
-            this._stricts[i].parent.remove(this._stricts[i])
-        }
-        this._stricts = []
-
-        await pause(10)
     }
 
     get positionsEnergy () {
@@ -166,73 +180,6 @@ export class Labyrinth {
     get positionsAntigravs () {
         return this._labSheme.positionsAntigravs
     }
-    
-    // private _buildStrict (houses: THousesGeomeries[], x: number, z: number) {
-    //     const strict = new THREE.Group()
-    //     strict.position.x = x
-    //     strict.position.z = z
-    //     this._root.studio.add(strict)
 
-    //     for (let i = 0; i < houses.length; ++i) {
-    //         const { geometry, vCollide } = houses[i]
-
-    //         const m = new THREE.Mesh(geometry, this._root.materials.walls00)
-    //         m.frustumCulled = false
-    //         strict.add(m)
-    //         m.position.y = .1
-    //         this._houses.push(m)
-
-    //         const collisionMesh = _M.createMesh({
-    //             v: vCollide,
-    //             material: this._root.materials.collision
-    //         })
-    //         collisionMesh.name = COLLISION_NAME_KEY + '_' + Math.floor(Math.random() * 1000)
-    //         this._collisionsNames.push(collisionMesh.name)
-    //         collisionMesh.position.add(strict.position) 
-    //         this._root.phisics.addMeshToCollision(collisionMesh)
-    //     }
-    // }
-
-    // private _buildRoads(areasData: IArea[], x: number, z: number) {
-    //     const strict = new THREE.Group()
-    //     strict.position.x = x
-    //     strict.position.z = z
-    //     this._root.studio.add(strict)
-
-    //     const v: number[] = [] 
-    //     const c: number[] = [] 
-
-    //     for (let i = 0; i < areasData.length; ++i) {
-    //         let isHouse = false
-    //         if (
-    //             areasData[i].typeSegment === SegmentType.AREA_00 ||
-    //             areasData[i].typeSegment === SegmentType.HOUSE_00 ||
-    //             areasData[i].typeSegment === SegmentType.HOUSE_01
-    //         ) {
-    //             isHouse = true
-    //         }
-    //         if (!isHouse) {
-    //             continue;
-    //         }
-
-    //         const areaData = areasData[i]
-
-    //         const r = createArea00(areaData.perimeter, COLOR_FLOOR, tileMapWall.stoneTree, 0, -2, tileMapWall.break)
-
-    //         v.push(...r.v)
-    //         c.push(...r.c)
-    //     }
-
-    //     const uv1 = _M.fillUvByPositionsXZ(v)
-    //     const m = _M.createMesh({ 
-    //         v,
-    //         uv: uv1,
-    //         c,
-    //         material: this._root.materials.road
-    //     })
-    //     m.position.y = .05
-    //     strict.add(m)
-    //     this._roads.push(m)
-    // } 
 }
 
