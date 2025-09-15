@@ -13,6 +13,12 @@ const currentBranch = exec('git rev-parse --abbrev-ref HEAD').toString().trim()
 
 module.exports = (env, { mode }) => {
     return {
+        devServer: {
+            headers: {
+                'Cross-Origin-Opener-Policy': 'same-origin',
+                'Cross-Origin-Embedder-Policy': 'require-corp',
+            },
+        },
         entry: './src/index.ts',
         // mode: 'development',
         devtool: mode === 'development' ? 'source-map' : false,
