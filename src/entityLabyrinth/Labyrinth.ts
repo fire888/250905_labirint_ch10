@@ -4,50 +4,6 @@ import * as THREE from "three"
 import { IArrayForBuffers, SegmentType, IArea, ILevelConf, TSchemeElem, TLabData } from "types/GeomTypes";
 
 
-// const createTexture = (width: number, height: number, w: number = 100) => {
-//     const size = width * height    
-    
-//     const data: number[] = []
-
-//     const sizePolygon = 3
-
-//     for (let i = 0; i < size; i += 3) {
-//         const center = [Math.random() * w, Math.random() * w, Math.random() * w]
-
-//         const p1 = [
-//             center[0] + Math.random() * sizePolygon, 
-//             center[1] + Math.random() * sizePolygon, 
-//             center[2] + Math.random() * sizePolygon,
-//             1,
-//         ]
-//         const p2 = [
-//             center[0] + Math.random() * sizePolygon, 
-//             center[1] + Math.random() * sizePolygon, 
-//             center[2] + Math.random() * sizePolygon,
-//             1,
-//         ]
-//         const p3 = [
-//             center[0] + Math.random() * sizePolygon, 
-//             center[1] + Math.random() * sizePolygon, 
-//             center[2] + Math.random() * sizePolygon,
-//             1,             
-//         ]
-//         data.push( ...p1, ...p2, ...p3)
-//     }
-
-//     // used the buffer to create a DataTexture
-
-//     const tArr = new Float32Array(data)
-//     const texture = new THREE.DataTexture(tArr, width, height, THREE.RGBAFormat, THREE.FloatType )
-//     texture.needsUpdate = true
-//     console.log('texture', texture)
-//     return texture
-// }
-
-
-
-
-
 export class Labyrinth {
     _root: Root
     _houses: THREE.Mesh[] = []
@@ -62,123 +18,13 @@ export class Labyrinth {
     }
 
     async build (conf: ILevelConf) {
-        // const textures: any[] = []
-
-        // const width = 512
-        // const height = 512
-        // const size = width * height
-
-        // for (let i = 0; i < 10; ++i) {
-        //     textures.push(createTexture(width, height, Math.random() * 300))
-        // } 
-
-
-
-
-        // // const mat = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide })
-        // // const geo = new THREE.PlaneGeometry(50, 50, 1, 1)
-        // // const mesh = new THREE.Mesh(geo, mat)
-        // // mesh.position.y = 25
-        // // this._root.studio.add(mesh)
-
-
-        // const verts = []
-        // for (let i = 0; i < size * 3; ++i) {
-        //     verts.push(0, 0, 0)
-        // }
-        // const geomMMM = _M.createBufferGeometry({ v: verts })
-
-        // const matM = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
-        // matM.onBeforeCompile = (shader:any) => {
-        //     shader.uniforms.positionTexture = { value: textures[0] };
-
-        //     shader.vertexShader = `
-        //         uniform highp sampler2D positionTexture;
-        //         ${shader.vertexShader}
-        //     `.replace(
-        //         '#include <begin_vertex>',
-        //         `#include <begin_vertex>
-        //         // вычисляем integer-координаты пикселя по индексу вершины
-        //         ivec2 size = textureSize(positionTexture, 0);   // (width, height)
-        //         int idx = gl_VertexID;
-        //         int x = idx % size.x;
-        //         int y = idx / size.x;
-        //         ivec2 texel = ivec2(x, y);
-
-        //         vec3 pos = texelFetch(positionTexture, texel, 0).xyz;
-        //         transformed = pos; // three.js ожидает писать в transformed
-        //         `
-        //     );
-        //     matM.userData.uniforms = shader.uniforms
-        // };
-
-        // const meshMMM = new THREE.Mesh(geomMMM, matM)
-        // this._root.studio.add(meshMMM)
-
-        // const update = (n: number) => {
-        //     if (!textures[n]) {
-        //         n = 0
-        //     }
-        //     if (matM.userData.uniforms) {
-        //         matM.userData.uniforms.positionTexture.value = textures[n]
-        //         matM.needsUpdate = true
-        //     }
-
-        //     n++
-        //     setTimeout(() => {
-        //         update(n)
-        //     }, 0)
-        // }
-        // update(0)
-
-
-
-
-
-
-        // matG.onBeforeCompile = (shader: any) => {
-        // shader.uniforms.positionTexture = { value: texture };
-        // shader.vertexShader = `
-        //     uniform sampler2D positionTexture;
-        //     ${shader.vertexShader}
-        // `.replace(
-        //     `#include <begin_vertex>`,
-        //     `#include <begin_vertex>
-            
-            
-        //     //ivec2 uv = ivec2(col, vertID);
-            
-        //     vec4 posData = texelFetch(positionTexture, uv, 0);
-            
-        //     transformed = posData.rgb;
-            
-        //     `
-        // );
-        
-        // console.log(shader.vertexShader);
-        // }
-
-        // материал
-
-        // const meshG = new THREE.Mesh(g, matG);
-        // this._root.studio.add(meshG);
-
-        // test MESH 
-        // const v: number[] = []
-        // for (let i = 0; i < data.length; i += 4) {
-        //     v.push(data[i], data[i + 1], data[i + 2])
-        // }
-        // const g = _M.createBufferGeometry({ v })
-        // const matPlane = new THREE.MeshLambertMaterial({flatShading: true, wireframe: !true})
-        // const meshPlane = new THREE.Mesh(g, matPlane)
-        // this._root.studio.add(meshPlane)
-
-
-
 
         // === параметры текстуры-позиций ===
-        const W = 256, H = 256; // 65_536 вершин
+        //const W = 256, H = 256; // 65_536 вершин
+        const W = 512 * 4, H = 512 * 10; // 65_536 вершин
         const VERT_COUNT = W * H;
+
+        console.log('VVV', VERT_COUNT)
 
         // SharedArrayBuffer под RGBA32F
         const BYTES_PER_TEXEL = 4 * 4;
@@ -209,7 +55,7 @@ export class Labyrinth {
             posTex:  { value: posTex },
             texSize: { value: new THREE.Vector2(W, H) },
             tint:    { value: new THREE.Color(0x77ccff) },
-            time:    { value: 0 }
+            //time:    { value: 0 }
         };
 
         const vertexShader = /* glsl */ `//#version 300 es
@@ -280,24 +126,31 @@ export class Labyrinth {
         points.frustumCulled = false;
         this._root.studio.add(points);
 
+        console.log('start 111')
+
         // Воркер
         //const worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
         const worker = new Worker(new URL('./worker.js', import.meta.url));
-        worker.postMessage({ sab, flagSAB, w: W, h: H });
+        worker.postMessage({ keyMessage: 'init', sab, flagSAB, w: W, h: H });
 
 
         let t = 0;
         function tick() {
-            requestAnimationFrame(tick);
 
             // кадр готов из воркера? — подгружаем без аллокаций
             if (Atomics.load(flag, 0) === 1) {
                 Atomics.store(flag, 0, 0);
                 posTex.needsUpdate = true; // внутри будет texSubImage2D на тот же объект
-            }
+                console.log('complete 1111')
 
-            t += 0.01;
-            uniforms.time.value = t;
+                setTimeout(() => {
+                    worker.postMessage({ keyMessage: 'update' });
+                }, 0)
+            }
+            //t += 0.01;
+            //uniforms.time.value = t;
+
+            requestAnimationFrame(tick)
         }
         tick();
 
