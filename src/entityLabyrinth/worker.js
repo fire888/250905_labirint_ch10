@@ -39,10 +39,6 @@ function writeFrame(d) {
   Atomics.notify(flag, 0);
 
   console.log('complete calculate')
-
-  // Максимально дёшево планируем следующий апдейт
-  // Можно setTimeout(0), MessageChannel и т.п. — подберите, что лучше по нагрузке
-  // setTimeout(writeFrame, 0);
 }
 
 
