@@ -44,6 +44,7 @@ export const pipelineInit = async (root: Root) => {
     phisics.createPlayerPhisicsBody([0, 0, 0])
 
     floor.init(root)
+    floor.mesh.position.set(0, -10, 0)
     studio.add(floor.mesh)
     
     await lab.init(root)
@@ -59,9 +60,9 @@ export const pipelineInit = async (root: Root) => {
         studio.setFogNearFar(.2, 1)
     }
 
-    particles.init(root)
-    ticker.on(particles.update.bind(particles))
-    studio.add(particles.m)
+    //particles.init(root)
+    //ticker.on(particles.update.bind(particles))
+    //studio.add(particles.m)
 
     ui.init(root)
     //ui.setEnergyLevel(0)

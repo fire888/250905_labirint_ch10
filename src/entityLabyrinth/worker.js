@@ -1,62 +1,69 @@
 // src/worker.js
-
+import { _M } from "geometry/_m";
 
 let data = null;
 let flag = null;
-let w = 0;
-let h = 0;
-let t = 0;
+let W = 0;
+let H = 0;
 let N = 0;
 
+const calculateLevel = () => {
+    const v = []
 
-function writeFrame(d) {
+    while (true) { 
+        const p0 = [Math.random() * 100, Math.random() * 100, Math.random() * 100]
+        const p1 = [p0[0] + 2, p0[1], p0[2]]
 
-  let idx = 0;
-  for (let i = 0; i < N; i++) {
-    const xIdx = i % w;
-    const yIdx = (i / w) | 0;
+        const r = _M.createPolygon(
+          p0,
+          p1,
+          [p1[0], p1[1] + 1, p1[2]],
+          [p0[0], p0[1] + 1, p0[2]],
+        )
 
-    const u = xIdx / (w - 1);
-    const v = yIdx / (h - 1);
+        if ((v.length + r.length) / 3 < N) {
+            v.push(...r)
+        } else {
+           break
+        }
+    }
 
-    // координаты плоскости [-1,1]
-    const x = (u - 0.5) * 2.0;
-    const y = (v - 0.5) * 2.0;
+    // дозаливаем нулями
+    while (v.length / 3 < N) {
+      v.push(0)
+    }
 
-    // волнистая z, меняется по t
-    const z = Math.sin(u * Math.PI * 6.0 + t) * Math.cos(v * Math.PI * 6.0 - t) * 0.25;
-
-    data[idx++] = x * d;
-    data[idx++] = y * d;
-    data[idx++] = z * d;
-    data[idx++] = 1.0; // w-компонента (можете использовать под что-то своё)
-  }
-
-  t = Math.random() * 100
-
-  // Сигнал "кадр готов"
-  Atomics.store(flag, 0, 1);
-  Atomics.notify(flag, 0);
-
-  console.log('complete calculate')
+    return v
 }
 
+const fillBuffer = (vv) => {
+  let idx = 0;
+  for (let i = 0; i < N; i++) {
+    const j = i * 3;
+    data[idx++] = vv[j    ];
+    data[idx++] = vv[j + 1];
+    data[idx++] = vv[j + 2];
+    data[idx++] = 1.0;
+  }
+  Atomics.store(flag, 0, 1);
+  Atomics.notify(flag, 0);
+}
 
 self.onmessage = (e) => {
   if (e.data.keyMessage === 'init') {
-    console.log('INIT')
     data = new Float32Array(e.data.sab)
     flag = new Int32Array(e.data.flagSAB)
-    w = e.data.w;
-    h = e.data.h;
+    W = e.data.w
+    H = e.data.h
+    N = W * H
 
-    N = w * h;
-
-    writeFrame(Math.random() * 50);
+    const v = calculateLevel()
+    fillBuffer(v)
   }
 
   if (e.data.keyMessage === 'update') {
     console.log('UPDATE')
-    writeFrame(Math.random() * 50);
+    const v = calculateLevel()
+    fillBuffer(v)
   }
 }
