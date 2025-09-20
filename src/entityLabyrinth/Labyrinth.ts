@@ -25,7 +25,6 @@ export class Labyrinth {
         const W = S, H = S;
         const VERT_COUNT = W * H;
         const BYTES_PER_TEXEL = 4 * 4;
-        const BYTES_PER_TEXEL_UV = 2 * 4;
 
         ///////////////////////
         const sabVertex = new SharedArrayBuffer(W * H * BYTES_PER_TEXEL);
@@ -52,7 +51,7 @@ export class Labyrinth {
         colorTex.flipY = false
 
         /////////////////////
-        const sabUv = new SharedArrayBuffer(W * H * BYTES_PER_TEXEL_UV)
+        const sabUv = new SharedArrayBuffer(W * H * BYTES_PER_TEXEL)
         const uvData = new Float32Array(sabUv)
         // @ts-ignore
         const uvTex = new THREE.DataTexture(uvData, W, H, THREE.RGBAFormat, THREE.FloatType)
@@ -84,10 +83,11 @@ export class Labyrinth {
 
         uniform ivec2 posTexSize;
         uniform sampler2D posTex;
+        uniform sampler2D colorTex;
         uniform sampler2D uvTex;
 
-        flat out ivec2 vCoord;
-        flat out vec2 vUV;
+        out vec2 vUv;
+        out vec3 vColor;
 
         ivec2 indexToCoord(int index, ivec2 size){
             int x = index % size.x;
@@ -98,8 +98,12 @@ export class Labyrinth {
         void main() {
             int vid = gl_VertexID;
             ivec2 coord = indexToCoord(vid, posTexSize);
-            vCoord = coord;
+
             vec3 p = texelFetch(posTex, coord, 0).xyz;
+
+            vUv = texelFetch(uvTex, coord, 0).xy;
+
+            vColor = texelFetch(colorTex, coord, 0).xyz;
 
             gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
             gl_PointSize = 2.0;
@@ -108,16 +112,18 @@ export class Labyrinth {
 
         const fragmentShader = /* glsl */ `
         precision highp float;
+        precision highp int;
 
         uniform sampler2D colorTex;
-        uniform ivec2 texSize;
+        uniform sampler2D map;
 
-        flat in ivec2 vCoord;
+        in vec2 vUv;
+        in vec3 vColor;
         out vec4 outColor;
 
         void main(){
-            vec3 c = texelFetch(colorTex, vCoord, 0).xyz;
-            outColor = vec4(c, 1.);
+            vec3 cTex = texture(map, vUv).rgb;  // теперь цвет меняется по полигону
+            outColor = vec4(cTex * vColor, 1.0);
         }
         `;
 
@@ -137,6 +143,8 @@ export class Labyrinth {
         this._root.studio.add(m);
 
         // Воркер
+        let date = Date.now()
+        console.log('[MESSAGE:] START CREATE WORKER')
         const worker = new Worker(new URL('./worker.ts', import.meta.url));
         worker.postMessage({ 
             keyMessage: 'init', 
@@ -144,7 +152,7 @@ export class Labyrinth {
             w: W, h: H 
         });
 
-        function tick() {
+        const tick = () => {
             if (Atomics.load(flag, 0) === 1) {
                 Atomics.store(flag, 0, 0)
                 
@@ -152,16 +160,16 @@ export class Labyrinth {
                 colorTex.needsUpdate = true
                 uvTex.needsUpdate = true
                 
-                console.log('complete')
+                console.log('[TIME:] UPDATE LABYRINTH', ((Date.now() - date) / 1000).toFixed(2))
+                date = Date.now()
 
                 setTimeout(() => {
                     worker.postMessage({ keyMessage: 'update' });
-                }, 10000)
+                }, 1)
             }
             requestAnimationFrame(tick)
         }
-        tick();
-
+        tick()
     }
 
     async clear () {

@@ -32,10 +32,12 @@ const fillBufferColor = (vv: number[]) => {
 
 const fillBufferUv = (vv: number[]) => {
     let idx = 0;
-    for (let i = 0; i < N / 4 * 2; i++) {
+    for (let i = 0; i < N; i++) {
         const j = i * 2;
         dataUv[idx++] = vv[j    ]
         dataUv[idx++] = vv[j + 1]
+        dataUv[idx++] = .5
+        dataUv[idx++] = .5
     }
 }
 

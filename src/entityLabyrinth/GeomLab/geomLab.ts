@@ -1,4 +1,5 @@
 import { _M, A3 } from "geometry/_m";
+// import { buildHouse00 } from "geometry/house00/buildHouse00";
 
 export const calculateLevel = (N: number) => {
     const v = []
@@ -24,7 +25,6 @@ export const calculateLevel = (N: number) => {
         _M.rotateVerticesY(_v, angleY)
         _M.rotateVerticesZ(_v, angleZ)
 
-        //const rN = _M.computeNormals(r)
         const _c = _M.fillColorFace([Math.random(), Math.random(), Math.random()])
         const _uv = _M.createUv([0, 0], [1, 0], [1, 1], [0, 1])
 
@@ -35,12 +35,6 @@ export const calculateLevel = (N: number) => {
         } else {
             break
         }
-    }
-
-    // дозаливаем нулями
-    while (v.length / 3 < N) {
-        v.push(0)
-        c.push(0)
     }
 
     return { v, c, uv }
