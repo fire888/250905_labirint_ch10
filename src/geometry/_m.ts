@@ -738,5 +738,43 @@ export const _M = {
         }
 
         return uv1
+    },
+
+    computeNormals: (vertices: number[]) => {
+        const normals = [];
+
+        for (let i = 0; i < vertices.length; i += 9) {
+            const p0 = [vertices[i], vertices[i+1], vertices[i+2]];
+            const p1 = [vertices[i+3], vertices[i+4], vertices[i+5]];
+            const p2 = [vertices[i+6], vertices[i+7], vertices[i+8]];
+
+            // Векторы
+            const u = [
+                p1[0] - p0[0],
+                p1[1] - p0[1],
+                p1[2] - p0[2]
+            ];
+            const v = [
+                p2[0] - p0[0],
+                p2[1] - p0[1],
+                p2[2] - p0[2]
+            ];
+
+            // Векторное произведение u × v
+            const n = [
+                u[1]*v[2] - u[2]*v[1],
+                u[2]*v[0] - u[0]*v[2],
+                u[0]*v[1] - u[1]*v[0]
+            ];
+
+            // Нормализация
+            const len = Math.hypot(n[0], n[1], n[2]);
+            const normal = len > 0 ? [n[0]/len, n[1]/len, n[2]/len] : [0,0,0];
+
+            // Одна нормаль на все три вершины
+            normals.push(...normal, ...normal, ...normal);
+        }
+
+        return normals;
     }
 }

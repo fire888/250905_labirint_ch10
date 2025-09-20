@@ -106,7 +106,7 @@ export class Labyrinth {
         this._root.studio.add(m);
 
         // Воркер
-        const worker = new Worker(new URL('./worker.js', import.meta.url));
+        const worker = new Worker(new URL('./worker.ts', import.meta.url));
         worker.postMessage({ keyMessage: 'init', sab, flagSAB, w: W, h: H });
 
         function tick() {
