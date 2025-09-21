@@ -13,8 +13,8 @@ export const calculateLevel = (N: number) => {
     while (true) {
         const perimeter: IPerimeter = [
             [3, 13],
-            [13, 13], 
-            [13, 3], 
+            [13, 13],
+            [13, 3],
             [3, 3],
             [3, 13],
         ] 
