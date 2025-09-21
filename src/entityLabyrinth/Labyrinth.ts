@@ -20,9 +20,6 @@ export class Labyrinth {
         const flagSAB = new SharedArrayBuffer(4);
         const flag = new Int32Array(flagSAB);
 
-        //const S = 2048;
-        //const S = 1024;
-        //const S = 256;
         const W = 2048, H = 1024;
         const VERT_COUNT = W * H;
         const BYTES_PER_TEXEL = 4 * 4;
