@@ -44,6 +44,7 @@ const fillBufferUv = (vv: number[]) => {
 self.onmessage = (e) => {
     const recalculateBuffers = () => {
         const { v, c, uv } = calculateLevel(N)
+        console.log('[MESSAGE:] vertticies n:', v.length / 3)
         fillBufferVertex(v)
         fillBufferColor(c)
         fillBufferUv(uv)

@@ -1,37 +1,45 @@
 import { _M, A3 } from "geometry/_m";
-// import { buildHouse00 } from "geometry/house00/buildHouse00";
+import { buildHouse01 } from "geometry/house01/buildHouse01";
+import { IPerimeter } from "types/GeomTypes";
 
 export const calculateLevel = (N: number) => {
     const v = []
     const c = []
     const uv = []
 
-    while (true) { 
-        const p0: A3 = [Math.random() * 100, Math.random() * 100, Math.random() * 100]
-        const p1: A3 = [p0[0] + 2, p0[1], p0[2]]
+    let xN = 0
+    let zN = 0
 
-        const _v = _M.createPolygon(
-            p0,
-            p1,
-            [p1[0], p1[1] + 1, p1[2]],
-            [p0[0], p0[1] + 1, p0[2]],
-        )
+    while (true) {
+        const perimeter: IPerimeter = [
+            [3, 13],
+            [13, 13], 
+            [13, 3], 
+            [3, 3],
+            [3, 13],
+        ] 
 
-        const angleX = Math.random() * Math.PI * 2
-        const angleY = Math.random() * Math.PI * 2
-        const angleZ = Math.random() * Math.PI * 2
+        const house = buildHouse01(perimeter)
+        const n = _M.computeNormals(house.v)
 
-        _M.rotateVerticesX(_v, angleX)
-        _M.rotateVerticesY(_v, angleY)
-        _M.rotateVerticesZ(_v, angleZ)
+        if ((v.length + house.v.length) / 3 < N) {
 
-        const _c = _M.fillColorFace([Math.random(), Math.random(), Math.random()])
-        const _uv = _M.createUv([0, 0], [1, 0], [1, 1], [0, 1])
+            _M.translateVertices(house.v, xN * 15, 0, zN * 15)
 
-        if ((v.length + _v.length) / 3 < N) {
-            v.push(..._v)
-            c.push(..._c)
-            uv.push(..._uv)
+            for (let i = 0; i < house.v.length; ++i) {
+                v.push(house.v[i])
+                c.push(n[i] * 0.5 + 0.5)
+            }
+            for (let i = 0; i < house.uv.length; ++i) {
+                uv.push(house.uv[i])
+            }
+
+            ++xN
+            if (xN > 10) { 
+                xN = 0
+                ++zN 
+            } 
+
         } else {
             break
         }
