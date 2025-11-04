@@ -163,22 +163,11 @@ export class Labyrinth {
 
                 setTimeout(() => {
                     worker.postMessage({ keyMessage: 'update' });
-                }, 1)
+                }, 10000)
             }
             requestAnimationFrame(tick)
         }
         tick()
-    }
-
-    async clear () {
-    }
-
-    get positionsEnergy () {
-        return this._labSheme.positionsEnergy
-    }
-
-    get positionsAntigravs () {
-        return this._labSheme.positionsAntigravs
     }
 
 }

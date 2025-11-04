@@ -9,7 +9,8 @@ import { LoaderAssets } from "./entities/Loader";
 import { DeviceData } from "./entities/DeviceData"
 import { Ui } from "./entities/Ui"
 import { Phisics } from "./entities/Phisics"
-import { Labyrinth } from './entityLabyrinth/Labyrinth'
+//import { Labyrinth } from './entityLabyrinth/Labyrinth'
+import { Labyrinth } from './entityLab01/Lab'
 //import { EnergySystem } from "entities/EnergySystem"
 //import { AntigravSystem } from "entities/AntigravSystem"
 //import { AntigravLast } from "./entities/AntigravLast"
