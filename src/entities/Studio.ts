@@ -51,20 +51,20 @@ export class Studio {
         this.camera.position.set(1, 30, 70)
         this.camera.lookAt(150, 1, 150)
 
-        this.spotLight = new SpotLight(0xffffff, 15)
-        this.spotLight.position.set(0, 3, 5)
-        this.spotLight.angle = Math.PI * .2
-        this.spotLight.penumbra = 1
-        this.spotLight.decay = 1
-        this.spotLight.distance = 300
-        const target = new Object3D()
-        this.spotLight.target = target
+        // this.spotLight = new SpotLight(0xffffff, 15)
+        // this.spotLight.position.set(0, 3, 5)
+        // this.spotLight.angle = Math.PI * .2
+        // this.spotLight.penumbra = 1
+        // this.spotLight.decay = 1
+        // this.spotLight.distance = 300
+        // const target = new Object3D()
+        // this.spotLight.target = target
 
-        target.position.z = -50
-        this.camera.add(this.spotLight.target)
+        //target.position.z = -50
+        //this.camera.add(this.spotLight.target)
 
         this.scene = new Scene()
-        this.scene.add(this.spotLight)
+        //this.scene.add(this.spotLight)
         this.scene.add(this.camera)
 
         this.scene.background = new THREE.Color(0x0e2535)
@@ -74,7 +74,7 @@ export class Studio {
         this.amb = new THREE.AmbientLight(0xffffff, .5) 
         this.scene.add(this.amb)
 
-        this.dirLight = new DirectionalLight(0xffffff, 15)
+        this.dirLight = new DirectionalLight(0xffffff, 3)
         this.dirLight.position.set(-3, 3, -2)
         this.scene.add(this.dirLight)
 
@@ -104,8 +104,8 @@ export class Studio {
     }
 
     render () {
-        this.camera.getWorldPosition(this.spotLight.position)
-        this.spotLight.position.y += .1
+        //this.camera.getWorldPosition(this.spotLight.position)
+        //this.spotLight.position.y += .1
 
         if (this.composer) {
             this.composer.render(140)

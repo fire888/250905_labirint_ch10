@@ -17,6 +17,11 @@ import wallTile from '../assets/tiles_wall.webp'
 import noise00 from '../assets/noise00.webp'
 import sprite from '../assets/sprite.webp'
 
+import el_0 from '../assets/el_0.jpg'
+import el_0_norm from '../assets/el_0_norm.png'
+import el_0_ao from '../assets/el_0_ao.png'
+import el_0_spec from '../assets/el_0_spec.png'
+
 type Assets = {
     sprite: Texture,
     soundAmbient: any,
@@ -28,6 +33,11 @@ type Assets = {
     lightMap: Texture,
     mapWall_01: Texture,
     noise00: Texture,
+
+    el_0: Texture,
+    el_0_norm: Texture,
+    el_0_ao: Texture,
+    el_0_spec: Texture
 }
 type ResultLoad = {
     key: keyof Assets,
@@ -48,6 +58,11 @@ export class LoaderAssets {
         lightMap: null,
         mapWall_01: null,
         noise00: null,
+
+        el_0: null,
+        el_0_norm: null,
+        el_0_ao: null,
+        el_0_spec: null
     }
 
     init () {}
@@ -91,6 +106,11 @@ export class LoaderAssets {
                 loadTexture('roadImg', roadImg),
                 loadTexture('mapWall_01', wallTile),
                 loadTexture('noise00', noise00),
+                
+                loadTexture('el_0', el_0),
+                loadTexture('el_0_norm', el_0_norm),
+                loadTexture('el_0_ao', el_0_ao),
+                loadTexture('el_0_spec', el_0_spec),
             ]
 
             Promise.all(promises).then(result => {
