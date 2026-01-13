@@ -22,6 +22,15 @@ import el_0_norm from '../assets/el_0_norm.png'
 import el_0_ao from '../assets/el_0_ao.png'
 import el_0_spec from '../assets/el_0_spec.png'
 
+import env from '../assets/env.jpg'
+
+import pX from '../assets/el_0.jpg'
+import nX from '../assets/el_0.jpg'
+import pY from '../assets/el_0.jpg'
+import nY from '../assets/el_0.jpg'
+import pZ from '../assets/el_0.jpg'
+import nZ from '../assets/el_0.jpg'
+
 type Assets = {
     sprite: Texture,
     soundAmbient: any,
@@ -37,7 +46,9 @@ type Assets = {
     el_0: Texture,
     el_0_norm: Texture,
     el_0_ao: Texture,
-    el_0_spec: Texture
+    el_0_spec: Texture,
+
+    env: Texture,
 }
 type ResultLoad = {
     key: keyof Assets,
@@ -62,7 +73,9 @@ export class LoaderAssets {
         el_0: null,
         el_0_norm: null,
         el_0_ao: null,
-        el_0_spec: null
+        el_0_spec: null,
+
+        env: null,
     }
 
     init () {}
@@ -111,6 +124,9 @@ export class LoaderAssets {
                 loadTexture('el_0_norm', el_0_norm),
                 loadTexture('el_0_ao', el_0_ao),
                 loadTexture('el_0_spec', el_0_spec),
+                
+                //loadTexture('env', env),
+                loadCubeTexture('env', [pX, nX, pY, nY, pZ, nZ]),
             ]
 
             Promise.all(promises).then(result => {

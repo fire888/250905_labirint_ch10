@@ -10,17 +10,19 @@ export const createColumn01 = (w: number, h: number, n: number = 8): IArrayForBu
     const uv: number[] = []
 
     {
-        const r = 1
-        const n = 16
-        const h = 0.7
+        const r = .3
+        const n = 8
+        const h = 0.3
 
         const __v: number[] = []
         const __c: number[] = []
         const __uv: number[] = []
 
-        for (let i = 1; i < n; ++i) {
-            const prev = (i) / n
-            const cur = (i - 1) / n
+        for (let i = 0; i < n; ++i) {
+            let prev = i / n
+            let cur = (i - 1) / n
+
+            if (i === 0) cur = (n - 1) / n
 
             const _v = _M.createPolygon(
                 [Math.cos(prev * Math.PI * 2) * r, 0, Math.sin(prev * Math.PI * 2) * r],
@@ -34,7 +36,7 @@ export const createColumn01 = (w: number, h: number, n: number = 8): IArrayForBu
             __uv.push(..._M.createUv([0, 0], [1, 0], [1, 1], [0, 1]))
         }
 
-        for (let i = 0; i < 20; ++i) {
+        for (let i = 0; i < 30; ++i) {
             const _vLoc = [...__v]
             _M.translateVertices(_vLoc, 0, i * h, 0)
 

@@ -67,7 +67,9 @@ export class Studio {
         //this.scene.add(this.spotLight)
         this.scene.add(this.camera)
 
+        //this.scene.environment = root.loader.assets.env
         this.scene.background = new THREE.Color(0x0e2535)
+        //this.scene.background = root.loader.assets.env
         this.fog = new THREE.Fog(0x0e2535, .2, 1000)
         this.addFog()
 

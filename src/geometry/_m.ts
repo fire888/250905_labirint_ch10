@@ -776,5 +776,21 @@ export const _M = {
         }
 
         return normals;
+    },
+
+    fill(src: number[], tgt: number[]) {
+        for (let i = 0; i < src.length; i++) {
+            tgt.push(src[i])
+        }
+    },
+
+    clone(src: number[]) {
+        const a = []
+        for (let i = 0; i < src.length; i++) {
+            a.push(src[i])
+        }
+        return a
     }
+
+
 }
