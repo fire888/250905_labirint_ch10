@@ -7,8 +7,8 @@ import {
     Material,
     ContactMaterial,
     Trimesh,
-    Box,
-    Vec3,
+    //Box,
+    //Vec3,
     Sphere,
 } from 'cannon-es'
 import { Object3D } from 'three'
@@ -60,14 +60,14 @@ export class Phisics {
         // We must add the contact materials to the world
         this.world.addContactMaterial(physicsContactMaterial);
 
-        this.ground = new Body({
-            type: Body.STATIC,
-            shape: new Box(new Vec3(500, 0.1, 500)),
-        })
-        //this.ground.scale.set(1000, 1, 1000)
-        this.ground._myName = 'ground'
-        //this.ground.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
-        this.world.addBody(this.ground)
+        // this.ground = new Body({
+        //     type: Body.STATIC,
+        //     shape: new Box(new Vec3(500, 0.1, 500)),
+        // })
+        // //this.ground.scale.set(1000, 1, 1000)
+        // this.ground._myName = 'ground'
+        // //this.ground.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
+        // this.world.addBody(this.ground)
 
         this._levelsPhisicsMeshes = []
 

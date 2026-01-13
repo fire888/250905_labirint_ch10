@@ -3,6 +3,7 @@ import { _M, A3 } from "../geometry/_m"
 import * as THREE from "three"
 import { IArrayForBuffers, SegmentType, IArea, ILevelConf, TSchemeElem, TLabData } from "types/GeomTypes";
 import { createColumn01 } from "geometry/column01/column01";
+import { createFloor00 } from "geometry/floor00/floor00";
 
 export class Labyrinth {
     _root: Root
@@ -34,6 +35,7 @@ export class Labyrinth {
             aoMapIntensity: 1,
             envMap: this._root.loader.assets.env,
             envMapIntensity: 1,
+            // wireframe: true
         })
 
 
@@ -41,97 +43,56 @@ export class Labyrinth {
 
         const v: number[] = []
         const c: number[] = []
-        const uv: number[] = [] 
+        const uv: number[] = []
+        const vCollide: number[] = []
 
-        for (let i = 0; i < 20; ++i) {
-            for (let j = 0; j < 20; ++j) {
-                const _v = [...col.v]
-                _M.translateVertices(_v, i * 2, 0, j * 2)
-                v.push(..._v)
-                uv.push(...col.uv)
-                c.push(...col.c)
-            }
+        let dir = 0
+        let point = [0, 0]
+
+        for (let i = 0; i < 80; ++i) {
+            const d = Math.floor(Math.random() * 15) + 5
+            const w = Math.floor(Math.random() * 10) + 3
+            
+            dir += (Math.random() - .5) * .3  * Math.PI
+
+            const floor = createFloor00(d, w)
+            
+            _M.translateVertices(floor.v, 0, 0, -w * .5)
+            _M.rotateVerticesY(floor.v, -dir)
+            _M.translateVertices(floor.v, point[0], 0, point[1])
+            
+            _M.translateVertices(floor.vCollide, 0, 0, -w * .5)
+            _M.rotateVerticesY(floor.vCollide, -dir)
+            _M.translateVertices(floor.vCollide, point[0], 0, point[1])
+
+            v.push(...floor.v)
+            uv.push(...floor.uv)
+            c.push(...floor.c)
+            vCollide.push(...floor.vCollide)
+
+            const colCopy = _M.clone(col.v)
+            _M.translateVertices(colCopy,  point[0], 0, point[1])
+            v.push(...colCopy)
+            c.push(...col.c)
+            uv.push(...col.uv)
+
+            point[0] += Math.cos(dir) * d
+            point[1] += Math.sin(dir) * d
+
+            //const l = _M.createLabel(point[0].toFixed(2) + '_' + point[1].toFixed(2), [1, 0, 0], 1)
+            //l.position.set(point[0], 0, point[1])
+            //this._root.studio.add(l)
         }
 
 
-        {
-            const s = .3
-            const tV = []  
-            const tC = []  
-            const tUv = []  
-            for (let i = 0; i < 100; ++i) {
-                for (let j = 0; j < 100; ++j) {
-                    const _v = _M.createPolygon(
-                        [(i + 1) * s, 0, j * s],
-                        [i * s, 0, j * s],
-                        [i * s, 0, (j + 1) * s],
-                        [(i + 1) * s, 0, (j + 1) * s],
-                    )
-                    tV.push(..._v)
-                    tUv.push(..._M.createUv([0, 0], [1, 0], [1, 1], [0, 1]))
-                    tC.push(..._M.fillColorFace([1, 1, 1]))
-                }
-            }
-
-            // bottom
-            _M.fill(tV, v)
-            _M.fill(tUv, uv)
-            _M.fill(tC, c)
-
-            // top
-            {
-                const _v0 = _M.clone(tV)
-                _M.rotateVerticesX(_v0, Math.PI)
-                _M.translateVertices(_v0, 0, 3, 20)
-                _M.fill(_v0, v)
-                _M.fill(tUv, uv)
-                _M.fill(tC, c)
-            }
-
-
-            // walls
-            {
-                const _v0 = _M.clone(tV)
-                _M.rotateVerticesX(_v0, -Math.PI / 2)
-                _M.translateVertices(_v0, 0, 0, 20)
-                _M.fill(_v0, v)
-                _M.fill(tUv, uv)
-                _M.fill(tC, c)
-            }
-
-            {
-                const _v0 = _M.clone(tV)
-                _M.rotateVerticesX(_v0, -Math.PI / 2)
-                _M.rotateVerticesY(_v0, -Math.PI / 2)
-                _M.fill(_v0, v)
-                _M.fill(tUv, uv)
-                _M.fill(tC, c)
-            }
-
-            {
-                const _v0 = _M.clone(tV)
-                _M.rotateVerticesX(_v0, -Math.PI / 2)
-                _M.rotateVerticesY(_v0, Math.PI)
-                _M.translateVertices(_v0, 20, 0, 0)
-                _M.fill(_v0, v)
-                _M.fill(tUv, uv)
-                _M.fill(tC, c)
-            }
-
-            {
-                const _v0 = _M.clone(tV)
-                _M.rotateVerticesX(_v0, -Math.PI / 2)
-                _M.rotateVerticesY(_v0, -Math.PI * 1.5)
-                _M.translateVertices(_v0, 20, 0, 20)
-                _M.fill(_v0, v)
-                _M.fill(tUv, uv)
-                _M.fill(tC, c)
-            }
-        }
 
         const m = new THREE.Mesh(_M.createBufferGeometry({ v, uv, c }), mat)
         m.position.set(0, 0, 0)
         this._root.studio.add(m)
+
+        const mCol = new THREE.Mesh(_M.createBufferGeometry({ v: vCollide }), this._root.materials.collision)
+        mCol.position.set(0, 0, 0)
+        this._root.phisics.addMeshToCollision(mCol)
     }
 }
 
