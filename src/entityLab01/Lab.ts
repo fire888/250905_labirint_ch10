@@ -6,7 +6,7 @@ import { createColumn01 } from "geometry/column01/column01";
 import { createFloor00 } from "geometry/floor00/floor00";
 
 
-type T_ROOM = {
+export type T_ROOM = {
     point0: A2,
     point1?: A2,
     dir0?: number,
@@ -51,24 +51,29 @@ export class Labyrinth {
         }
 
         for (let i = 0; i < rooms.length; ++i) {
-            let dir0 = Math.PI * 2
-            let dir1 = Math.PI * 2
-            const point1: A2 = [
-                rooms[i].point0[0] + Math.cos(rooms[i].dir) * rooms[i].d,
-                rooms[i].point0[1] + Math.sin(rooms[i].dir) * rooms[i].d 
-            ] 
+            let dir0 = Math.PI * .5
+            let dir1 = Math.PI * .5
+            let point1: A2 = rooms[i + 1] 
+                ? [...rooms[i + 1].point0] 
+                : [
+                    rooms[i].point0[0] + Math.cos(rooms[i].dir) * rooms[i].d,
+                    rooms[i].point0[1] + Math.sin(rooms[i].dir) * rooms[i].d 
+                ] 
 
             if (rooms[i - 1]) {
                 dir0 = (rooms[i - 1].dir + rooms[i].dir) * .5 + Math.PI * .5 
             }
             if (rooms[i + 1]) {
                 dir1 = (rooms[i + 1].dir + rooms[i].dir) * .5 + Math.PI * .5 
+            } else if (dir0) {
+                dir1 = dir0
             }
 
             rooms[i].dir0 = dir0
             rooms[i].dir1 = dir1
             rooms[i].point1 = point1
         }
+
 
         /////////////////////////////////////////////////////////////////////
 
@@ -94,21 +99,32 @@ export class Labyrinth {
         const uv: number[] = []
         const vCollide: number[] = []
 
+
         for (let i = 0; i < rooms.length; ++i) {
-            const r = createFloor00(rooms[i].d, rooms[i].w)
-            _M.translateVertices(r.v, 0, 0, -rooms[i].w * .5)
-            _M.rotateVerticesY(r.v, -rooms[i].dir)
-            _M.translateVertices(r.v, rooms[i].point0[0], 0, rooms[i].point0[1])
-            v.push(...r.v)
-            uv.push(...r.uv)
-            c.push(...r.c)
+            const floor = createFloor00(rooms[i], this._root)
+            _M.fill(floor.v, v)
+            _M.fill(floor.uv, uv)
+            _M.fill(floor.c, c)
 
-
-            _M.translateVertices(r.vCollide, 0, 0, -rooms[i].w * .5)
-            _M.rotateVerticesY(r.vCollide, -rooms[i].dir)
-            _M.translateVertices(r.vCollide, rooms[i].point0[0], 0, rooms[i].point0[1])
-            vCollide.push(...r.vCollide)
+            _M.fill(floor.vCollide, vCollide)
         }
+
+
+        // for (let i = 0; i < rooms.length; ++i) {
+        //     const r = createFloor00(rooms[i].d, rooms[i].w)
+        //     _M.translateVertices(r.v, 0, 0, -rooms[i].w * .5)
+        //     _M.rotateVerticesY(r.v, -rooms[i].dir)
+        //     _M.translateVertices(r.v, rooms[i].point0[0], 0, rooms[i].point0[1])
+        //     v.push(...r.v)
+        //     uv.push(...r.uv)
+        //     c.push(...r.c)
+
+
+        //     _M.translateVertices(r.vCollide, 0, 0, -rooms[i].w * .5)
+        //     _M.rotateVerticesY(r.vCollide, -rooms[i].dir)
+        //     _M.translateVertices(r.vCollide, rooms[i].point0[0], 0, rooms[i].point0[1])
+        //     vCollide.push(...r.vCollide)
+        // }
 
         const m = new THREE.Mesh(_M.createBufferGeometry({ v, uv, c }), mat)
         m.position.set(0, 0, 0)

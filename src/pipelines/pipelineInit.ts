@@ -41,7 +41,7 @@ export const pipelineInit = async (root: Root) => {
 
     phisics.init(root)
     ticker.on(phisics.update.bind(phisics))
-    phisics.createPlayerPhisicsBody([0, 3, 0])
+    phisics.createPlayerPhisicsBody([3, 3, 0])
 
     floor.init(root)
     floor.mesh.position.set(0, -10, 0)
