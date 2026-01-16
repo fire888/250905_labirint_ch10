@@ -7,8 +7,8 @@ import { createFloor00 } from "geometry/floor00/floor00";
 
 
 export type T_ROOM = {
-    point0: A2,
-    point1?: A2,
+    point0: A3,
+    point1?: A3,
     dir0?: number,
     dir1?: number,
     dir: number,
@@ -34,7 +34,7 @@ export class Labyrinth {
     async build (conf: ILevelConf) {
     
         let dir = 0
-        let point: A2 = [0, 0]
+        let point: A3 = [0, 0, 0]
 
         const rooms: T_ROOM[] = []
 
@@ -47,17 +47,19 @@ export class Labyrinth {
             dir += (Math.random() - .5) * .3  * Math.PI
             
             point[0] += Math.cos(dir) * d
-            point[1] += Math.sin(dir) * d
+            point[1] += (Math.random() - .5) * 3 
+            point[2] += Math.sin(dir) * d
         }
 
         for (let i = 0; i < rooms.length; ++i) {
             let dir0 = Math.PI * .5
             let dir1 = Math.PI * .5
-            let point1: A2 = rooms[i + 1] 
+            let point1: A3 = rooms[i + 1] 
                 ? [...rooms[i + 1].point0] 
                 : [
                     rooms[i].point0[0] + Math.cos(rooms[i].dir) * rooms[i].d,
-                    rooms[i].point0[1] + Math.sin(rooms[i].dir) * rooms[i].d 
+                    rooms[i].point0[1],
+                    rooms[i].point0[2] + Math.sin(rooms[i].dir) * rooms[i].d 
                 ] 
 
             if (rooms[i - 1]) {
