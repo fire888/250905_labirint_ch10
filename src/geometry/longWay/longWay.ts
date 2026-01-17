@@ -18,8 +18,8 @@ type I_Seg = {
     type: I_TypeSeg
 }
 
-const MIN_SEG = 5
-const MAX_SEG = 20
+const MIN_SEG = 20
+const MAX_SEG = 30
 const MIN_STAIR_LEN = 4
 const MAX_STAIR_LEN = 10
 
@@ -34,38 +34,50 @@ export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], 
     const curP = new THREE.Vector3().copy(s)
     const curDir = new THREE.Vector3().subVectors(e, s).normalize()
 
-    // const sL = _M.createLabel('s', [0, 0, 1], 10)
-    // sL.position.set(s.x, s.y, s.z)
-    // root.studio.add(sL)
+    const sL = _M.createLabel('s', [0, 0, 1], 10)
+    sL.position.set(s.x, s.y, s.z)
+    root.studio.add(sL)
 
-    // const eL = _M.createLabel('e', [0, 0, 1], 10)
-    // eL.position.set(e.x, e.y, e.z)
-    // root.studio.add(eL)
+    const eL = _M.createLabel('e', [0, 0, 1], 10)
+    eL.position.set(e.x, e.y, e.z)
+    root.studio.add(eL)
 
     let iterate = 1000
     while (iterate > 0) {
         --iterate
 
+        const type = iterate % 2 ? I_TypeSeg.STAIR : I_TypeSeg.FLOOR
+
         let newDir
         let newDist
         let newP
+        let w = Math.random() * 5 + 5 
 
-        const eDist = curP.distanceTo(e)
+        const eDist = curP.clone().setY(0).distanceTo(e)
         if (eDist < MAX_SEG) {
             newDist = eDist
-            newDir = newP.clone().sub(curP).normalize()
+            newDir = e.clone().sub(curP).normalize()
             newP = e.clone()
 
             iterate = 0
         } else {
             newDist = Math.random() * (MAX_SEG - MIN_SEG) + MIN_SEG
-            newDir = e.clone().sub(curP).normalize().applyAxisAngle(new THREE.Vector3(0, 1, 0), (Math.random() - .5) * Math.PI * .7)
+            newDir = e.clone().sub(curP).setY(0).normalize().applyAxisAngle(
+                new THREE.Vector3(0, 1, 0), 
+                (Math.random() - .5) * Math.PI * .7
+            )
             newP = newDir.clone().multiplyScalar(newDist).add(curP)
+
+            if (type === I_TypeSeg.STAIR) {
+                const newY = (Math.random() - .5) * 30
+                newP.setY(newY)
+                w = 3
+            }
         }
 
         segments.push({ 
-            p0: curP.clone(), p1: newP, dir: newDir.clone(), 
-            type: I_TypeSeg.FLOOR 
+            p0: curP.clone(), p1: newP, dir: newDir.clone(), w,
+            type 
         })
 
         curP.copy(newP)
@@ -81,6 +93,11 @@ export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], 
         l1.position.set(s.p1.x, s.p1.y + .5, s.p1.z)
         root.studio.add(l1)
     })
+
+
+
+
+
 
     console.log(segments)
 
