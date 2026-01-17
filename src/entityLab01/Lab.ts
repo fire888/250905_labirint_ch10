@@ -4,6 +4,7 @@ import * as THREE from "three"
 import { IArrayForBuffers, SegmentType, IArea, ILevelConf, TSchemeElem, TLabData } from "types/GeomTypes";
 import { createColumn01 } from "geometry/column01/column01";
 import { createFloor00 } from "geometry/floor00/floor00";
+import { createLongWay } from "geometry/longWay/longWay";
 
 
 export type T_ROOM = {
@@ -32,6 +33,10 @@ export class Labyrinth {
     }
 
     async build (conf: ILevelConf) {
+
+        const longWay = createLongWay([0, 0, 0], [200, 0, 0], this._root)
+
+
     
         let dir = 0
         let point: A3 = [0, 0, 0]
