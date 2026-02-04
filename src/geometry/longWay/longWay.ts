@@ -1,20 +1,29 @@
 import { _M, A2, A3 } from "../_m"
 import { tileMapWall } from '../tileMapWall'
-import { IArrayForBuffers } from "types/GeomTypes"
+import { IArrayForBuffers, T_ROOM } from "types/GeomTypes"
 import { Root } from "index"
 import { COLOR_BLUE } from "constants/CONSTANTS"
-import { T_ROOM } from "entityLab01/Lab"
 import * as THREE from "three" 
+import { createFloor00 } from "../floor00/floor00"
 
 // const S = 0.3
 const S = .3
+const STAIR_W = 3 
 
 enum I_TypeSeg {
-    STAIR, FLOOR
+    FLOOR, STAIR, 
 }
 
 type I_Seg = {
     p0: THREE.Vector3,
+    type: I_TypeSeg
+}
+
+type T_SEGMENT = {
+    p0: THREE.Vector3
+    p1: THREE.Vector3
+    dir: THREE.Vector3
+    w: number
     type: I_TypeSeg
 }
 
@@ -24,9 +33,8 @@ const MIN_STAIR_LEN = 4
 const MAX_STAIR_LEN = 10
 
 
-
-export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], root: Root): IArrayForBuffers => {
-    const segments = []
+const prepareSegments = (point0: A3, point1: A3, root: Root) => {
+    const segments: T_SEGMENT[] = []
 
     const s = new THREE.Vector3().fromArray(point0)
     const e = new THREE.Vector3().fromArray(point1)
@@ -42,11 +50,11 @@ export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], 
     eL.position.set(e.x, e.y, e.z)
     root.studio.add(eL)
 
-    let iterate = 1000
+    let iterate = 1001
     while (iterate > 0) {
         --iterate
 
-        const type = iterate % 2 ? I_TypeSeg.STAIR : I_TypeSeg.FLOOR
+        const type = iterate % 2 === 0 ? I_TypeSeg.FLOOR : I_TypeSeg.STAIR
 
         let newDir
         let newDist
@@ -61,24 +69,32 @@ export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], 
 
             iterate = 0
         } else {
+            if (iterate === 1000) {
+                newDir = new THREE.Vector3(1, 0, 0)
+            }  else {
+                newDir = e.clone().sub(curP).setY(0).normalize().applyAxisAngle(
+                    new THREE.Vector3(0, 1, 0), 
+                    (Math.random() - .5) * Math.PI * .7
+                )
+            }
+
             newDist = Math.random() * (MAX_SEG - MIN_SEG) + MIN_SEG
-            newDir = e.clone().sub(curP).setY(0).normalize().applyAxisAngle(
-                new THREE.Vector3(0, 1, 0), 
-                (Math.random() - .5) * Math.PI * .7
-            )
+
             newP = newDir.clone().multiplyScalar(newDist).add(curP)
 
             if (type === I_TypeSeg.STAIR) {
-                const newY = (Math.random() - .5) * 30
+                const newY = Math.max(1, curP.y + (Math.random() - .5) * 30)
                 newP.setY(newY)
-                w = 3
+                w = STAIR_W
             }
         }
 
-        segments.push({ 
+        const el: T_SEGMENT = {
             p0: curP.clone(), p1: newP, dir: newDir.clone(), w,
             type 
-        })
+        } 
+
+        segments.push(el)
 
         curP.copy(newP)
         curDir.copy(newDir)
@@ -94,17 +110,109 @@ export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], 
         root.studio.add(l1)
     })
 
+    return segments
+}
 
+const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
+    const segments: T_ROOM[] = []
 
+    let n = 0
 
+    for (let i = 0; i < segmemtsSrc.length; i++) {
+        const cur = segmemtsSrc[i]
 
+        if (cur.type === I_TypeSeg.STAIR) {
+            const prev = segmemtsSrc[i - 1] ?? null
+            const next = segmemtsSrc[i + 1] ?? null
 
-    console.log(segments)
+            if (prev && next) {
+                const pStairStart = prev.dir.clone().multiplyScalar(cur.w).add(cur.p0)
+                const pStairEnd = next.dir.clone().multiplyScalar(-next.w).add(cur.p1)
+
+                const newDir = pStairEnd.clone().sub(pStairStart).setY(0).normalize()
+
+                const dataS: T_ROOM = {
+                    d: pStairStart.distanceTo(cur.p0),
+                    w: cur.w,
+                    point0: cur.p0,
+                    point1: pStairStart,
+                    dir0: prev.dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
+                    dir1: newDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
+                    dir: pStairStart.clone().sub(cur.p0).normalize(),
+                    id: n,
+                } 
+                ++n
+                segments.push(dataS)
+
+                const dataForRoom: T_ROOM = {
+                    d: pStairEnd.distanceTo(pStairStart),
+                    w: cur.w,
+                    point0: pStairStart,
+                    point1: pStairEnd,
+                    dir0: newDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
+                    dir1: newDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
+                    dir: newDir,
+                    id: n,
+                }
+                ++n
+                segments.push(dataForRoom)
+
+                const dataE: T_ROOM = {
+                    d: pStairEnd.distanceTo(cur.p1),
+                    w: cur.w,
+                    point0: pStairEnd,
+                    point1: cur.p1,
+                    dir0: newDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
+                    dir1: next.dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
+                    dir: cur.p1.clone().sub(pStairEnd).setY(0).normalize(),
+                    id: n,
+                } 
+                ++n
+                segments.push(dataE)
+            }
+
+    
+        } else if (cur.type === I_TypeSeg.FLOOR) {
+            const { p0, p1 } = cur
+
+            const vDir = p1.clone().sub(p0).normalize()
+
+            const dataForRoom: T_ROOM = {
+                d: p0.distanceTo(p1),
+                w: cur.w,
+                point0: p0,
+                point1: p1,
+                dir0: vDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
+                dir1: vDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
+                dir: vDir,
+                id: n,
+            }
+            ++n
+
+            segments.push(dataForRoom)
+        }
+    }
+
+    return segments
+}
+
+export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], root: Root): IArrayForBuffers => {
+    const segments = prepareSegments(point0, point1, root)
+
+    const segments2: T_ROOM[] = divideStairs(segments, root)
 
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
     const vCollide: number[] = []
+
+    segments2.forEach((s: T_ROOM, i) => {
+        const r = createFloor00(s, root)
+        v.push(...r.v)
+        c.push(...r.c)
+        uv.push(...r.uv)
+        vCollide.push(...r.vCollide)
+    })
 
     return { v, uv, c, vCollide }
 }

@@ -1,23 +1,10 @@
 import { Root } from "../index"
 import { _M, A3, A2 } from "../geometry/_m"
 import * as THREE from "three"
-import { IArrayForBuffers, SegmentType, IArea, ILevelConf, TSchemeElem, TLabData } from "types/GeomTypes";
+import { IArrayForBuffers, SegmentType, IArea, ILevelConf, TSchemeElem, TLabData, T_ROOM } from "types/GeomTypes";
 import { createColumn01 } from "geometry/column01/column01";
 import { createFloor00 } from "geometry/floor00/floor00";
 import { createLongWay } from "geometry/longWay/longWay";
-
-
-export type T_ROOM = {
-    point0: A3,
-    point1?: A3,
-    dir0?: number,
-    dir1?: number,
-    dir: number,
-    id: number,
-    w: number,
-    d: number,
-} 
-
 
 export class Labyrinth {
     _root: Root
@@ -33,53 +20,60 @@ export class Labyrinth {
     }
 
     async build (conf: ILevelConf) {
+        const v: number[] = []
+        const c: number[] = []
+        const uv: number[] = []
+        const vCollide: number[] = []
 
-        const longWay = createLongWay([0, 0, 0], [200, 0, 0], this._root)
-
+        const longWay = createLongWay([-10, 20, 0], [200, 20, 0], this._root)
+        _M.fill(longWay.v, v)
+        _M.fill(longWay.c, c)
+        _M.fill(longWay.uv, uv)
+        _M.fill(longWay.vCollide, vCollide)
 
     
-        let dir = 0
-        let point: A3 = [0, 0, 0]
+        // let dir = 0
+        // let point: A3 = [0, 0, 0]
 
-        const rooms: T_ROOM[] = []
+        // const rooms: T_ROOM[] = []
 
-        for (let i = 0; i < 20; ++i) {
-            const d = Math.floor(Math.random() * 15) + 5
-            const w = Math.floor(Math.random() * 10) + 3
+        // for (let i = 0; i < 20; ++i) {
+        //     const d = Math.floor(Math.random() * 15) + 5
+        //     const w = Math.floor(Math.random() * 10) + 3
 
-            rooms.push({ id: i, point0: [...point], w, d, dir })
+        //     rooms.push({ id: i, point0: [...point], w, d, dir })
             
-            dir += (Math.random() - .5) * .3  * Math.PI
+        //     dir += (Math.random() - .5) * .3  * Math.PI
             
-            point[0] += Math.cos(dir) * d
-            point[1] += (Math.random() - .5) * 3 
-            point[2] += Math.sin(dir) * d
-        }
+        //     point[0] += Math.cos(dir) * d
+        //     point[1] += (Math.random() - .5) * 3 
+        //     point[2] += Math.sin(dir) * d
+        // }
 
-        for (let i = 0; i < rooms.length; ++i) {
-            let dir0 = Math.PI * .5
-            let dir1 = Math.PI * .5
-            let point1: A3 = rooms[i + 1] 
-                ? [...rooms[i + 1].point0] 
-                : [
-                    rooms[i].point0[0] + Math.cos(rooms[i].dir) * rooms[i].d,
-                    rooms[i].point0[1],
-                    rooms[i].point0[2] + Math.sin(rooms[i].dir) * rooms[i].d 
-                ] 
+        // for (let i = 0; i < rooms.length; ++i) {
+        //     let dir0 = Math.PI * .5
+        //     let dir1 = Math.PI * .5
+        //     let point1: A3 = rooms[i + 1] 
+        //         ? [...rooms[i + 1].point0] 
+        //         : [
+        //             rooms[i].point0[0] + Math.cos(rooms[i].dir) * rooms[i].d,
+        //             rooms[i].point0[1],
+        //             rooms[i].point0[2] + Math.sin(rooms[i].dir) * rooms[i].d 
+        //         ] 
 
-            if (rooms[i - 1]) {
-                dir0 = (rooms[i - 1].dir + rooms[i].dir) * .5 + Math.PI * .5 
-            }
-            if (rooms[i + 1]) {
-                dir1 = (rooms[i + 1].dir + rooms[i].dir) * .5 + Math.PI * .5 
-            } else if (dir0) {
-                dir1 = dir0
-            }
+        //     if (rooms[i - 1]) {
+        //         dir0 = (rooms[i - 1].dir + rooms[i].dir) * .5 + Math.PI * .5 
+        //     }
+        //     if (rooms[i + 1]) {
+        //         dir1 = (rooms[i + 1].dir + rooms[i].dir) * .5 + Math.PI * .5 
+        //     } else if (dir0) {
+        //         dir1 = dir0
+        //     }
 
-            rooms[i].dir0 = dir0
-            rooms[i].dir1 = dir1
-            rooms[i].point1 = point1
-        }
+        //     rooms[i].dir0 = dir0
+        //     rooms[i].dir1 = dir1
+        //     rooms[i].point1 = point1
+        // }
 
 
         /////////////////////////////////////////////////////////////////////
@@ -101,20 +95,17 @@ export class Labyrinth {
 
         const col = createColumn01(1, 1, 1)
 
-        const v: number[] = []
-        const c: number[] = []
-        const uv: number[] = []
-        const vCollide: number[] = []
 
 
-        for (let i = 0; i < rooms.length; ++i) {
-            const floor = createFloor00(rooms[i], this._root)
-            _M.fill(floor.v, v)
-            _M.fill(floor.uv, uv)
-            _M.fill(floor.c, c)
 
-            _M.fill(floor.vCollide, vCollide)
-        }
+        // for (let i = 0; i < rooms.length; ++i) {
+        //     const floor = createFloor00(rooms[i], this._root)
+        //     _M.fill(floor.v, v)
+        //     _M.fill(floor.uv, uv)
+        //     _M.fill(floor.c, c)
+
+        //     _M.fill(floor.vCollide, vCollide)
+        // }
 
 
         // for (let i = 0; i < rooms.length; ++i) {

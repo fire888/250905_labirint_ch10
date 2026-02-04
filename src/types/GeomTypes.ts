@@ -1,4 +1,5 @@
 import * as THREE from 'three'
+import { A3 } from "../geometry/_m"
 
 export enum SegmentType {
     HOUSE_00 = 'HOUSE_00',
@@ -177,3 +178,15 @@ export const addTypeFullIdataForFillWall = (draft: Partial<IdataForFillWall>): I
         throw new Error('wall draft is incomplete');
     }
 }
+
+
+export type T_ROOM = {
+    point0: THREE.Vector3,
+    point1?: THREE.Vector3,
+    dir0?: THREE.Vector3,
+    dir1?: THREE.Vector3,
+    dir: THREE.Vector3,
+    id: number,
+    w: number,
+    d: number,
+} 

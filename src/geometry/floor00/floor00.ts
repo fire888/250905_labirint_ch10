@@ -1,9 +1,8 @@
 import { _M, A2, A3 } from "../_m"
 import { tileMapWall } from '../tileMapWall'
-import { IArrayForBuffers } from "types/GeomTypes"
+import { IArrayForBuffers, T_ROOM } from "types/GeomTypes"
 import { Root } from "index"
 import { COLOR_BLUE } from "constants/CONSTANTS"
-import { T_ROOM } from "entityLab01/Lab"
 import * as THREE from "three" 
 
 // const S = 0.3
@@ -11,6 +10,8 @@ const S = .3
 
 export const createFloor00 = (floor: T_ROOM, root: Root): IArrayForBuffers => {
     const { d, w, point0, point1, dir0, dir1 } = floor
+    
+    const hW = w * .5
 
     // const l0 = _M.createLabel('point', [1, 0, 0], 1)
     // l0.position.set(...point0)
@@ -21,26 +22,10 @@ export const createFloor00 = (floor: T_ROOM, root: Root): IArrayForBuffers => {
     // root.studio.add(l1)
 
     // perimeter
-    const p0: A3 = [
-        point0[0] + Math.cos(dir0) * w * .5,
-        point0[1],
-        point0[2] + Math.sin(dir0) * w * .5
-    ]
-    const p1: A3 = [
-        point1[0] + Math.cos(dir1) * w * .5,
-        point1[1],
-        point1[2] + Math.sin(dir1) * w * .5
-    ]
-    const p2: A3 = [
-        point1[0] - Math.cos(dir1) * w * .5,
-        point1[1],
-        point1[2] - Math.sin(dir1) * w * .5
-    ]
-    const p3: A3 = [
-        point0[0] - Math.cos(dir0) * w * .5,
-        point0[1],
-        point0[2] - Math.sin(dir0) * w * .5
-    ]
+    const p0 = new THREE.Vector3().copy(dir0).multiplyScalar(-hW).add(point0)
+    const p1 = new THREE.Vector3().copy(dir1).multiplyScalar(-hW).add(point1)
+    const p2 = new THREE.Vector3().copy(dir1).multiplyScalar(hW).add(point1)
+    const p3 = new THREE.Vector3().copy(dir0).multiplyScalar(hW).add(point0)
 
     const v: number[] = []
     const c: number[] = []
@@ -58,14 +43,14 @@ export const createFloor00 = (floor: T_ROOM, root: Root): IArrayForBuffers => {
         const cur = i / countD
         
         p0_p1.push(new THREE.Vector3(
-            p0[0] * (1 - cur) + p1[0] * cur, 
-            p0[1], 
-            p0[2] * (1 - cur) + p1[2] * cur
+            p0.x * (1 - cur) + p1.x * cur, 
+            p0.y * (1 - cur) + p1.y * cur, 
+            p0.z * (1 - cur) + p1.z * cur
         ))
         p3_p2.push(new THREE.Vector3(
-            p3[0] * (1 - cur) + p2[0] * cur, 
-            p3[1], 
-            p3[2] * (1 - cur) + p2[2] * cur
+            p3.x * (1 - cur) + p2.x * cur, 
+            p3.y * (1 - cur) + p2.y * cur,  
+            p3.z * (1 - cur) + p2.z * cur
         ))
     }
 
@@ -84,7 +69,7 @@ export const createFloor00 = (floor: T_ROOM, root: Root): IArrayForBuffers => {
         }
     }
     
-    const _vCollide = _M.createPolygon(p0, p1, p2, p3)
+    const _vCollide = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
     vCollide.push(..._vCollide) 
 
     return { v, uv, c, vCollide }
