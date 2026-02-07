@@ -16,6 +16,9 @@ let geomLabel: THREE.PlaneGeometry | null = null
 
 export const _M = {
     createPolygon: function(v0: A3, v1: A3, v2: A3, v3: A3) { return  [...v0, ...v1, ...v2, ...v0, ...v2, ...v3] },
+    createPolygonV: function(v0: Vector3, v1: Vector3, v2: Vector3, v3: Vector3) { return  [
+        ...v0.toArray(), ...v1.toArray(), ...v2.toArray(), ...v0.toArray(), ...v2.toArray(), ...v3.toArray()
+    ]},
     fillColorFace: (c: A3) => [...c, ...c, ...c, ...c, ...c, ...c],
     createUv: (v1: A2, v2: A2, v3: A2, v4: A2) => [...v1, ...v2, ...v3, ...v1, ...v3, ...v4],
     createBevel4P: function (v0: A3, v1: A3, v2: A3, v3: A3, height: number = 1, isCap: boolean = false): number[] {
