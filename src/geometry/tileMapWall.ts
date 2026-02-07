@@ -1,3 +1,5 @@
+import { A2 } from "./_m"
+
 const D = .25
 
 export const tileMapWall = {
@@ -107,4 +109,8 @@ export const tileMapWall = {
         D * 2, D * 3,
         D * 1.5, D * 4,
     ],
-} 
+}
+
+export const BLACK: A2[] = [[0, 0], [0, 0], [0, 0], [0, 0]]
+export const NORM: A2[] = [[0, 0], [1, 0], [1, 1], [0, 1]]
+export const GRAY: A2[] = [[.3, .3], [.3, .3], [.3, .3], [.3, .3]]

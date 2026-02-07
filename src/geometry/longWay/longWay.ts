@@ -10,7 +10,7 @@ import { createColumn01 } from "../column01/column01";
 const STAIR_W = 3 
 
 enum I_TypeSeg {
-    FLOOR, STAIR, 
+    FLOOR, STAIR
 }
 
 type I_Seg = {
@@ -106,6 +106,24 @@ const prepareSegments = (point0: A3, point1: A3, root: Root) => {
     return segments
 }
 
+
+const checkMinOffset = (prevDir: THREE.Vector3, curDir: THREE.Vector3, w: number): number => { 
+    // bottom
+    const pp0 = prevDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(w * .5)
+    const pp1 = curDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(w * .5)
+    const d1 = pp0.distanceTo(pp1)
+   
+    return d1
+    // top
+   
+    //const pp2 = prevDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(-w * .5)
+    //const pp3 = curDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(-w * .5)
+    //const d2 = pp2.distanceTo(pp3)
+    // dist
+    //const d = Math.max(d1, d2) * .5
+    //return d
+}
+
 const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
     const segments: T_ROOM[] = []
 
@@ -122,18 +140,11 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                 const sDir = cur.dir.clone().add(prev.dir).normalize().divideScalar(2).add(prev.dir)
                 const eDir = next.dir.clone().add(cur.dir).normalize().divideScalar(2).add(cur.dir)
                 
-                const pp0 = prev.dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(cur.w * .5)
-                const pp1 = cur.dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(cur.w * .5)
-                const d1 = pp0.distanceTo(pp1)
+                const sDist = checkMinOffset(prev.dir, cur.dir, cur.w)
+                const pStairStart = sDir.clone().multiplyScalar(sDist).add(cur.p0)
 
-                const pp2 = prev.dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(-cur.w * .5)
-                const pp3 = cur.dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(-cur.w * .5)
-                const d2 = pp2.distanceTo(pp3)
-
-                const d = Math.max(d1, d2)
-
-                const pStairStart = sDir.clone().multiplyScalar(d).add(cur.p0)
-                const pStairEnd = eDir.clone().multiplyScalar(-d).add(cur.p1)
+                const eDist = checkMinOffset(cur.dir, next.dir, cur.w) 
+                const pStairEnd = eDir.clone().multiplyScalar(-eDist).add(cur.p1)
 
                 const newDir = pStairEnd.clone().sub(pStairStart).setY(0).normalize()
 

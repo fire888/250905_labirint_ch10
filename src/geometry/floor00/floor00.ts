@@ -4,6 +4,7 @@ import { IArrayForBuffers, T_ROOM } from "types/GeomTypes"
 import { Root } from "index"
 import { COLOR_BLUE } from "constants/CONSTANTS"
 import * as THREE from "three" 
+import { BLACK, GRAY, NORM } from "../tileMapWall"
 
 // const S = 0.3
 const S = .3
@@ -65,7 +66,21 @@ export const createFloor00 = (floor: T_ROOM, root: Root): IArrayForBuffers => {
             const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
             v.push(..._v)
             c.push(..._M.fillColorFace([1, 1, 1]))
-            uv.push(..._M.createUv([0, 0], [1, 0], [1, 1], [0, 1]))
+            if (i === 1 || j === 1 || i === p0_p1.length - 1 || j === countW - 1) {
+                if (Math.random() < .1) { 
+                    uv.push(..._M.createUv(GRAY[0], GRAY[1], GRAY[2], GRAY[3]))
+                } else {
+                    uv.push(..._M.createUv(BLACK[0], BLACK[1], BLACK[2], BLACK[3]))
+                }
+            } else {
+                if (Math.random() < .1) {
+                    uv.push(..._M.createUv(GRAY[0], GRAY[1], GRAY[2], GRAY[3]))
+                } else {
+                    uv.push(..._M.createUv(NORM[0], NORM[1], NORM[2], NORM[3]))
+                }
+
+            }
+            //
         }
     }
     
