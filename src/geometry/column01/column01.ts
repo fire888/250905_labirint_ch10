@@ -13,7 +13,6 @@ export const createColumn01 = (w: number, h: number = 20, n: number = 8): IArray
         let rS1 = .3
         let rS2 = .3
         const nS = 8
-        const hS = 0.3
 
         let curH = 0
         let i = 0

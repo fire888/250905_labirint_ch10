@@ -1,20 +1,9 @@
 import { _M, A3 } from "../_m"
-import { IArrayForBuffers, T_ROOM } from "types/GeomTypes"
+import { IArrayForBuffers, T_ROOM, I_TypeSeg } from "types/GeomTypes"
 import { Root } from "index"
 import * as THREE from "three" 
 import { createFloor00 } from "../floor00/floor00"
 import { createColumn01 } from "../column01/column01";
-
-const STAIR_W = 3 
-
-enum I_TypeSeg {
-    FLOOR, STAIR
-}
-
-type I_Seg = {
-    p0: THREE.Vector3,
-    type: I_TypeSeg
-}
 
 type T_SEGMENT = {
     p0: THREE.Vector3
@@ -24,8 +13,12 @@ type T_SEGMENT = {
     type: I_TypeSeg
 }
 
-const MIN_SEG = 5
-const MAX_SEG = 20
+const MIN_SEG = 1
+const MAX_SEG = 10
+const MIN_W = 2
+const MAX_W = 5
+const STAIR_W = 1
+const STAIR_MIN_W = 2
 
 const calcPerimeter = (
     point0: THREE.Vector3, dir0: THREE.Vector3, point1: THREE.Vector3, dir1: THREE.Vector3, w: number
@@ -40,14 +33,15 @@ const calcPerimeter = (
     return { p0, p1, p2, p3 }
 }
 
-const prepareSegments = (point0: A3, point1: A3, root: Root) => {
+const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THREE.Vector3, dir1: THREE.Vector3, root: Root) => {
     const segments: T_SEGMENT[] = []
 
-    const s = new THREE.Vector3().fromArray(point0)
-    const e = new THREE.Vector3().fromArray(point1)
+    const s = point0.clone()
+    const e = point1.clone()
 
     const curP = new THREE.Vector3().copy(s)
-    const curDir = new THREE.Vector3().subVectors(e, s).normalize()
+    const curDir = dir0.clone()
+    const mainDir = point1.clone().sub(point0).normalize()
 
     const sL = _M.createLabel('s', [0, 0, 1], 10)
     sL.position.set(s.x, s.y, s.z)
@@ -66,7 +60,7 @@ const prepareSegments = (point0: A3, point1: A3, root: Root) => {
         let newDir
         let newDist
         let newP
-        let w = Math.random() * 5 + 5 
+        let w = Math.random() * MAX_W + MIN_W 
 
         const eDist = curP.clone().setY(0).distanceTo(e.clone().setY(0))
         if (eDist < MAX_SEG) {
@@ -77,12 +71,17 @@ const prepareSegments = (point0: A3, point1: A3, root: Root) => {
             iterate = 0
         } else {
             if (iterate === 1000) {
-                newDir = new THREE.Vector3(1, 0, 0)
+                newDir = curDir.clone()
             }  else {
-                newDir = e.clone().sub(curP).setY(0).normalize().applyAxisAngle(
-                    new THREE.Vector3(0, 1, 0), 
-                    (Math.random() - .5) * Math.PI * .4
-                )
+                const diff = mainDir.distanceTo(curDir)
+                if (diff > .5) {
+                    newDir =  mainDir.clone().sub(curDir).normalize().multiplyScalar(.2).add(curDir)
+                } else {
+                    newDir = e.clone().sub(curP).setY(0).normalize().applyAxisAngle(
+                        new THREE.Vector3(0, 1, 0), 
+                        (Math.random() - .5) * Math.PI * .4
+                    )
+                }
             }
 
             newDist = Math.random() * (MAX_SEG - MIN_SEG) + MIN_SEG
@@ -92,7 +91,7 @@ const prepareSegments = (point0: A3, point1: A3, root: Root) => {
             if (type === I_TypeSeg.STAIR) {
                 const newY = Math.max(1, curP.y + (Math.random() - .5) * newDist * .8)
                 newP.setY(newY)
-                w = 2 + Math.random() * STAIR_W
+                w = STAIR_MIN_W + Math.random() * STAIR_W
             }
         }
 
@@ -103,16 +102,6 @@ const prepareSegments = (point0: A3, point1: A3, root: Root) => {
         curP.copy(newP)
         curDir.copy(newDir)
     }
-
-    segments.forEach((s, i) => {
-        const l = _M.createLabel('p0_' + i, [1, 0, 0], 4)
-        l.position.set(s.p0.x, s.p0.y, s.p0.z)
-        root.studio.add(l)
-
-        const l1 = _M.createLabel('p1_' + i, [1, 0, 0], 4)
-        l1.position.set(s.p1.x, s.p1.y + .5, s.p1.z)
-        root.studio.add(l1)
-    })
 
     return segments
 }
@@ -163,6 +152,7 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                         dir1,
                         dir: sDir,
                         id: n,
+                        type: I_TypeSeg.STAIR_ADAPTER,
                         ...points
                     } 
                     ++n
@@ -183,7 +173,8 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                         dir1: newDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
                         dir: newDir,
                         id: n,
-                        ...points
+                        ...points,
+                        type: I_TypeSeg.STAIR
                     }
                     ++n
                     segments.push(dataForRoom)
@@ -203,7 +194,8 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                         dir1: next.dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
                         dir: eDir,
                         id: n,
-                        ...points
+                        ...points,
+                        type: I_TypeSeg.STAIR_ADAPTER
                     } 
                     ++n
                     segments.push(dataE)
@@ -229,7 +221,8 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                 dir1: vDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5),
                 dir: vDir,
                 id: n,
-                ...points
+                ...points,
+                type: I_TypeSeg.FLOOR
             }
             ++n
 
@@ -240,8 +233,13 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
     return segments
 }
 
-export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], root: Root): IArrayForBuffers => {
-    const segments = prepareSegments(point0, point1, root)
+type T_LONG_WAY = { p0: THREE.Vector3, dir0: THREE.Vector3, p1: THREE.Vector3, dir1: THREE.Vector3 }
+
+export const createLongWay = (options: T_LONG_WAY, root: Root): IArrayForBuffers => {
+    const { p0, dir0, p1, dir1 } = options
+    
+    console.log('%^%^%^', dir0)
+    const segments = prepareSegments(p0, dir0, p1, dir1, root)
     const segments2: T_ROOM[] = divideStairs(segments, root)
 
     const v: number[] = []
@@ -250,16 +248,43 @@ export const createLongWay = (point0: A3 = [0, 0, 0], point1: A3 = [100, 0, 0], 
     const vCollide: number[] = []
 
     segments2.forEach((s: T_ROOM, i) => {
-        //if (i === 0) 
         { // columns
-            const center = s.axisP0.clone().add(s.axisP1.clone().sub(s.axisP0).multiplyScalar(.5))
-            
-            const r0 = createColumn01(1, 2)
-
-            _M.translateVertices(r0.v, center.x, center.y, center.z)
-            _M.fill(r0.v, v)
-            _M.fill(r0.c, c)
-            _M.fill(r0.uv, uv)
+            if (s.type === I_TypeSeg.FLOOR) {
+                const offsetAxis = s.dir.clone().multiplyScalar(.4)
+                const offsetAxisM = s.dir.clone().multiplyScalar(-.4)
+                {
+                    const offsetDir1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
+                    const r0 = createColumn01(1, 2)
+                    _M.translateVertices(r0.v, offsetDir1.x, offsetDir1.y, offsetDir1.z)
+                    _M.fill(r0.v, v)
+                    _M.fill(r0.c, c)
+                    _M.fill(r0.uv, uv)
+                }
+                {
+                    const offsetDir1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
+                    const r0 = createColumn01(1, 2)
+                    _M.translateVertices(r0.v, offsetDir1.x, offsetDir1.y, offsetDir1.z)
+                    _M.fill(r0.v, v)
+                    _M.fill(r0.c, c)
+                    _M.fill(r0.uv, uv)
+                }
+                {
+                    const offsetDir2 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
+                    const r0 = createColumn01(1, 2)
+                    _M.translateVertices(r0.v, offsetDir2.x, offsetDir2.y, offsetDir2.z)
+                    _M.fill(r0.v, v)
+                    _M.fill(r0.c, c)
+                    _M.fill(r0.uv, uv)
+                }
+                {
+                    const offsetDir2 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
+                    const r0 = createColumn01(1, 2)
+                    _M.translateVertices(r0.v, offsetDir2.x, offsetDir2.y, offsetDir2.z)
+                    _M.fill(r0.v, v)
+                    _M.fill(r0.c, c)
+                    _M.fill(r0.uv, uv)
+                }
+            }
         }
 
         { // floor
