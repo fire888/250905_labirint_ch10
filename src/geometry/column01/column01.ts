@@ -1,7 +1,7 @@
 import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { NORM, GRAY, BLACK } from "../tileMapWall"
+import { UV_NORM, COL_NORM, UV_BLACK, COL_BLACK, UV_GRAY, COL_GRAY } from "../tileMapWall"
 
 
 export const createColumn01 = (w: number, h: number = 20, n: number = 8): IArrayForBuffers => {
@@ -43,15 +43,15 @@ export const createColumn01 = (w: number, h: number = 20, n: number = 8): IArray
 
                 const ran = Math.random()
                 if (ran < .02) {
-                    uv.push(..._M.createUv(BLACK[0], BLACK[1], BLACK[0], BLACK[1]))
+                    uv.push(...UV_GRAY)
+                    c.push(...COL_BLACK)
                 } else if (ran < .04) {
-                    uv.push(..._M.createUv(GRAY[0], GRAY[1], GRAY[2], GRAY[3]))
+                    uv.push(...UV_GRAY)
+                    c.push(...COL_GRAY)
                 } else {
-                    uv.push(..._M.createUv(NORM[0], NORM[1], NORM[2], NORM[3]))
+                    uv.push(...UV_NORM)
+                    c.push(...COL_NORM)
                 }
-
-                c.push(..._M.fillColorFace([1, 1, 1]))
-
             }
             
             _M.translateVertices(__v, 0, curH, 0)

@@ -2,7 +2,7 @@ import { _M, A3 } from "../_m"
 import { IArrayForBuffers, T_ROOM, I_TypeSeg } from "types/GeomTypes"
 import { Root } from "index"
 import * as THREE from "three" 
-import { createFloor00 } from "../floor00/floor00"
+import { createPlatform00 } from "geometry/platform00/platform00"
 import { createColumn01 } from "../column01/column01";
 
 type T_SEGMENT = {
@@ -233,12 +233,10 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
     return segments
 }
 
-type T_LONG_WAY = { p0: THREE.Vector3, dir0: THREE.Vector3, p1: THREE.Vector3, dir1: THREE.Vector3 }
-
-export const createLongWay = (options: T_LONG_WAY, root: Root): IArrayForBuffers => {
+const createSingleWay = (options: T_LONG_WAY, root: Root): { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
     const { p0, dir0, p1, dir1 } = options
-    
-    console.log('%^%^%^', dir0)
+
+    // central
     const segments = prepareSegments(p0, dir0, p1, dir1, root)
     const segments2: T_ROOM[] = divideStairs(segments, root)
 
@@ -287,108 +285,59 @@ export const createLongWay = (options: T_LONG_WAY, root: Root): IArrayForBuffers
             }
         }
 
-        { // floor
-            const r = createFloor00(s, root)
-            v.push(...r.v)
-            c.push(...r.c)
-            uv.push(...r.uv)
-            vCollide.push(...r.vCollide)
-        }
-
-        // perimeter vertical
-        const hPL = .3
-
-        { // left
-            const _v = _M.createPolygonV(
-                s.p0.clone().setY(s.p0.y - hPL), 
-                s.p1.clone().setY(s.p1.y - hPL), 
-                s.p1,
-                s.p0
-            )
-            _M.fill(_v, v)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-            ], c)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0
-            ], uv)
-        }
-
-        { // right
-            const _v = _M.createPolygonV(
-                s.p2.clone().setY(s.p2.y - hPL), 
-                s.p3.clone().setY(s.p3.y - hPL), 
-                s.p3,
-                s.p2
-            )
-            _M.fill(_v, v)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-            ], c)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0
-            ], uv)
-        }
-
-        { // фронт
-            const _v = _M.createPolygonV(
-                s.p3.clone().setY(s.p3.y - hPL), 
-                s.p0.clone().setY(s.p0.y - hPL), 
-                s.p0.clone(),
-                s.p3.clone() 
-            )
-            _M.fill(_v, v)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-            ], c)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0
-            ], uv)
-        }
-
-        { // бэк
-            const _v = _M.createPolygonV(
-                s.p1.clone().setY(s.p1.y - hPL), 
-                s.p2.clone().setY(s.p2.y - hPL), 
-                s.p2.clone(),
-                s.p1.clone() 
-            )
-            _M.fill(_v, v)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-            ], c)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0
-            ], uv)
-        }
-
-        { // боттом
-            const _v = _M.createPolygonV(
-                s.p3.clone().setY(s.p3.y - hPL), 
-                s.p2.clone().setY(s.p2.y - hPL), 
-                s.p1.clone().setY(s.p1.y - hPL),
-                s.p0.clone().setY(s.p0.y - hPL) 
-            )
-            _M.fill(_v, v)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-                0, 0, 0, 0, 0, 0, 0, 0, 0,
-            ], c)
-            _M.fill([
-                0, 0, 0, 0, 0, 0, 
-                0, 0, 0, 0, 0, 0
-            ], uv)
-        }
-
+        const platformData = createPlatform00(s, root)
+        _M.fill(platformData.v, v)
+        _M.fill(platformData.c, c)
+        _M.fill(platformData.uv, uv)
+        _M.fill(platformData.vCollide, vCollide)
     })
+
+    return { geomData: { v, c, uv, vCollide }, segments: segments2 }
+}
+
+
+type T_LONG_WAY = { p0: THREE.Vector3, dir0: THREE.Vector3, p1: THREE.Vector3, dir1: THREE.Vector3 }
+
+export const createLongWay = (options: T_LONG_WAY, root: Root): IArrayForBuffers => {
+
+    const { geomData: { v, c, uv, vCollide }, segments } = createSingleWay(options, root)
+
+    const L_SLEEP_WAYS = 100
+    
+    let count = 0
+    let currentN = 1
+
+    while (currentN < segments.length && count < 10) {
+        while (segments[currentN].type !== I_TypeSeg.FLOOR) { 
+            ++currentN 
+        }
+
+        if (Math.random() < .3) {
+            const { p0, p1, p2, p3, dir } = segments[currentN]
+
+            let start, dirSeg, end
+            if (count % 2 === 0) {
+                start = p2.clone().sub(p3).multiplyScalar(.5).add(p3).setY(p2.y)
+                dirSeg = dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5)
+                end = dirSeg.clone().multiplyScalar(L_SLEEP_WAYS).add(start)
+            } else {
+                start = p1.clone().sub(p0).multiplyScalar(.5).add(p0).setY(p1.y)
+                dirSeg = dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI * .5)
+                end = dirSeg.clone().multiplyScalar(L_SLEEP_WAYS).add(start) 
+            }
+
+            const { geomData } = createSingleWay({ p0: start, dir0: dirSeg, p1: end, dir1: dirSeg }, root)
+
+            _M.fill(geomData.v, v)
+            _M.fill(geomData.c, c)
+            _M.fill(geomData.uv, uv)
+            _M.fill(geomData.vCollide, vCollide)
+
+            count += 1
+        }
+
+        currentN += 1
+    }
 
     return { v, uv, c, vCollide }
 }

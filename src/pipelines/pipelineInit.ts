@@ -43,9 +43,9 @@ export const pipelineInit = async (root: Root) => {
     ticker.on(phisics.update.bind(phisics))
     phisics.createPlayerPhisicsBody([3, 23, 0])
 
-    floor.init(root)
-    floor.mesh.position.set(0, -10, 0)
-    studio.add(floor.mesh)
+    //floor.init(root)
+    //floor.mesh.position.set(0, -10, 0)
+    //studio.add(floor.mesh)
     
     await lab.init(root)
     await lab.build(LEVELS[0])
@@ -73,6 +73,7 @@ export const pipelineInit = async (root: Root) => {
 
     if (IS_DEV_START_ORBIT) {
         await ui.hideStartScreenForce()
+        studio.removeFog()
     } else {
         await ui.hideStartScreen()
     }

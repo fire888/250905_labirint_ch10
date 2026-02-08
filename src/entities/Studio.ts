@@ -70,8 +70,8 @@ export class Studio {
         //this.scene.environment = root.loader.assets.env
         this.scene.background = new THREE.Color(0x0e2535)
         //this.scene.background = root.loader.assets.env
-        this.fog = new THREE.Fog(0x0e2535, .2, 1000)
-        this.addFog()
+        this.fog = new THREE.Fog(0x4c9d4c, .2, 100)
+        // this.addFog()
 
         this.amb = new THREE.AmbientLight(0xffffff, .5) 
         this.scene.add(this.amb)
@@ -271,6 +271,7 @@ export class Studio {
     }
 
     addFog() {
+        console.log('#$#$#$')
         this.scene.fog = this.fog
     }
 

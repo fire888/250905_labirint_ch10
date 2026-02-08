@@ -1,4 +1,4 @@
-import { A2 } from "./_m"
+import { _M, A2 } from "./_m"
 
 const D = .25
 
@@ -111,6 +111,9 @@ export const tileMapWall = {
     ],
 }
 
-export const BLACK: A2[] = [[0, 0], [0, 0], [0, 0], [0, 0]]
-export const NORM: A2[] = [[0, 0], [1, 0], [1, 1], [0, 1]]
-export const GRAY: A2[] = [[.3, .3], [.3, .3], [.3, .3], [.3, .3]]
+export const UV_BLACK: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+export const COL_BLACK: number[] = _M.fillColorFace([0, 0, 0])
+export const UV_NORM: number[] = _M.createUv([0, 0], [1, 0], [1, 1], [0, 1])
+export const COL_NORM: number[] = _M.fillColorFace([1, 1, 1])
+export const UV_GRAY: number[] = _M.createUv([.3, .3], [.3, .3], [.3, .3], [.3, .3])
+export const COL_GRAY: number[] = _M.fillColorFace([1, 0, 0])
