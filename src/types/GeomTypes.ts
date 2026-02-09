@@ -179,9 +179,7 @@ export const addTypeFullIdataForFillWall = (draft: Partial<IdataForFillWall>): I
     }
 }
 
-export enum I_TypeSeg {
-    FLOOR, STAIR, STAIR_ADAPTER
-}
+export type I_TypeSeg = 'FLOOR' | 'STAIR' | 'STAIR_ADAPTER'
 
 export type T_ROOM = {
     axisP0?: THREE.Vector3,

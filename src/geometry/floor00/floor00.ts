@@ -1,16 +1,24 @@
 import { _M, A2, A3 } from "../_m"
-import { tileMapWall } from '../tileMapWall'
-import { IArrayForBuffers, T_ROOM } from "types/GeomTypes"
+import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { COLOR_BLUE } from "constants/CONSTANTS"
 import * as THREE from "three" 
 import { UV_BLACK, COL_BLACK, UV_GRAY, COL_GRAY, UV_NORM, COL_NORM } from "../tileMapWall"
 
-// const S = 0.3
 const S = .3
 
-export const createFloor00 = (floor: T_ROOM, root: Root): IArrayForBuffers => {
-    const { d, w, p0, p1, p2, p3, dir0, dir1 } = floor
+export type T_Floor = { 
+    p0: THREE.Vector3 
+    p1: THREE.Vector3
+    p2: THREE.Vector3
+    p3: THREE.Vector3
+    d: number
+    w: number
+    isFillStart: boolean
+    isFillEnd: boolean
+}
+
+export const createFloor00 = (floor: T_Floor, root: Root): IArrayForBuffers => {
+    const { d, w, p0, p1, p2, p3, isFillStart, isFillEnd } = floor
 
     const v: number[] = []
     const c: number[] = []
@@ -58,7 +66,14 @@ export const createFloor00 = (floor: T_ROOM, root: Root): IArrayForBuffers => {
                 uv.push(...UV_GRAY)
                 c.push(...COL_GRAY)
             } else {
-                if (i === 1 || j === 1 || i === p0_p1.length - 1 || j === countW) { // black border
+                let isSide = false
+
+                if (j === 1) isSide = true
+                if (j === countW) isSide = true
+                if (i === 1 && isFillStart) isSide = true
+                if (i === p0_p1.length - 1 && isFillEnd) isSide = true
+
+                if (isSide) { // black border
                     uv.push(...UV_BLACK)
                     c.push(...COL_BLACK)
                 } else { // normal

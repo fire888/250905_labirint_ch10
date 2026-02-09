@@ -1,5 +1,5 @@
 import { IArrayForBuffers, T_ROOM, I_TypeSeg } from "types/GeomTypes"
-import { createFloor00 } from "geometry/floor00/floor00"
+import { createFloor00, T_Floor } from "geometry/floor00/floor00"
 import { _M } from "../_m"
 import { Root } from "index"
 import { UV_BLACK, COL_BLACK } from "geometry/tileMapWall"
@@ -9,10 +9,15 @@ export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
     const c: number[] = []
     const uv: number[] = []
     const vCollide: number[] = []
-    
 
+    const plData: T_Floor = {
+        p0: s.p0, p1: s.p1, p2: s.p2, p3: s.p3,
+        d: s.d, w: s.w,
+        isFillStart: s.type !==  'STAIR_ADAPTER', isFillEnd: s.type !== 'STAIR_ADAPTER'
+    }
+    
     { // floor
-        const r = createFloor00(s, root)
+        const r = createFloor00(plData, root)
         v.push(...r.v)
         c.push(...r.c)
         uv.push(...r.uv)

@@ -271,7 +271,6 @@ export class Studio {
     }
 
     addFog() {
-        console.log('#$#$#$')
         this.scene.fog = this.fog
     }
 

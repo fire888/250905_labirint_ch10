@@ -11,8 +11,10 @@ type T_SEGMENT = {
     dir: THREE.Vector3
     w: number
     type: I_TypeSeg
+    count: number
 }
 
+const MIN_DIST_TO_END = 20
 const MIN_SEG = 1
 const MAX_SEG = 10
 const MIN_W = 2
@@ -39,64 +41,94 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
     const s = point0.clone()
     const e = point1.clone()
 
+    {
+        const sL = _M.createLabel('s', [0, 0, 1], 10)
+        sL.position.set(s.x, s.y, s.z)
+        root.studio.add(sL)
+
+        const eL = _M.createLabel('e', [0, 0, 1], 10)
+        eL.position.set(e.x, e.y, e.z)
+        root.studio.add(eL)
+    }
+
     const curP = new THREE.Vector3().copy(s)
     const curDir = dir0.clone()
+    let nnDir = dir0.clone()
     const mainDir = point1.clone().sub(point0).normalize()
 
-    const sL = _M.createLabel('s', [0, 0, 1], 10)
-    sL.position.set(s.x, s.y, s.z)
-    root.studio.add(sL)
-
-    const eL = _M.createLabel('e', [0, 0, 1], 10)
-    eL.position.set(e.x, e.y, e.z)
-    root.studio.add(eL)
-
+    let count = 0
     let iterate = 1001
     while (iterate > 0) {
         --iterate
 
-        const type = iterate % 2 === 0 ? I_TypeSeg.FLOOR : I_TypeSeg.STAIR
+        let type: I_TypeSeg = iterate % 2 === 0 ? 'FLOOR' : 'STAIR'
 
         let newDir
-        let newDist
         let newP
-        let w = Math.random() * MAX_W + MIN_W 
-
+        
         const eDist = curP.clone().setY(0).distanceTo(e.clone().setY(0))
-        if (eDist < MAX_SEG) {
-            newDist = eDist
-            newDir = e.clone().sub(curP).normalize()
+        if (eDist < MIN_DIST_TO_END) { // last segment
+            newDir = e.clone().sub(curP).setY(0).normalize()
             newP = e.clone()
+            
+            if (type === 'STAIR') { // last adapter convert to floor
+                const pE = newP.clone().sub(newDir.clone().multiplyScalar(eDist * .5)).setY(newP.y)
+                const el: T_SEGMENT = { 
+                    p0: curP.clone(), 
+                    p1: pE, 
+                    dir: newDir.clone(), 
+                    w: STAIR_MIN_W + Math.random() * STAIR_W, 
+                    type: 'STAIR',
+                    count: ++count
+                }
+                segments.push(el)
+
+                curP.copy(pE)
+                type = 'FLOOR'
+
+                const l = _M.createLabel('l', [0, 1, 1], 10)
+                l.position.set(el.p0.x, el.p0.y, el.p0.z)
+                root.studio.add(l)
+            }           
 
             iterate = 0
         } else {
-            if (iterate === 1000) {
+            if (iterate === 1000) { // стартовая платформа
                 newDir = curDir.clone()
-            }  else {
-                const diff = mainDir.distanceTo(curDir)
-                if (diff > .5) {
-                    newDir =  mainDir.clone().sub(curDir).normalize().multiplyScalar(.2).add(curDir)
-                } else {
-                    newDir = e.clone().sub(curP).setY(0).normalize().applyAxisAngle(
-                        new THREE.Vector3(0, 1, 0), 
-                        (Math.random() - .5) * Math.PI * .4
-                    )
+            }
+            if (iterate !== 1000) { // промежуточные платформы
+                if (type === 'STAIR') {
+                    newDir = nnDir.clone().sub(curDir).multiplyScalar(.5).add(curDir) 
+                }
+                if (type === 'FLOOR') {
+                    newDir = nnDir.clone()
+
+                    const diff = mainDir.distanceTo(curDir)
+                    if (diff > .5) {
+                        nnDir = mainDir.clone().sub(curDir).normalize().multiplyScalar(.2).add(curDir)
+                    } else {
+                        nnDir = e.clone().sub(curP).setY(0).normalize().applyAxisAngle(
+                            new THREE.Vector3(0, 1, 0), 
+                            (Math.random() - .5) * Math.PI * .4
+                        )
+                    }
                 }
             }
 
-            newDist = Math.random() * (MAX_SEG - MIN_SEG) + MIN_SEG
-
+            let newDist = Math.random() * (MAX_SEG - MIN_SEG) + MIN_SEG
             newP = newDir.clone().multiplyScalar(newDist).add(curP)
 
-            if (type === I_TypeSeg.STAIR) {
-                const newY = Math.max(1, curP.y + (Math.random() - .5) * newDist * .8)
+            if (type === 'STAIR') {
+                let newY = Math.max(1, curP.y + (Math.random() - .5) * newDist * .8)
                 newP.setY(newY)
-                w = STAIR_MIN_W + Math.random() * STAIR_W
             }
         }
 
-        const el: T_SEGMENT = { p0: curP.clone(), p1: newP, dir: newDir.clone(), w, type }
+        let w
+        if (type === 'FLOOR') w = Math.random() * MAX_W + MIN_W
+        if (type === 'STAIR') w = STAIR_MIN_W + Math.random() * STAIR_W
 
+        const el: T_SEGMENT = { p0: curP.clone(), p1: newP, dir: newDir.clone(), w, type, count: ++count }
         segments.push(el)
 
         curP.copy(newP)
@@ -110,7 +142,7 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
 const checkMinOffset = (prevDir: THREE.Vector3, curDir: THREE.Vector3, w: number): number => {
     const pp0 = prevDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(w * .5)
     const pp1 = curDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5).multiplyScalar(w * .5)
-    const d1 = pp0.distanceTo(pp1)
+    const d1 = Math.max(.1, pp0.distanceTo(pp1))
     return d1
 }
 
@@ -122,7 +154,7 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
     for (let i = 0; i < segmemtsSrc.length; i++) {
         const cur = segmemtsSrc[i]
 
-        if (cur.type === I_TypeSeg.STAIR) {
+        if (cur.type === 'STAIR') {
             const prev = segmemtsSrc[i - 1] ?? null
             const next = segmemtsSrc[i + 1] ?? null
 
@@ -152,7 +184,7 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                         dir1,
                         dir: sDir,
                         id: n,
-                        type: I_TypeSeg.STAIR_ADAPTER,
+                        type: 'STAIR_ADAPTER',
                         ...points
                     } 
                     ++n
@@ -174,7 +206,7 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                         dir: newDir,
                         id: n,
                         ...points,
-                        type: I_TypeSeg.STAIR
+                        type: 'STAIR'
                     }
                     ++n
                     segments.push(dataForRoom)
@@ -195,7 +227,7 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                         dir: eDir,
                         id: n,
                         ...points,
-                        type: I_TypeSeg.STAIR_ADAPTER
+                        type: 'STAIR_ADAPTER'
                     } 
                     ++n
                     segments.push(dataE)
@@ -203,7 +235,7 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
             }
 
     
-        } else if (cur.type === I_TypeSeg.FLOOR) {
+        } else if (cur.type === 'FLOOR') {
             const { p0, p1 } = cur
 
             const vDir = p1.clone().sub(p0).normalize()
@@ -222,7 +254,7 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
                 dir: vDir,
                 id: n,
                 ...points,
-                type: I_TypeSeg.FLOOR
+                type: 'FLOOR'
             }
             ++n
 
@@ -247,7 +279,7 @@ const createSingleWay = (options: T_LONG_WAY, root: Root): { geomData: IArrayFor
 
     segments2.forEach((s: T_ROOM, i) => {
         { // columns
-            if (s.type === I_TypeSeg.FLOOR) {
+            if (s.type === 'FLOOR') {
                 const offsetAxis = s.dir.clone().multiplyScalar(.4)
                 const offsetAxisM = s.dir.clone().multiplyScalar(-.4)
                 {
@@ -308,7 +340,7 @@ export const createLongWay = (options: T_LONG_WAY, root: Root): IArrayForBuffers
     let currentN = 1
 
     while (currentN < segments.length && count < 10) {
-        while (segments[currentN].type !== I_TypeSeg.FLOOR) { 
+        while (segments[currentN].type !== 'FLOOR') { 
             ++currentN 
         }
 
