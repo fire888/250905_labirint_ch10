@@ -14,6 +14,7 @@ export const pipelineInit = async (root: Root) => {
         ticker,
         floor,
         loader,
+        texturesCanvas,
         phisics,
         lab,
         //audio,
@@ -27,6 +28,8 @@ export const pipelineInit = async (root: Root) => {
 
     loader.init()
     await loader.loadAssets()
+
+    await texturesCanvas.init()
 
     ticker.start()
 

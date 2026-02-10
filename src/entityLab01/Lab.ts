@@ -41,16 +41,20 @@ export class Labyrinth {
 
         const mat = new THREE.MeshStandardMaterial({ 
             color: 0xffffff,
-            roughness: .05,
+            //roughness: .05,
             metalness: .5,
-            metalnessMap : this._root.loader.assets.el_0_spec,
-            map: this._root.loader.assets.el_0,
-            normalMap: this._root.loader.assets.el_0_norm,
-            normalScale: new THREE.Vector2(3, 3),
-            aoMap: this._root.loader.assets.el_0_ao,
+            metalnessMap : this._root.texturesCanvas.iron00Map,
+            //map: this._root.loader.assets.el_0,
+            map: this._root.texturesCanvas.iron00Map,
+            //normalMap: this._root.loader.assets.el_0_norm,
+            bumpMap: this._root.texturesCanvas.iron00Map,
+            bumpScale: 1,
+            //normalScale: new THREE.Vector2(3, 3),
+            aoMap: this._root.texturesCanvas.iron00Map,
             aoMapIntensity: 1,
-            envMap: this._root.loader.assets.env,
+            envMap: this._root.texturesCanvas.iron00Map,
             envMapIntensity: 1,
+            vertexColors: true,
             // wireframe: true
         })
 
