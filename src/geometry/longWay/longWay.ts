@@ -19,8 +19,8 @@ const MIN_SEG = 1
 const MAX_SEG = 10
 const MIN_W = 2
 const MAX_W = 5
-const STAIR_W = 1
-const STAIR_MIN_W = 2
+const STAIR_W = 3
+const STAIR_MIN_W = 1
 
 const calcPerimeter = (
     point0: THREE.Vector3, dir0: THREE.Vector3, point1: THREE.Vector3, dir1: THREE.Vector3, w: number
@@ -67,31 +67,48 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
         let newP
         
         const eDist = curP.clone().setY(0).distanceTo(e.clone().setY(0))
-        if (eDist < MIN_DIST_TO_END) { // last segment
+        if (eDist < MIN_DIST_TO_END) { // подсоединение к завершающей платформе
+            iterate = 0
+
             newDir = e.clone().sub(curP).setY(0).normalize()
             newP = e.clone()
+
+            let pS = null
+            const pE = newP.clone().sub(newDir.clone().multiplyScalar(eDist * .7)).setY(curP.y)
             
-            if (type === 'STAIR') { // last adapter convert to floor
-                const pE = newP.clone().sub(newDir.clone().multiplyScalar(eDist * .5)).setY(newP.y)
+            if (type === 'FLOOR') { // небольшая платформа если нужна
                 const el: T_SEGMENT = { 
                     p0: curP.clone(), 
-                    p1: pE, 
+                    p1: pE.clone(), 
                     dir: newDir.clone(), 
-                    w: STAIR_MIN_W + Math.random() * STAIR_W, 
-                    type: 'STAIR',
+                    w: 4, 
+                    type: 'FLOOR',
                     count: ++count
                 }
                 segments.push(el)
 
-                curP.copy(pE)
-                type = 'FLOOR'
-
                 const l = _M.createLabel('l', [0, 1, 1], 10)
                 l.position.set(el.p0.x, el.p0.y, el.p0.z)
-                root.studio.add(l)
-            }           
+                root.studio.add(l)      
 
-            iterate = 0
+                pS = pE.clone()
+                pE.add(newDir.clone().multiplyScalar(eDist * .2)).setY(newP.y)
+            }
+
+            pE.setY(newP.y)
+
+            const el: T_SEGMENT = { // лестница к последней платформе
+                p0: pS ?? curP.clone(), 
+                p1: pE, 
+                dir: newDir.clone(), 
+                w: STAIR_MIN_W + Math.random() * STAIR_W, 
+                type: 'STAIR',
+                count: ++count
+            }
+            segments.push(el)
+
+            curP.copy(pE)
+            type = 'FLOOR'
         } else {
             if (iterate === 1000) { // стартовая платформа
                 newDir = curDir.clone()
@@ -125,10 +142,23 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
         }
 
         let w
-        if (type === 'FLOOR') w = Math.random() * MAX_W + MIN_W
-        if (type === 'STAIR') w = STAIR_MIN_W + Math.random() * STAIR_W
+        if (type === 'FLOOR') { 
+            w = Math.random() * MAX_W + MIN_W 
+        }
+        if (type === 'STAIR') {
+            const d = curP.distanceTo(newP) 
+            const wRan = (STAIR_MIN_W + Math.random() * STAIR_W)
+            w = Math.min(wRan, wRan * (d * .8 / wRan)) 
+        }
 
-        const el: T_SEGMENT = { p0: curP.clone(), p1: newP, dir: newDir.clone(), w, type, count: ++count }
+        const el: T_SEGMENT = { 
+            p0: curP.clone(), 
+            p1: newP, 
+            dir: newDir.clone(), 
+            w, 
+            type, 
+            count: ++count 
+        }
         segments.push(el)
 
         curP.copy(newP)

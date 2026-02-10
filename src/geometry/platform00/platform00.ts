@@ -13,7 +13,7 @@ export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
     const plData: T_Floor = {
         p0: s.p0, p1: s.p1, p2: s.p2, p3: s.p3,
         d: s.d, w: s.w,
-        isFillStart: s.type !==  'STAIR_ADAPTER', isFillEnd: s.type !== 'STAIR_ADAPTER'
+        isFillStart: s.type === 'FLOOR', isFillEnd: s.type === 'FLOOR'
     }
     
     { // floor

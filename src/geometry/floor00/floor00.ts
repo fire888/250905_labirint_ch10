@@ -59,10 +59,10 @@ export const createFloor00 = (floor: T_Floor, root: Root): IArrayForBuffers => {
             v.push(..._v)
             
             const ran = Math.random()
-            if (ran < .01) { // random black
+            if (ran < .08) { // random black
                 uv.push(...UV_BLACK)
                 c.push(...COL_GRAY)
-            } else if (ran < .02) { // random gray
+            } else if (ran < .16) { // random gray
                 uv.push(...UV_GRAY)
                 c.push(...COL_GRAY)
             } else {

@@ -87,16 +87,19 @@ export const pipelineInit = async (root: Root) => {
 
     await pause(100)
     
-    if (!IS_DEV_START_ORBIT) {
-        controls.disconnect()
-        const startPos = [LEVELS[0].playerStartPosition[0], .7, LEVELS[0].playerStartPosition[1]]
-        await studio.cameraFlyToLevel(startPos)
-        phisics.setPlayerPosition(...startPos)
-        studio.animateFogTo(LEVELS[0].fogFar, LEVELS[0].theme.fogColor, 4000)
-        studio.animateBackgroundTo(LEVELS[0].theme.sceneBackground, 3000)
-        studio.animateLightTo(LEVELS[0].theme.dirLightColor, LEVELS[0].theme.ambientLightColor, 3000)
-        controls.connect()
-    }
+    // if (!IS_DEV_START_ORBIT) {
+    //     controls.disconnect()
+    //     // const startPos 
+    //     // const startPos = [LEVELS[0].playerStartPosition[0], .7, LEVELS[0].playerStartPosition[1]]
+    //     await studio.cameraFlyToLevel(startPos)
+    //     phisics.setPlayerPosition(...startPos)
+    //     studio.animateFogTo(LEVELS[0].fogFar, LEVELS[0].theme.fogColor, 4000)
+    //     studio.animateBackgroundTo(LEVELS[0].theme.sceneBackground, 3000)
+    //     studio.animateLightTo(LEVELS[0].theme.dirLightColor, LEVELS[0].theme.ambientLightColor, 3000)
+    //     controls.connect()
+    // }
+
+    //controls.
 
     createChangerGameTheme(root)
 }
