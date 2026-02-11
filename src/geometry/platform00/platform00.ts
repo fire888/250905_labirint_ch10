@@ -2,7 +2,7 @@ import { IArrayForBuffers, T_ROOM, I_TypeSeg } from "types/GeomTypes"
 import { createFloor00, T_Floor } from "geometry/floor00/floor00"
 import { _M } from "../_m"
 import { Root } from "index"
-import { UV_BLACK, COL_BLACK } from "geometry/tileMapWall"
+import { COL_RED, UV_RED } from "geometry/tileMapWall"
 
 export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
     const v: number[] = []
@@ -35,8 +35,8 @@ export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
             s.p0
         )
         _M.fill(_v, v)
-        _M.fill(COL_BLACK, c)
-        _M.fill(UV_BLACK, uv)
+        _M.fill(COL_RED, c)
+        _M.fill(UV_RED, uv)
     }
 
     { // right
@@ -47,8 +47,8 @@ export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
             s.p2
         )
         _M.fill(_v, v)
-        _M.fill(COL_BLACK, c)
-        _M.fill(UV_BLACK, uv)
+        _M.fill(COL_RED, c)
+        _M.fill(UV_RED, uv)
     }
 
     { // фронт
@@ -59,8 +59,8 @@ export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
             s.p3.clone() 
         )
         _M.fill(_v, v)
-        _M.fill(COL_BLACK, c)
-        _M.fill(UV_BLACK, uv)
+        _M.fill(COL_RED, c)
+        _M.fill(UV_RED, uv)
     }
 
     { // бэк
@@ -71,8 +71,8 @@ export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
             s.p1.clone() 
         )
         _M.fill(_v, v)
-        _M.fill(COL_BLACK, c)
-        _M.fill(UV_BLACK, uv)
+        _M.fill(COL_RED, c)
+        _M.fill(UV_RED, uv)
     }
 
     { // боттом
@@ -83,8 +83,8 @@ export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
             s.p0.clone().setY(s.p0.y - hPL) 
         )
         _M.fill(_v, v)
-        _M.fill(COL_BLACK, c)
-        _M.fill(UV_BLACK, uv)
+        _M.fill(COL_RED, c)
+        _M.fill(UV_RED, uv)
     }
     
     return { v, c, uv, vCollide }

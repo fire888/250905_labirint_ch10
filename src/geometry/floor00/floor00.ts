@@ -3,10 +3,10 @@ import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
 import * as THREE from "three" 
 import { 
-    UV_BLACK, COL_BLACK, 
+    UV_RED, COL_RED, COL_BLUE,
     UV_GRAY, COL_GRAY, 
     UV_NORM, COL_NORM, COL_NORM_2,
-    UV_GRID, COL_GRID
+    UV_GRID, UV_GRID_C,
 } from "../tileMapWall"
 
 const S = .3
@@ -52,7 +52,13 @@ export const createFloor00 = (floor: T_Floor, root: Root): IArrayForBuffers => {
         ))
     }
 
-    const isARROW = Math.random() < .5 
+    let mode = 'ARROW'
+    const ran = Math.random()
+    if (ran < .25) {
+        mode = 'GRID'
+    } else if (ran < .5) { 
+        mode = 'DARK'
+    } 
 
     // fill tiles full perimeter
     for (let i = 1; i < p0_p1.length; ++i) {
@@ -61,19 +67,50 @@ export const createFloor00 = (floor: T_Floor, root: Root): IArrayForBuffers => {
             const p1 = p0_p1[i - 1].clone().sub(p3_p2[i - 1]).multiplyScalar(j / countW).add(p3_p2[i - 1])
             const p2 = p0_p1[i].clone().sub(p3_p2[i]).multiplyScalar(j / countW).add(p3_p2[i])
             const p3 = p0_p1[i].clone().sub(p3_p2[i]).multiplyScalar((j - 1) / countW).add(p3_p2[i]) 
-            
-            const ran = Math.random()
-            if (ran < .08) { // random black
-                const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
-                v.push(..._v)
-                uv.push(...UV_BLACK)
-                c.push(...COL_BLACK)
-            } else if (ran < .16) { // random gray
-                const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
-                v.push(..._v)
-                uv.push(...UV_GRAY)
-                c.push(...COL_GRAY)
-            } else {
+
+            if (mode === 'ARROW') {
+                const ran = Math.random()
+                if (ran < .08) { // random black
+                    const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                    v.push(..._v)
+                    uv.push(...UV_RED)
+                    c.push(...COL_RED)
+                } else if (ran < .16) { // random gray
+                    const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                    v.push(..._v)
+                    uv.push(...UV_GRAY)
+                    c.push(...COL_GRAY)
+                } else {
+                    let isSide = false
+
+                    if (j === 1) isSide = true
+                    if (j === countW) isSide = true
+                    if (i === 1 && isFillStart) isSide = true
+                    if (i === p0_p1.length - 1 && isFillEnd) isSide = true
+
+                    if (isSide) { // black border
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_RED)
+                        c.push(...COL_RED)
+                    } else { // normal
+                        const ran = Math.random()
+                        if (ran < .1) { // back
+                            const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                            v.push(..._v)
+                            uv.push(...UV_NORM)
+                            c.push(...COL_NORM_2)
+                        } else {
+                            const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
+                            v.push(..._v)
+                            uv.push(...UV_NORM)
+                            c.push(...COL_NORM)
+                        }
+                    }
+                }
+            }
+
+            if (mode === 'GRID') {
                 let isSide = false
 
                 if (j === 1) isSide = true
@@ -82,34 +119,85 @@ export const createFloor00 = (floor: T_Floor, root: Root): IArrayForBuffers => {
                 if (i === p0_p1.length - 1 && isFillEnd) isSide = true
 
                 if (isSide) { // black border
-                    const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
-                    v.push(..._v)
-                    uv.push(...UV_BLACK)
-                    c.push(...COL_BLACK)
+                    const r = Math.random()
+                    if (r > .2) { 
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_RED)
+                        c.push(...COL_RED)
+                    } else {
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_GRAY)
+                        c.push(...COL_GRAY)
+                    }
                 } else { // normal
-                    if (isARROW) {
-                        const ran = Math.random()
-                        if (ran < .1) { // back
-                            const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
-                            v.push(..._v)
-                            uv.push(...UV_NORM)
-                            c.push(...COL_NORM_2)
-                        } else { // front
-                            const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
-                            v.push(..._v)
-                            if (isARROW) {
-                                uv.push(...UV_NORM)
-                                c.push(...COL_NORM)
-                            } else {
-                                uv.push(...UV_GRID)
-                                c.push(...COL_GRID)
-                            }
+                    const ran = Math.random()
+                    if (ran < .1) { // back
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_GRID)
+                        c.push(...COL_NORM)
+                    } else if (ran < .13) { 
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_GRAY)
+                        c.push(...COL_GRAY)
+                    } else if (ran < .135) {
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_RED)
+                        c.push(...COL_RED)
+                    } else {
+                        const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_GRID_C)
+                        c.push(...COL_NORM)
+                    }
+                }
+            }
+
+            if (mode === 'DARK') {
+                let isSide = false
+
+                if (j === 1) isSide = true
+                if (j === countW) isSide = true
+                if (i === 1 && isFillStart) isSide = true
+                if (i === p0_p1.length - 1 && isFillEnd) isSide = true
+
+                if (isSide) {
+                    if (Math.random() > .04) {
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_RED)
+                        if (Math.random() > .06) {
+                            c.push(...COL_BLUE) 
+                        } else {
+                            c.push(...COL_RED) 
                         }
                     } else {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
-                        uv.push(...UV_GRID)
-                        c.push(...COL_NORM)
+                        uv.push(...UV_GRAY)
+                        c.push(...COL_GRAY)
+                    }
+                } else {
+                    const r = Math.random()
+                    if (r < .03) {
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_RED)
+                        c.push(...COL_RED)
+                    } else if (r < .06) {
+                        const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_RED)
+                        c.push(...COL_BLUE)
+                    } else {
+                        const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_GRAY)
+                        c.push(...COL_GRAY)
                     }
                 }
             }

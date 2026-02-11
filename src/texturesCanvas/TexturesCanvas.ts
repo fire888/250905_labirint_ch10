@@ -11,6 +11,8 @@ const show = (iron00Map: HTMLCanvasElement) => {
     iron00Map.style.border = '1px solid red'
 }
 
+const ROAD_COLOR = "#234e6c"
+
 export class TexturesCanvas {
     iron00Map: THREE.CanvasTexture
     //iron00AO: HTMLCanvasElement
@@ -30,6 +32,7 @@ export class TexturesCanvas {
             const texSide = createSide()
             const tex2 = createTex2()
             const tex3 = createTex3() 
+            const tex4 = createTex4() 
 
             ///////////////////////////////
 
@@ -44,6 +47,7 @@ export class TexturesCanvas {
             ctx.drawImage(texSide, S * 2, 0)
             ctx.drawImage(tex2, S * 3, 0)
             ctx.drawImage(tex3, 0, S)
+            ctx.drawImage(tex4, S, S)
 
             // show(canMain)
 
@@ -94,7 +98,7 @@ const create1 = () => { // треугольник светлый в центре
     ctx.stroke()
 
     ctx.beginPath()
-    ctx.fillStyle = "#000000"
+    ctx.fillStyle = ROAD_COLOR
     ctx.moveTo(S * 0.1, S * 0.3)
     ctx.lineTo(S * 0.1, S * 0.9)
     ctx.lineTo(S * 0.4, S * 0.9)
@@ -102,7 +106,7 @@ const create1 = () => { // треугольник светлый в центре
     ctx.fill()
 
     ctx.beginPath()
-    ctx.fillStyle = "#000000"
+    ctx.fillStyle = ROAD_COLOR
     ctx.moveTo(S * 0.9, S * 0.3)
     ctx.lineTo(S * 0.9, S * 0.9)
     ctx.lineTo(S * 0.6, S * 0.9)
@@ -181,7 +185,7 @@ const createTex3 = () => { // решетка крестик
     iron00Map.height = S
     const ctx = iron00Map.getContext('2d')
     
-    ctx.fillStyle = "#000000"
+    ctx.fillStyle = ROAD_COLOR
     const offset2 = 0
     const s2 = S - 2 * offset2
     ctx.fillRect(offset2, offset2, s2, s2)
@@ -210,6 +214,54 @@ const createTex3 = () => { // решетка крестик
     bolt(S, 0, S * .15)
     bolt(S, S, S * .15)
     bolt(0, S, S * .15)
+
+    return iron00Map
+}
+const createTex4 = () => { // решетка крестик + кружок
+    const iron00Map = document.createElement('canvas')
+    iron00Map.width = S
+    iron00Map.height = S
+    const ctx = iron00Map.getContext('2d')
+    
+    ctx.fillStyle = ROAD_COLOR
+    const offset2 = 0
+    const s2 = S - 2 * offset2
+    ctx.fillRect(offset2, offset2, s2, s2)
+    
+    ctx.strokeStyle = "#ffffff"
+    ctx.lineWidth = S * .1
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(S, S)
+    ctx.moveTo(0, S)
+    ctx.lineTo(S, 0)
+    ctx.stroke()
+
+    const bolt = (x: number, y: number, r: number, hole: boolean) => {
+        ctx.beginPath()
+        ctx.arc(x, y, r, 0, Math.PI * 2)
+        ctx.fillStyle = '#333333'
+        ctx.fill()
+        ctx.beginPath()
+        ctx.arc(x, y, r - 3, 0, Math.PI * 2)
+        ctx.fillStyle = '#ffffff'
+        ctx.fill()
+
+        if (hole) {
+            ctx.beginPath()
+            ctx.arc(x, y, r * .45, 0, Math.PI * 2)
+            ctx.fillStyle = '#610c4d'
+            ctx.fill()
+        }
+    }
+
+    bolt(0, 0, S * .15, false)
+    bolt(S, 0, S * .15, false)
+    bolt(S, S, S * .15, false)
+    bolt(0, S, S * .15, false)
+    bolt(S * .5, S * .5, S * .45, true)
+
+    // show(iron00Map)
 
     return iron00Map
 }
