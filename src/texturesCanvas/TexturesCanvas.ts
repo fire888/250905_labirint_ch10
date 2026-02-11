@@ -2,6 +2,15 @@ import * as THREE from 'three'
         
 const S = 256
 
+const show = (iron00Map: HTMLCanvasElement) => {
+    document.body.appendChild(iron00Map)
+    iron00Map.style.position = 'absolute'
+    iron00Map.style.left = '0'
+    iron00Map.style.top = '0'
+    iron00Map.style.zIndex = '100'
+    iron00Map.style.border = '1px solid red'
+}
+
 export class TexturesCanvas {
     iron00Map: THREE.CanvasTexture
     //iron00AO: HTMLCanvasElement
@@ -16,8 +25,29 @@ export class TexturesCanvas {
         // }
 
         { // 1
-            const t = create1()
-            this.iron00Map = new THREE.CanvasTexture(t) 
+            const texEmpty = createEmpty()
+            const tex1 = create1()
+            const texSide = createSide()
+            const tex2 = createTex2()
+            const tex3 = createTex3() 
+
+            ///////////////////////////////
+
+            const canMain = document.createElement('canvas')
+            canMain.width = S * 4
+            canMain.height = S * 4
+
+            const ctx = canMain.getContext('2d')
+
+            ctx.drawImage(texEmpty, 0, 0)
+            ctx.drawImage(tex1, S, 0)
+            ctx.drawImage(texSide, S * 2, 0)
+            ctx.drawImage(tex2, S * 3, 0)
+            ctx.drawImage(tex3, 0, S)
+
+            // show(canMain)
+
+            this.iron00Map = new THREE.CanvasTexture(canMain) 
             this.iron00Map.minFilter = THREE.LinearMipmapLinearFilter
             //NearestFilter | NearestMipmapNearestFilter | NearestMipmapLinearFilter | LinearFilter | LinearMipmapNearestFilter | LinearMipmapLinearFilter
         }
@@ -41,7 +71,7 @@ const createEmpty = () => {
     return iron00Map
 }
 
-const create1 = () => {
+const create1 = () => { // треугольник светлый в центре, черные треугольники по бокам
     const iron00Map = document.createElement('canvas')
     iron00Map.width = S
     iron00Map.height = S
@@ -78,6 +108,108 @@ const create1 = () => {
     ctx.lineTo(S * 0.6, S * 0.9)
     ctx.closePath()
     ctx.fill()
+
+    return iron00Map
+}
+
+const createSide = () => { // решетка
+    const iron00Map = document.createElement('canvas')
+    iron00Map.width = S
+    iron00Map.height = S
+
+    const ctx = iron00Map.getContext('2d')
+    ctx.fillStyle = "#ffffff"
+
+    const offset1 = .01 * S
+    const s = S - 2 * offset1
+    ctx.fillRect(offset1, offset1, s, s)
+
+    const offset = .1 * S
+    const SIZE = S * .03
+    const n = 10
+    ctx.fillStyle = '#000000'
+    const step = (S - 2 * offset) / (n - 1)
+    for (let i = 0; i < n; i++) { 
+        for (let j = 0; j < n; j++) {
+            ctx.fillRect(
+                offset + i * step - SIZE * .5,
+                offset + j * step - SIZE * .5,
+                SIZE, SIZE
+            )
+        }
+    }
+
+    return iron00Map
+}
+
+
+const createTex2 = () => { // решетка паралельная
+    const iron00Map = document.createElement('canvas')
+    iron00Map.width = S
+    iron00Map.height = S
+
+    const ctx = iron00Map.getContext('2d')
+    ctx.fillStyle = "#484848"
+    const offset1 = S * .01
+    const s = S - 2 * offset1
+    ctx.fillRect(offset1, offset1, s, s)
+
+    ctx.fillStyle = "#000000"
+    const offset2 = S * .03
+    const s2 = S - 2 * offset2
+    ctx.fillRect(offset2, offset2, s2, s2)
+
+    const SIZE = S * .03
+    const n = 10
+    ctx.fillStyle = '#414141'
+    const step = (S - 2 * offset2) / (n - 1)
+    for (let i = 1; i < (n - 1); i++) { 
+        ctx.fillRect(
+            offset2 + i * step - SIZE * .5,
+            offset2 + SIZE,
+            SIZE,
+            S - (offset2 * 2) - SIZE - SIZE
+        )
+    }
+
+    return iron00Map
+}
+
+const createTex3 = () => { // решетка крестик
+    const iron00Map = document.createElement('canvas')
+    iron00Map.width = S
+    iron00Map.height = S
+    const ctx = iron00Map.getContext('2d')
+    
+    ctx.fillStyle = "#000000"
+    const offset2 = 0
+    const s2 = S - 2 * offset2
+    ctx.fillRect(offset2, offset2, s2, s2)
+    
+    ctx.strokeStyle = "#ffffff"
+    ctx.lineWidth = S * .1
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(S, S)
+    ctx.moveTo(0, S)
+    ctx.lineTo(S, 0)
+    ctx.stroke()
+
+    const bolt = (x: number, y: number, r: number) => {
+        ctx.beginPath()
+        ctx.arc(x, y, r, 0, Math.PI * 2)
+        ctx.fillStyle = '#333333'
+        ctx.fill()
+        ctx.beginPath()
+        ctx.arc(x, y, r * .93, 0, Math.PI * 2)
+        ctx.fillStyle = '#ffffff'
+        ctx.fill()
+    }
+
+    bolt(0, 0, S * .15)
+    bolt(S, 0, S * .15)
+    bolt(S, S, S * .15)
+    bolt(0, S, S * .15)
 
     return iron00Map
 }

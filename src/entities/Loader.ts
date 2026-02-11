@@ -24,12 +24,12 @@ import el_0_spec from '../assets/el_0_spec.png'
 
 import env from '../assets/env.jpg'
 
-import pX from '../assets/noise00.webp'
-import nX from '../assets/noise00.webp'
-import pY from '../assets/noise00.webp'
-import nY from '../assets/noise00.webp'
-import pZ from '../assets/noise00.webp'
-import nZ from '../assets/noise00.webp'
+import pX from '../assets/el_0.jpg'
+import nX from '../assets/el_0.jpg'
+import pY from '../assets/el_0.jpg'
+import nY from '../assets/el_0.jpg'
+import pZ from '../assets/el_0.jpg'
+import nZ from '../assets/el_0.jpg'
 
 type Assets = {
     sprite: Texture,

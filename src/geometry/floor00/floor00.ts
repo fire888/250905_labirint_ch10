@@ -2,7 +2,12 @@ import { _M, A2, A3 } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
 import * as THREE from "three" 
-import { UV_BLACK, COL_BLACK, UV_GRAY, COL_GRAY, UV_NORM, COL_NORM } from "../tileMapWall"
+import { 
+    UV_BLACK, COL_BLACK, 
+    UV_GRAY, COL_GRAY, 
+    UV_NORM, COL_NORM, COL_NORM_2,
+    UV_GRID, COL_GRID
+} from "../tileMapWall"
 
 const S = .3
 
@@ -47,22 +52,25 @@ export const createFloor00 = (floor: T_Floor, root: Root): IArrayForBuffers => {
         ))
     }
 
+    const isARROW = Math.random() < .5 
+
     // fill tiles full perimeter
     for (let i = 1; i < p0_p1.length; ++i) {
         for (let j = 1; j < countW + 1; ++j) {
-            const p0 = p0_p1[i - 1].clone().sub(p3_p2[i - 1]).multiplyScalar(j / countW).add(p3_p2[i - 1])
-            const p1 = p0_p1[i].clone().sub(p3_p2[i]).multiplyScalar(j / countW).add(p3_p2[i])
-            const p2 = p0_p1[i].clone().sub(p3_p2[i]).multiplyScalar((j - 1) / countW).add(p3_p2[i])
-            const p3 = p0_p1[i - 1].clone().sub(p3_p2[i - 1]).multiplyScalar((j - 1) / countW).add(p3_p2[i - 1])
-
-            const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
-            v.push(..._v)
+            const p0 = p0_p1[i - 1].clone().sub(p3_p2[i - 1]).multiplyScalar((j - 1) / countW).add(p3_p2[i - 1])
+            const p1 = p0_p1[i - 1].clone().sub(p3_p2[i - 1]).multiplyScalar(j / countW).add(p3_p2[i - 1])
+            const p2 = p0_p1[i].clone().sub(p3_p2[i]).multiplyScalar(j / countW).add(p3_p2[i])
+            const p3 = p0_p1[i].clone().sub(p3_p2[i]).multiplyScalar((j - 1) / countW).add(p3_p2[i]) 
             
             const ran = Math.random()
             if (ran < .08) { // random black
+                const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                v.push(..._v)
                 uv.push(...UV_BLACK)
                 c.push(...COL_BLACK)
             } else if (ran < .16) { // random gray
+                const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                v.push(..._v)
                 uv.push(...UV_GRAY)
                 c.push(...COL_GRAY)
             } else {
@@ -74,11 +82,35 @@ export const createFloor00 = (floor: T_Floor, root: Root): IArrayForBuffers => {
                 if (i === p0_p1.length - 1 && isFillEnd) isSide = true
 
                 if (isSide) { // black border
+                    const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                    v.push(..._v)
                     uv.push(...UV_BLACK)
                     c.push(...COL_BLACK)
                 } else { // normal
-                    uv.push(...UV_NORM)
-                    c.push(...COL_NORM)
+                    if (isARROW) {
+                        const ran = Math.random()
+                        if (ran < .1) { // back
+                            const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
+                            v.push(..._v)
+                            uv.push(...UV_NORM)
+                            c.push(...COL_NORM_2)
+                        } else { // front
+                            const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
+                            v.push(..._v)
+                            if (isARROW) {
+                                uv.push(...UV_NORM)
+                                c.push(...COL_NORM)
+                            } else {
+                                uv.push(...UV_GRID)
+                                c.push(...COL_GRID)
+                            }
+                        }
+                    } else {
+                        const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
+                        v.push(..._v)
+                        uv.push(...UV_GRID)
+                        c.push(...COL_NORM)
+                    }
                 }
             }
         }

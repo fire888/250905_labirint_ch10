@@ -111,10 +111,16 @@ export const tileMapWall = {
     ],
 }
 
-export const UV_BLACK: number[] = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
-export const COL_BLACK: number[] = _M.fillColorFace([0, 0, 0])
-//export const UV_NORM: number[] = _M.createUv([0, 0], [1, 0], [1, 1], [0, 1])
-export const UV_NORM: number[] = _M.createUv([0, 1], [0, 0], [1, 0], [1, 1])
-export const COL_NORM: number[] = _M.fillColorFace([1, 1, 1])
-export const UV_GRAY: number[] = _M.createUv([.5, .5], [.5, .5], [.5, .5], [.5, .5])
-export const COL_GRAY: number[] = _M.fillColorFace([1, 1, 1])
+const S = 0.25
+export const UV_BLACK: number[] = _M.createUv([S * 2, S * 3], [S * 3, S * 3], [S * 3, S * 4], [S * 2, S * 4])
+export const COL_BLACK: number[] = _M.fillColorFace([1, 0, 0])
+
+export const UV_NORM: number[] = _M.createUv([S * 1, S * 3], [S * 2, S * 3], [S * 2, S * 4], [S * 1, S * 4])
+export const COL_NORM: number[] = _M.fillColorFace([1, 1, 0])
+export const COL_NORM_2: number[] = _M.fillColorFace([1, 1, .6])
+
+export const UV_GRAY: number[] = _M.createUv([S * 3, S * 3], [S * 4, S * 3], [S * 4, S * 4], [S * 3, S * 4])
+export const COL_GRAY: number[] = _M.fillColorFace([.7, .7, 1])
+
+export const UV_GRID: number[] = _M.createUv([0, S * 2], [S * 1, S * 2], [S * 1, S * 3], [0, S * 3])
+export const COL_GRID: number[] = _M.fillColorFace([.7, 1, .7])
