@@ -44,14 +44,14 @@ export const pipelineInit = async (root: Root) => {
 
     phisics.init(root)
     ticker.on(phisics.update.bind(phisics))
-    phisics.createPlayerPhisicsBody([3, 23, 0])
+    phisics.createPlayerPhisicsBody([3, 2, 0])
 
     //floor.init(root)
     //floor.mesh.position.set(0, -10, 0)
     //studio.add(floor.mesh)
     
     await lab.init(root)
-    await lab.build(LEVELS[0])
+    await lab.buildNext(LEVELS[0])
 
     //energySystem.init(root, lab.positionsEnergy)
     //antigravSystem.init(root, lab.positionsAntigravs)

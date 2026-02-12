@@ -22,6 +22,8 @@ const MIN_W = 2
 const MAX_W = 5
 const STAIR_W = 3
 const STAIR_MIN_W = 1
+const MIN_Y = -10
+
 
 const calcPerimeter = (
     point0: THREE.Vector3, dir0: THREE.Vector3, point1: THREE.Vector3, dir1: THREE.Vector3, w: number
@@ -42,15 +44,15 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
     const s = point0.clone()
     const e = point1.clone()
 
-    {
-        const sL = _M.createLabel('s', [0, 0, 1], 10)
-        sL.position.set(s.x, s.y, s.z)
-        root.studio.add(sL)
+    // {
+    //     const sL = _M.createLabel('s', [0, 0, 1], 10)
+    //     sL.position.set(s.x, s.y, s.z)
+    //     root.studio.add(sL)
 
-        const eL = _M.createLabel('e', [0, 0, 1], 10)
-        eL.position.set(e.x, e.y, e.z)
-        root.studio.add(eL)
-    }
+    //     const eL = _M.createLabel('e', [0, 0, 1], 10)
+    //     eL.position.set(e.x, e.y, e.z)
+    //     root.studio.add(eL)
+    // }
 
     const curP = new THREE.Vector3().copy(s)
     const curDir = dir0.clone()
@@ -88,9 +90,9 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
                 }
                 segments.push(el)
 
-                const l = _M.createLabel('l', [0, 1, 1], 10)
-                l.position.set(el.p0.x, el.p0.y, el.p0.z)
-                root.studio.add(l)      
+                // const l = _M.createLabel('l', [0, 1, 1], 10)
+                // l.position.set(el.p0.x, el.p0.y, el.p0.z)
+                // root.studio.add(l)      
 
                 pS = pE.clone()
                 pE.add(newDir.clone().multiplyScalar(eDist * .2)).setY(newP.y)
@@ -137,7 +139,7 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
             newP = newDir.clone().multiplyScalar(newDist).add(curP)
 
             if (type === 'STAIR') {
-                let newY = Math.max(1, curP.y + (Math.random() - .5) * newDist * .8)
+                let newY = Math.max(MIN_Y, curP.y + (Math.random() - .5) * newDist * .8)
                 newP.setY(newY)
             }
         }
@@ -397,7 +399,7 @@ const createSingleWay = (options: T_LONG_WAY, root: Root): { geomData: IArrayFor
 
 type T_LONG_WAY = { p0: THREE.Vector3, dir0: THREE.Vector3, p1: THREE.Vector3, dir1: THREE.Vector3 }
 
-export const createLongWay = (options: T_LONG_WAY, root: Root): IArrayForBuffers => {
+export const createLongWay = (options: T_LONG_WAY, root: Root):  { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
 
     const { geomData: { v, c, uv, vCollide }, segments } = createSingleWay(options, root)
 
@@ -438,5 +440,5 @@ export const createLongWay = (options: T_LONG_WAY, root: Root): IArrayForBuffers
         currentN += 1
     }
 
-    return { v, uv, c, vCollide }
+    return { geomData: { v, uv, c, vCollide }, segments }
 }

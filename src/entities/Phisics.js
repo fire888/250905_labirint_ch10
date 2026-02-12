@@ -114,7 +114,7 @@ export class Phisics {
         })
         this.world.addEventListener('endContact', (event) => {
             const { bodyA, bodyB } = event;
-            if (bodyA.id === 0 && bodyB.id === 1) {
+            if (bodyA && bodyB && bodyA.id === 0 && bodyB.id === 1) {
                 this.isGround = false
             }
         })
@@ -126,7 +126,7 @@ export class Phisics {
             mass: 0, 
             type: Body.STATIC, 
         })
-        mesh.geometry.dispose()
+        //mesh.geometry.dispose()
         body.addShape(cannonShape)
         body._myName = mesh.name
         //body.collisionResponse = 0;
