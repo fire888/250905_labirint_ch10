@@ -68,8 +68,10 @@ export class Studio {
         this.scene.add(this.camera)
 
         //this.scene.environment = root.loader.assets.env
+        this.scene.environment = root.texturesCanvas.env
         this.scene.background = new THREE.Color(0x0e2535)
         //this.scene.background = root.loader.assets.env
+        //this.scene.background = root.texturesCanvas.env
         this.fog = new THREE.Fog(0x4c9d4c, .2, 100)
         // this.addFog()
 
@@ -279,8 +281,8 @@ export class Studio {
     }
 
     setFogNearFar(near = .2, far = 100) {
-        this.fog.near = near
-        this.fog.far = far
+        // this.fog.near = near
+        // this.fog.far = far
     }
 
     setFogColor(color: number[]) {

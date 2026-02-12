@@ -54,7 +54,8 @@ export class Labyrinth {
             //normalScale: new THREE.Vector2(3, 3),
             aoMap: this._root.texturesCanvas.iron00Map,
             aoMapIntensity: 1,
-            envMap: this._root.loader.assets.env,
+            //envMap: this._root.loader.assets.env,
+            envMap: this._root.texturesCanvas.env,
             envMapIntensity: 1,
             vertexColors: true,
             // wireframe: true

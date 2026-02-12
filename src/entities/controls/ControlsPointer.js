@@ -47,7 +47,7 @@ export class ControlsPointer {
 
         this.savedPosition = new Vector3()
         this.diffVec = new Vector3()
-        this.savedRotation = new Quaternion()
+        this.savedRotation = new Quaternion().setFromAxisAngle(this._topVec,-Math.PI * .5)
 
         this.controls = new PointerLockControls(this.camera, this.domElem)
         this.controls.maxPolarAngle = Math.PI - .01
@@ -136,7 +136,7 @@ export class ControlsPointer {
                 return res(false)
             }
             if (this._isFirstLock) {
-                this.controls.getObject().rotation.set(0, Math.PI, 0)
+                this.controls.getObject().rotation.set(0, Math.PI * 1.5, 0)
             }
             this.controls.lock()
             this.isEnabled = true

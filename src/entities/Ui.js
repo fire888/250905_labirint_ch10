@@ -44,42 +44,42 @@ export class Ui {
 
         const loaderCont = document.body.getElementsByClassName('loader')[0]
 
-        opacityByTransition(loaderCont, 0, 300)
-        await pause(300)
+        opacityByTransition(loaderCont, 0, 3)
+        //await pause(300)
         loaderCont.style.display = 'none'
         
         const startButton = document.body.getElementsByClassName('start-but')[0]
         startButton.style.display = 'block'
-        opacityByTransition(startButton, 1, 300)      
+        //opacityByTransition(startButton, 1, 300)      
     
         await elementClickOnce(startButton)
 
-        const controlsM = document.body.getElementsByClassName('controls-mess')[0]
-        await opacityByTransition(controlsM, 0, 300)
+        //const controlsM = document.body.getElementsByClassName('controls-mess')[0]
+        //await opacityByTransition(controlsM, 0, 300)
         //await pause(100)  
 
-        await opacityByTransition(startButton, 0, 300)
+        //await opacityByTransition(startButton, 0, 300)
         //await pause(100)
 
-        const img = document.body.getElementsByTagName('img')[0]
-        await opacityByTransition(img, 0, 300)
+        // const img = document.body.getElementsByTagName('img')[0]
+        // await opacityByTransition(img, 0, 300)
         //await pause(100)
 
         const h1 = document.body.getElementsByTagName('h1')[0]
-        await opacityByTransition(h1, 0, 300)
+        opacityByTransition(h1, 0, 3)
         //await pause(100)
 
         const startScreen = document.body.getElementsByClassName('start-screen')[0]
-        await opacityByTransition(startScreen, 0, 300)
+        opacityByTransition(startScreen, 0, 3)
         //await pause(100)
 
-        setTimeout(async () => {
+        //setTimeout(async () => {
             this.toggleVisibleDark(false)
-            await pause(600)
+            //await pause(600)
             document.body.removeChild(startScreen)
             //document.body.removeChild(this.finalDark)
-            await opacityByTransition(this._countEnergyInner, 1, 300)
-        }, 300)
+            opacityByTransition(this._countEnergyInner, 1, 3)
+        //}, 300)
     }
 
     async hideStartScreenForce () {

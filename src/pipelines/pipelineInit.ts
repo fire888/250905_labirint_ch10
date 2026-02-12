@@ -13,21 +13,21 @@ export const pipelineInit = async (root: Root) => {
         ui,
         ticker,
         floor,
-        loader,
+        //loader,
         texturesCanvas,
         phisics,
         lab,
         //audio,
         materials,
         deviceData,
-        particles,
+        //particles,
         //energySystem,
         //antigravSystem,
         //antigravLast,
     } = root
 
-    loader.init()
-    await loader.loadAssets()
+    //loader.init()
+    //await loader.loadAssets()
 
     await texturesCanvas.init()
 
@@ -78,6 +78,7 @@ export const pipelineInit = async (root: Root) => {
         await ui.hideStartScreenForce()
         studio.removeFog()
     } else {
+        //await ui.hideStartScreenForce()
         await ui.hideStartScreen()
     }
 

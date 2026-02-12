@@ -24,12 +24,12 @@ import el_0_spec from '../assets/el_0_spec.png'
 
 import env from '../assets/env.jpg'
 
-import pX from '../assets/el_0.jpg'
-import nX from '../assets/el_0.jpg'
-import pY from '../assets/el_0.jpg'
-import nY from '../assets/el_0.jpg'
-import pZ from '../assets/el_0.jpg'
-import nZ from '../assets/el_0.jpg'
+import pX from '../assets/el_0_blur.jpg'
+import nX from '../assets/el_0_blur.jpg'
+import pY from '../assets/el_0_blur.jpg'
+import nY from '../assets/el_0_blur.jpg'
+import pZ from '../assets/el_0_blur.jpg'
+import nZ from '../assets/el_0_blur.jpg'
 
 type Assets = {
     sprite: Texture,

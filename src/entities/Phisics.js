@@ -92,7 +92,17 @@ export class Phisics {
 
         this.playerBody._object3D = new Object3D()
         this.playerBody._object3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
+
         this.playerBody._object3D.rotation.y = Math.PI
+
+        this.playerBody._object3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
+        this.playerBody.quaternion.set(
+            this.playerBody._object3D.quaternion.x,
+            this.playerBody._object3D.quaternion.y,
+            this.playerBody._object3D.quaternion.z,
+            this.playerBody._object3D.quaternion.w,
+        )
+
 
         this.world.addBody(this.playerBody)
 
@@ -169,13 +179,21 @@ export class Phisics {
         }
     }
 
-    setPlayerPosition (x, y, z) {
+    setPlayerPosition (x, y, z, rotY = Math.PI) {
         this.playerBody.position.x = x
         this.playerBody.position.y = y
         this.playerBody.position.z = z
 
+        this.playerBody._object3D.rotation.y = rotY
+
         this.playerBody._object3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
-        this.playerBody._object3D.rotation.y = Math.PI
+        this.playerBody.quaternion.set(
+            this.playerBody._object3D.quaternion.x,
+            this.playerBody._object3D.quaternion.y,
+            this.playerBody._object3D.quaternion.z,
+            this.playerBody._object3D.quaternion.w,
+        )
+        
     }
 
     stopPlayerBody () {
