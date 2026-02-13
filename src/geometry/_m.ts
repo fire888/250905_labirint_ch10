@@ -787,6 +787,12 @@ export const _M = {
         }
     },
 
+    fillStart(src: number[], tgt: any) {
+        for (let i = 0; i < src.length; i++) {
+            tgt[i] = src[i]
+        }
+    },
+
     clone(src: number[]) {
         const a = []
         for (let i = 0; i < src.length; i++) {

@@ -71,8 +71,6 @@ class Way {
     }
 }
 
-let NOT_BULD = false 
-
 export class Labyrinth {
     _root: Root
     _material: THREE.MeshStandardMaterial
@@ -116,24 +114,19 @@ export class Labyrinth {
     }
 
     async buildNext (conf: ILevelConf) {
-        this._root.phisics.removeMeshFromCollision(this._mCollisionNextBuild.name)
-        
         const startPoint = new THREE.Vector3()
-        let nextWay = this._way1
+        this._currentWay && startPoint.copy(this._currentWay.endPoint).add(new THREE.Vector3(0, -1, 0))
 
-        if (this._currentWay && this._currentWay.name === 'way1') {
-            nextWay = this._way2
-        }
-        if (this._currentWay) { 
-            startPoint.copy(this._currentWay.endPoint).add(new THREE.Vector3(0, -1, 0))
-        }
+        const nextWay = this._currentWay && this._currentWay.name === 'way1' 
+            ? this._way2
+            : this._way1
 
         nextWay.build(startPoint)
 
         this._mCollisionNextBuild.position.copy(nextWay.centerPoint)
         this._root.phisics.addMeshToCollision(this._mCollisionNextBuild)
-
-        this._root.phisics.onCollision('collisionNextBuild', () => {            
+        this._root.phisics.onCollision('collisionNextBuild', () => {
+            this._root.phisics.removeMeshFromCollision(this._mCollisionNextBuild.name)          
             this.buildNext(LEVELS[0])
         })
 
@@ -145,7 +138,5 @@ export class Labyrinth {
         this._mCollisionNextBuild = new THREE.Mesh(geomColT, this._root.materials.collision)
 
         this._mCollisionNextBuild.name = 'collisionNextBuild'
-        this._mCollisionNextBuild.visible = false
-        this._root.studio.add(this._mCollisionNextBuild)
     }  
 }
