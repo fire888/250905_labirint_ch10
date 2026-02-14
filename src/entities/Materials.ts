@@ -6,72 +6,51 @@ export class Materials {
     // road: THREE.MeshStandardMaterial
     // desert: THREE.MeshPhongMaterial | THREE.MeshStandardMaterial
     collision: THREE.MeshBasicMaterial
+    materialLab: THREE.MeshStandardMaterial
     
     init (root: Root) {
-        // this.walls00 =  new THREE.MeshStandardMaterial({ 
-        //     color: 0xffffff,
-        //     map: root.loader.assets.mapWall_01,
-        //     bumpMap: root.loader.assets.mapWall_01,
-        //     bumpScale: 3,
-        //     vertexColors: true,
-        // })
-        
-        // this.walls00.onBeforeCompile = (shader) => {
-        //     shader.vertexShader =
-        //         `attribute float forcemat;
-        //         varying float vForceMat;
-        //         ` + shader.vertexShader
+        this.materialLab = new THREE.MeshStandardMaterial({
+            // color: 0xffffff,
+            // //roughness: .05,
+            // //metalness: .5,
+            // roughness: 0,
+            // metalness: .7,
+            // //metalnessMap : this._root.texturesCanvas.iron00Map,
+            // //map: this._root.loader.assets.el_0,
+            // map: root.texturesCanvas.iron00Map,
+            // //normalMap: this._root.loader.assets.el_0_norm,
+            // bumpMap: root.texturesCanvas.iron00Map,
+            // bumpScale: .5,
+            // //normalScale: new THREE.Vector2(3, 3),
+            // aoMap: root.texturesCanvas.iron00Map,
+            // aoMapIntensity: 1,
+            // //envMap: this._root.loader.assets.env,
+            // envMap: root.texturesCanvas.env,
+            // envMapIntensity: 1,
+            // //vertexColors: true,
+            // // wireframe: true
 
-        //     shader.vertexShader = shader.vertexShader.replace(
-        //         '#include <begin_vertex>',
-        //         `
-        //         #include <begin_vertex>
-        //         vForceMat = forcemat;
-        //         `
-        //     )
 
-        //     shader.fragmentShader =
-        //         `varying float vForceMat;
-        //         ` + shader.fragmentShader;
 
-        //     shader.fragmentShader = shader.fragmentShader.replace(
-        //         '#include <tonemapping_fragment>',
-        //         `
-        //         gl_FragColor.rgb *= (vForceMat - .5);
-        //         #include <tonemapping_fragment>
-        //         `
-        //     )
-        // }
 
-        // {
-        //     const map = root.loader.assets.roadImg
-        //     map.wrapS = THREE.RepeatWrapping
-        //     map.wrapT = THREE.RepeatWrapping
-        //     map.repeat.set(40, 40)
-        // }
+            // DO NOT DELETE ////////////////
+            color: 0xffffff,
+            roughness: 0,
+            metalness: .7,
+            map: root.texturesCanvas.iron00Map,
+            bumpMap: root.texturesCanvas.iron00Map,
+            bumpScale: .5,
+            aoMap: root.texturesCanvas.iron00Map,
+            aoMapIntensity: 1,
+            envMap: root.texturesCanvas.env,
+            envMapIntensity: 1,
+            vertexColors: true,
 
-        // this.road = new THREE.MeshStandardMaterial({ 
-        //     color: 0xffffff,
-        //     map: root.loader.assets.roadImg,
-        //     bumpMap: root.loader.assets.roadImg,
-        //     bumpScale: 17,
-        //     vertexColors: true,
-        // })
 
-        // {
-        //     const map = root.loader.assets.noise00
-        //     map.wrapS = THREE.RepeatWrapping
-        //     map.wrapT = THREE.RepeatWrapping
-        //     map.repeat.set(50, 50)
-        // }
 
-        // this.desert = new THREE.MeshStandardMaterial({
-        //     color: 0x323341,
-        //     map: root.loader.assets.noise00,
-        //     bumpMap: root.loader.assets.noise00,
-        //     bumpScale: 4,
-        // })
 
+            //color: 0xffffff,
+        })
         this.collision = new THREE.MeshBasicMaterial({ color: 0x00ff00 })
     }
 

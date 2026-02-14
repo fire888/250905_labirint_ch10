@@ -787,7 +787,7 @@ export const _M = {
         }
     },
 
-    fillStart(src: number[], tgt: any) {
+    fillStart(src: number[], tgt: number[] | Float32Array) {
         for (let i = 0; i < src.length; i++) {
             tgt[i] = src[i]
         }
@@ -799,6 +799,33 @@ export const _M = {
             a.push(src[i])
         }
         return a
+    },
+
+    computeNormalsV: (v: number[]): number[] => { 
+        const n = []
+        const v0 = new THREE.Vector3()
+        const v1 = new THREE.Vector3()
+        const v2 = new THREE.Vector3()
+
+        for (let i = 0; i < v.length; i += 9) {
+            v0.set(v[i], v[i + 1], v[i + 2])
+            v1.set(v[i + 3], v[i + 4], v[i + 5])
+            v2.set(v[i + 6], v[i + 7], v[i + 8])
+            const normal = v0.cross(v1).add(v0.cross(v2)).normalize()
+            n.push(normal.x, normal.y, normal.z)
+            n.push(normal.x, normal.y, normal.z)
+            n.push(normal.x, normal.y, normal.z)
+        }
+
+        for (let i = 0; i < n.length; i += 3) {
+            v0.set(n[i], n[i + 1], n[i + 2])
+            v0.normalize()
+            n[i] = v0.x
+            n[i + 1] = v0.y
+            n[i + 2] = v0.z
+        }
+
+        return n
     }
 
 

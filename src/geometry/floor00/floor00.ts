@@ -23,7 +23,7 @@ export type T_Floor = {
     isFillEnd: boolean
 }
 
-export const createFloor00 = (floor: T_Floor, root: Root): IArrayForBuffers => {
+export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
     const { d, w, p0, p1, p2, p3, isFillStart, isFillEnd } = floor
 
     const v: number[] = []

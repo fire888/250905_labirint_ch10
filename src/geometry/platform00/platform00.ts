@@ -4,7 +4,7 @@ import { _M } from "../_m"
 import { Root } from "index"
 import { COL_RED, UV_RED } from "geometry/tileMapWall"
 
-export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
+export const createPlatform00 = (s: T_ROOM): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
@@ -17,7 +17,7 @@ export const createPlatform00 = (s: T_ROOM, root: Root ): IArrayForBuffers => {
     }
     
     { // floor
-        const r = createFloor00(plData, root)
+        const r = createFloor00(plData)
         v.push(...r.v)
         c.push(...r.c)
         uv.push(...r.uv)

@@ -38,7 +38,7 @@ const calcPerimeter = (
     return { p0, p1, p2, p3 }
 }
 
-const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THREE.Vector3, dir1: THREE.Vector3, root: Root) => {
+const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THREE.Vector3, dir1: THREE.Vector3) => {
     const segments: T_SEGMENT[] = []
 
     const s = point0.clone()
@@ -179,7 +179,7 @@ const checkMinOffset = (prevDir: THREE.Vector3, curDir: THREE.Vector3, w: number
     return d1
 }
 
-const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
+const divideStairs = (segmemtsSrc: T_SEGMENT[]): T_ROOM[] => {
     const segments: T_ROOM[] = []
 
     let n = 0
@@ -298,12 +298,12 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[], root: Root): T_ROOM[] => {
     return segments
 }
 
-const createSingleWay = (options: T_LONG_WAY, root: Root): { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
+const createSingleWay = (options: T_LONG_WAY): { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
     const { p0, dir0, p1, dir1 } = options
 
     // central
-    const segments = prepareSegments(p0, dir0, p1, dir1, root)
-    const segments2: T_ROOM[] = divideStairs(segments, root)
+    const segments = prepareSegments(p0, dir0, p1, dir1)
+    const segments2: T_ROOM[] = divideStairs(segments)
 
     const v: number[] = []
     const c: number[] = []
@@ -386,7 +386,7 @@ const createSingleWay = (options: T_LONG_WAY, root: Root): { geomData: IArrayFor
             }
         }
 
-        const platformData = createPlatform00(s, root)
+        const platformData = createPlatform00(s)
         _M.fill(platformData.v, v)
         _M.fill(platformData.c, c)
         _M.fill(platformData.uv, uv)
@@ -399,9 +399,9 @@ const createSingleWay = (options: T_LONG_WAY, root: Root): { geomData: IArrayFor
 
 type T_LONG_WAY = { p0: THREE.Vector3, dir0: THREE.Vector3, p1: THREE.Vector3, dir1: THREE.Vector3 }
 
-export const createLongWay = (options: T_LONG_WAY, root: Root):  { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
+export const createLongWay = (options: T_LONG_WAY):  { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
 
-    const { geomData: { v, c, uv, vCollide }, segments } = createSingleWay(options, root)
+    const { geomData: { v, c, uv, vCollide }, segments } = createSingleWay(options)
 
     const L_SLEEP_WAYS = 100
     
@@ -427,7 +427,7 @@ export const createLongWay = (options: T_LONG_WAY, root: Root):  { geomData: IAr
                 end = dirSeg.clone().multiplyScalar(L_SLEEP_WAYS).add(start) 
             }
 
-            const { geomData } = createSingleWay({ p0: start, dir0: dirSeg, p1: end, dir1: dirSeg }, root)
+            const { geomData } = createSingleWay({ p0: start, dir0: dirSeg, p1: end, dir1: dirSeg })
 
             _M.fill(geomData.v, v)
             _M.fill(geomData.c, c)
