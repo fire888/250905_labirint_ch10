@@ -5,8 +5,8 @@ import * as THREE from 'three'
 
 // DEBUG FLAGS ************************************* / 
 
-export const IS_DEV_START_ORBIT = false
-//export const IS_DEV_START_ORBIT = true
+//export const IS_DEV_START_ORBIT = false
+export const IS_DEV_START_ORBIT = true
 
 const PHISICS_CONF = {
     IS_DEBUG: false

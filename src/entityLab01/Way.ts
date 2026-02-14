@@ -2,7 +2,6 @@ import { Root } from "../index"
 import { _M } from "../geometry/_m"
 import * as THREE from "three"
 import { T_ROOM } from "types/GeomTypes";
-import { createLongWay } from "geometry/longWay/longWay"
 
 export class Way {
     static nameCol = 'col'
@@ -17,12 +16,12 @@ export class Way {
     _root: Root
     _m: THREE.Mesh
     _mCollision: THREE.Mesh
-    _geomCollision: THREE.BufferGeometry
     
     _worker: Worker
     _flagComplete: Int32Array
+    _coordsLongWayParts: Float32Array
 
-    constructor(name: string, root: Root) {
+    constructor(name: string, root: Root, y: number) {
         this._root = root
         
         this.name = name
@@ -35,10 +34,13 @@ export class Way {
         const flagCompleteSAB = new SharedArrayBuffer(4)
         this._flagComplete = new Int32Array(flagCompleteSAB)
 
+        const coordsLongWayPartsSAB = new SharedArrayBuffer(4 * 9)
+        this._coordsLongWayParts = new Float32Array(coordsLongWayPartsSAB)
+
         ////////////////////////////////////////
 
-        const VERT_COUNT = 4000000 * 3
-        const UV_COUNT = 4000000 * 2
+        const VERT_COUNT = 700000 * 3 * 4
+        const UV_COUNT = 700000 * 2 * 4
         
         const sabVertex = new SharedArrayBuffer(VERT_COUNT)
         const posF32 = new Float32Array(sabVertex)
@@ -58,51 +60,42 @@ export class Way {
         geometry.setAttribute('color', new THREE.BufferAttribute(colorF32, 3))
         geometry.setAttribute('uv', new THREE.BufferAttribute(uvF32, 2))
 
+        this._m = new THREE.Mesh(geometry, root.materials.materialLab)
+        this._m.frustumCulled = false
+        this._m.position.y = y
+        this._root.studio.add(this._m)
+
         /////////////////////////////////////////
 
-        const COLLIDE_VERT_COUNT = 10000 * 3
+        const COLLIDE_VERT_COUNT = 5000 * 3 * 4
         const sabVertexCollide = new SharedArrayBuffer(COLLIDE_VERT_COUNT)
         const posF32Collide = new Float32Array(sabVertexCollide)
         
-        this._geomCollision = new THREE.BufferGeometry()
-        this._geomCollision.setAttribute('position', new THREE.BufferAttribute(posF32Collide, 3))
+        const geomCollision = new THREE.BufferGeometry()
+        geomCollision.setAttribute('position', new THREE.BufferAttribute(posF32Collide, 3))
+
+        this._mCollision = new THREE.Mesh(geomCollision, root.materials.collision)
+        this._mCollision.name = Way.nameCol
+        this._mCollision.frustumCulled = false
+        this._mCollision.position.y = y - .5
+        this._root.studio.add(this._mCollision)
 
         ////////////////////////////////////////
 
-        this._m = new THREE.Mesh(geometry, root.materials.materialLab)
-        this._m.frustumCulled = false
-        this._root.studio.add(this._m)
-
-        //let date = Date.now()
-        //console.log('[MESSAGE:] START CREATE WORKER')
         this._worker = new Worker(new URL('./worker.ts', import.meta.url));
 
         this._worker.postMessage({ 
             keyMessage: 'init', 
-            sabVertex, sabColor, sabUv, sabNormals, 
-            // sabVertexCollide, 
-            flagCompleteSAB, 
-            VERT_COUNT, UV_COUNT, COLLIDE_VERT_COUNT
+            sabVertex, sabColor, sabNormals, VERT_COUNT,
+            sabUv, UV_COUNT,
+            sabVertexCollide, COLLIDE_VERT_COUNT,
+            coordsLongWayPartsSAB,
+            flagCompleteSAB
         })
     }
 
     build (startPoint: THREE.Vector3) {
         this.startPoint = startPoint.clone()
-
-        // const options = {
-        //     p0: new THREE.Vector3(0, 0, 0),
-        //     p1: new THREE.Vector3(400, 0, 0),
-        //     dir0: new THREE.Vector3(1, 0, 0),
-        //     dir1: new THREE.Vector3(1, 0, 0),
-        // }
-
-        //const longWay = createLongWay(options)
-        //const { v, uv, c, vCollide } = longWay.geomData
-
-        //console.log('YUYU v', v.length / 3)
-        //console.log('YUYU uv', uv.length / 2)
-        //console.log('YUYU c', c.length / 3)
-        //console.log('YUYU vCollide', vCollide.length / 3)
 
         const date = Date.now()
         console.log('[MESSAGE:] START LAB')
@@ -111,36 +104,31 @@ export class Way {
             if (Atomics.load(this._flagComplete, 0) === 1) {
                 Atomics.store(this._flagComplete, 0, 0)
                 
-                this._m.geometry.attributes.position.needsUpdate = true
-                this._m.geometry.attributes.color.needsUpdate = true
-                this._m.geometry.attributes.uv.needsUpdate = true
-                this._m.geometry.computeVertexNormals()
-                
+                this._recalcylateBuffers(this.startPoint)
+
                 console.log('[TIME:] UPDATE LABYRINTH', ((Date.now() - date) / 1000).toFixed(2))
             } else {
-                setTimeout(tick, 5)
+                setTimeout(tick, 10)
             }
         }
         tick()
 
         this._worker.postMessage({ keyMessage: 'update' })
 
-        this._m.position.copy(this.startPoint)
-
         /////////////////////////////////////
         
-        if (this._mCollision) {
-            this._root.phisics.removeMeshFromCollision(this._mCollision.name)
-            this._mCollision.geometry.dispose()
-        }
+        //if (this._mLabCollision) {
+            //this._root.phisics.removeMeshFromCollision(this._mCollision.name)
+            //this._mCollision.geometry.dispose()
+        //}
         //const geomCol = _M.createBufferGeometry({ v: vCollide })        
         //this._mCollision = new THREE.Mesh(geomCol, this._root.materials.collision)
-        this._mCollision = new THREE.Mesh(new THREE.BoxGeometry(7, 7, 7), this._root.materials.collision)
-        this._mCollision.name = Way.nameCol
-        Way.nameCol += '|_'
+        //this._mLabCollision = new THREE.Mesh(new THREE.BoxGeometry(7, 7, 7), this._root.materials.collision)
+        //this._mLabCollision.name = Way.nameCol
+        //Way.nameCol += '|_'
         //this._mCollision.position.copy(this.startPoint)
-        this._mCollision.position.copy(new THREE.Vector3(100, 0, 0))
-        this._root.phisics.addMeshToCollision(this._mCollision)
+        //this._mLabCollision.position.copy(startPoint)
+        //this._root.phisics.addMeshToCollision(this._mCollision)
         
         /////////////////////////////////////
 
@@ -149,4 +137,20 @@ export class Way {
         //const seg = this.segments[Math.floor(this.segments.length / 2)]
         //this.centerPoint = seg.axisP1.clone().sub(seg.axisP0).multiplyScalar(.5).add(seg.axisP0).add(this.startPoint)
     }
+
+    private _recalcylateBuffers (startPoint: THREE.Vector3) {
+        this._m.geometry.attributes.position.needsUpdate = true
+        this._m.geometry.attributes.color.needsUpdate = true
+        this._m.geometry.attributes.uv.needsUpdate = true
+        this._m.geometry.attributes.normal.needsUpdate = true
+
+        this._mCollision.geometry.attributes.position.needsUpdate = true
+
+        this.centerPoint.set(this._coordsLongWayParts[3], this._coordsLongWayParts[4], this._coordsLongWayParts[5]).add(this.startPoint)
+        this.endPoint.set(this._coordsLongWayParts[6], this._coordsLongWayParts[7], this._coordsLongWayParts[8]).add(this.startPoint)
+
+        this._m.position.copy(startPoint)
+        this._mCollision.position.copy(startPoint)
+    }
+    
 }

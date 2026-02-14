@@ -1,26 +1,29 @@
-//import { calculateLevel } from "entityLabyrinth/GeomLab/geomLab";
 import { createLongWay } from "geometry/longWay/longWay"
 import * as THREE from "three"
 import { _M } from "geometry/_m"
 
 let VERT_COUNT = 0
-let vertexSAB: Float32Array = null
-let normalsSAB: Float32Array = null
-let colorSAB: Float32Array = null
-let uvSAB: Float32Array = null
-let flag: Int32Array = null
-
-
-// const fillBuffer = (src: number[], target: Float32Array) => {
-//     for (let i = 0; i < VERT_COUNT; ++i) {
-//         target[i] = src[i]
-//     }
-// }
-
-
+let sabVertex: Float32Array = null
+let sabNormals: Float32Array = null
+let sabColor: Float32Array = null
+let sabUv: Float32Array = null
+let sabVertexCollide: Float32Array = null
+let flagCompleteSAB: Int32Array = null
+let coordsLongWayPartsSAB: Float32Array = null
 
 self.onmessage = (e) => {
-    const recalculateBuffers = () => {
+    if (e.data.keyMessage === 'init') {
+        VERT_COUNT = e.data.VERT_COUNT
+        sabVertex = new Float32Array(e.data.sabVertex)
+        sabNormals = new Float32Array(e.data.sabNormals)
+        sabColor = new Float32Array(e.data.sabColor)
+        sabUv = new Float32Array(e.data.sabUv)
+        sabVertexCollide = new Float32Array(e.data.sabVertexCollide)
+        flagCompleteSAB = new Int32Array(e.data.flagCompleteSAB)
+        coordsLongWayPartsSAB = new Float32Array(e.data.coordsLongWayPartsSAB)
+    }
+
+    if (e.data.keyMessage === 'update') {
         const options = {
             p0: new THREE.Vector3(0, 0, 0),
             p1: new THREE.Vector3(400, 0, 0),
@@ -28,33 +31,31 @@ self.onmessage = (e) => {
             dir1: new THREE.Vector3(1, 0, 0),
         }
 
-        const { geomData: { v, c, uv }, segments } = createLongWay(options)
+        const { geomData: { v, c, uv, vCollide }, segments } = createLongWay(options)
         
         console.log('[MESSAGE:] vertticies n:', v.length / 3)
         
-        _M.fillStart(v, vertexSAB)
-        
+        _M.fillStart(v, sabVertex)
+        _M.fillStart(c, sabColor)
+        _M.fillStart(uv, sabUv)
         const n = _M.computeNormalsV(v)
-        _M.fillStart(n, normalsSAB)
-        
-        _M.fillStart(c, colorSAB)
-        
-        _M.fillStart(uv, uvSAB)
-        
-        Atomics.store(flag, 0, 1)
-        Atomics.notify(flag, 0)
-    }  
-  
-    if (e.data.keyMessage === 'init') {
-        VERT_COUNT = e.data.VERT_COUNT
-        vertexSAB = new Float32Array(e.data.sabVertex)
-        normalsSAB = new Float32Array(e.data.sabNormals)
-        colorSAB = new Float32Array(e.data.sabColor)
-        uvSAB = new Float32Array(e.data.sabUv)
-        flag = new Int32Array(e.data.flagCompleteSAB)
-    }
+        _M.fillStart(n, sabNormals)
+        _M.fillStart(vCollide, sabVertexCollide)
 
-    if (e.data.keyMessage === 'update') {
-        recalculateBuffers()
+        const firstSeg = segments[0]
+        coordsLongWayPartsSAB[0] = firstSeg.axisP0.x
+        coordsLongWayPartsSAB[1] = firstSeg.axisP0.y
+        coordsLongWayPartsSAB[2] = firstSeg.axisP0.z
+        const centerSeg = segments[Math.floor(segments.length / 2)]
+        coordsLongWayPartsSAB[3] = centerSeg.axisP1.x 
+        coordsLongWayPartsSAB[4] = centerSeg.axisP1.y 
+        coordsLongWayPartsSAB[5] = centerSeg.axisP1.z
+        const lastSeg = segments[segments.length - 1]
+        coordsLongWayPartsSAB[6] = lastSeg.axisP1.x
+        coordsLongWayPartsSAB[7] = lastSeg.axisP1.y
+        coordsLongWayPartsSAB[8] = lastSeg.axisP1.z
+
+        Atomics.store(flagCompleteSAB, 0, 1)
+        Atomics.notify(flagCompleteSAB, 0)
     }
 }

@@ -20,8 +20,8 @@ export class Labyrinth {
     async init (root: Root) {
         this._root = root
 
-        this._way1 = new Way('way1', this._root)
-        this._way2 = new Way('way2', this._root)
+        this._way1 = new Way('way1', this._root, 0)
+        this._way2 = new Way('way2', this._root, 0)
 
         this._createCollisionCenter()
     }
@@ -48,7 +48,7 @@ export class Labyrinth {
 
         setTimeout(() => {
             this.buildNext(LEVELS[0])
-        }, 5000)
+        }, 15000)
     }
 
     private _createCollisionCenter() {
