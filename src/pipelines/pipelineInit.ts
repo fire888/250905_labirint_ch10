@@ -51,7 +51,7 @@ export const pipelineInit = async (root: Root) => {
     //studio.add(floor.mesh)
     
     await lab.init(root)
-    await lab.buildNext(LEVELS[0])
+    await lab.buildNext()
 
     //energySystem.init(root, lab.positionsEnergy)
     //antigravSystem.init(root, lab.positionsAntigravs)

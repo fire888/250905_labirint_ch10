@@ -33,7 +33,8 @@ self.onmessage = (e) => {
 
         const { geomData: { v, c, uv, vCollide }, segments } = createLongWay(options)
         
-        console.log('[MESSAGE:] vertticies n:', v.length / 3)
+        console.log('[MESSAGE:] verticies level n:', v.length / 3)
+        console.log('[MESSAGE:] verticies collision n:', vCollide.length / 3)
         
         _M.fillStart(v, sabVertex)
         _M.fillStart(c, sabColor)
