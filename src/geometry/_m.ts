@@ -803,26 +803,38 @@ export const _M = {
 
     computeNormalsV: (v: number[]): number[] => { 
         const n = []
-        const v0 = new THREE.Vector3()
-        const v1 = new THREE.Vector3()
-        const v2 = new THREE.Vector3()
+        const pA = new THREE.Vector3()
+        const pB = new THREE.Vector3()
+        const pC = new THREE.Vector3()
+
+        const ab = new THREE.Vector3()
+        const bc = new THREE.Vector3()
+        const cb = new THREE.Vector3()
 
         for (let i = 0; i < v.length; i += 9) {
-            v0.set(v[i], v[i + 1], v[i + 2])
-            v1.set(v[i + 3], v[i + 4], v[i + 5])
-            v2.set(v[i + 6], v[i + 7], v[i + 8])
-            const normal = v0.cross(v1).add(v0.cross(v2)).normalize()
-            n.push(normal.x, normal.y, normal.z)
-            n.push(normal.x, normal.y, normal.z)
-            n.push(normal.x, normal.y, normal.z)
+            pA.set(v[i], v[i + 1], v[i + 2])
+            pB.set(v[i + 3], v[i + 4], v[i + 5])
+            pC.set(v[i + 6], v[i + 7], v[i + 8])
+
+        
+            cb.subVectors(pC, pB)
+            ab.subVectors(pA, pB)
+            cb.cross(ab)
+            
+            n.push(
+                cb.x, cb.y, cb.z, 
+                cb.x, cb.y, cb.z, 
+                cb.x, cb.y, cb.z, 
+            )
+
         }
 
         for (let i = 0; i < n.length; i += 3) {
-            v0.set(n[i], n[i + 1], n[i + 2])
-            v0.normalize()
-            n[i] = v0.x
-            n[i + 1] = v0.y
-            n[i + 2] = v0.z
+            pA.set(n[i], n[i + 1], n[i + 2])
+            pA.normalize()
+            n[i] = pA.x
+            n[i + 1] = pA.y
+            n[i + 2] = pA.z
         }
 
         return n

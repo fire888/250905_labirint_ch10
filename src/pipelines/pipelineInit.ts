@@ -1,7 +1,7 @@
 import { pause } from 'helpers/htmlHelpers'
 import { Root } from '../index'
 import { update } from '@tweenjs/tween.js'
-import { COLOR_FOG_PLAY, IS_DEV_START_ORBIT, LEVELS } from '../constants/CONSTANTS'
+import { IS_DEV_START_ORBIT } from '../constants/CONSTANTS'
 import * as THREE from 'three'
 import { createChangerGameTheme } from 'helpers/changerGameTheme'
 

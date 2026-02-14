@@ -24,7 +24,6 @@ export class Labyrinth {
         this._way2 = new Way('way2', this._root)
 
         this._mCollisionNextBuild = this._createCollisionCenter()
-        this._root.studio.add(this._mCollisionNextBuild)
     }
 
     async buildNext () {
