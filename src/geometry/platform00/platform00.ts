@@ -1,4 +1,4 @@
-import { IArrayForBuffers, T_ROOM, I_TypeSeg } from "types/GeomTypes"
+import { IArrayForBuffers, T_ROOM } from "types/GeomTypes"
 import { createFloor00, T_Floor } from "geometry/floor00/floor00"
 import { _M } from "../_m"
 import { Root } from "index"

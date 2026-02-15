@@ -4,7 +4,7 @@ import { Root } from "index"
 import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY } from "../tileMapWall"
 
 
-export const createColumn01 = (w: number, h: number = 20, n: number = 8): IArrayForBuffers => {
+export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []

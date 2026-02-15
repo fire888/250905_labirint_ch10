@@ -10,11 +10,7 @@ import { TexturesCanvas } from "texturesCanvas/TexturesCanvas"
 import { DeviceData } from "./entities/DeviceData"
 import { Ui } from "./entities/Ui"
 import { Phisics } from "./entities/Phisics"
-//import { Labyrinth } from './entityLabyrinth/Labyrinth'
 import { Labyrinth } from './entityLab01/Lab'
-//import { EnergySystem } from "entities/EnergySystem"
-//import { AntigravSystem } from "entities/AntigravSystem"
-//import { AntigravLast } from "./entities/AntigravLast"
 //import { AudioManager } from "./entities/AudioManager"
 import { Materials } from "./entities/Materials"
 import { pipelineInit } from "./pipelines/pipelineInit"
@@ -36,9 +32,6 @@ export type Root = {
     lab: Labyrinth,
     //audio: AudioManager,
     materials: Materials,
-    //energySystem: EnergySystem,
-    //antigravSystem: AntigravSystem,
-    //antigravLast: AntigravLast,
 }
 
 
@@ -60,10 +53,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         phisics: new Phisics(),
         lab: new Labyrinth(),
         //audio: new AudioManager(),
-        materials: new Materials(),
-        //energySystem: new EnergySystem(),
-        //antigravSystem: new AntigravSystem(),
-        //antigravLast: new AntigravLast(),
+        materials: new Materials()
     }
 
     await pipelineInit(root)

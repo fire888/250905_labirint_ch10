@@ -3,6 +3,10 @@ import { _M } from "../geometry/_m"
 import * as THREE from "three"
 import { Way } from "./Way"
 import { createHelix00 } from "geometry/helix00/helix00"
+import { createColumn01 } from "geometry/column01/column01"
+import { createColumn02 } from "geometry/column02/column02"
+import { createFloor00 } from "geometry/floor00/floor00"
+import { createPlatform00 } from "geometry/platform00/platform00"
 
 export class Labyrinth {
     static isCanBuild = true 
@@ -26,7 +30,7 @@ export class Labyrinth {
 
         this._mCollisionNextBuild = this._createCollisionCenter()
 
-        this._buildHelix()
+        this._buildTest()
     }
 
     async buildNext () {
@@ -68,10 +72,30 @@ export class Labyrinth {
         return m
     } 
     
-    private _buildHelix() {
-        const { v, c, uv, vCollide } = createHelix00(true)
+    private _buildTest() {
+        const { v, c, uv, vCollide } = createPlatform00({
+                p0: new THREE.Vector3(0, 0, 0),
+                p1: new THREE.Vector3(10, 0, 0),
+                p2: new THREE.Vector3(10, 0, -10),
+                p3: new THREE.Vector3(0, 0, -10),
+                d: 10,
+                w: 10,
+
+
+                axisP0: new THREE.Vector3(0, 0, -5),
+                axisP1: new THREE.Vector3(10, 0, -5),
+                dir0: new THREE.Vector3(0, 0, 1),
+                dir1: new THREE.Vector3(0, 0, 1),
+                dir: new THREE.Vector3(1, 0, 0),
+
+                id: 1,
+                
+                
+                type: 'FLOOR'
+        })
 
         const m = _M.createMesh({ v, c, uv, material: this._root.materials.materialLab })
+        m.position.set(-20, 0, 0)
 
         this._root.studio.add(m)
     }

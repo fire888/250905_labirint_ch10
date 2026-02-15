@@ -10,7 +10,7 @@ import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY,
 import * as THREE from 'three'
 
 
-export const createColumn02 = (w: number, h: number = 20, n: number = 8): IArrayForBuffers => {
+export const createColumn02 = (w: number = .5, h: number = 20, n: number = 8): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
