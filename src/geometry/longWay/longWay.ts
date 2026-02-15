@@ -299,7 +299,7 @@ const divideStairs = (segmemtsSrc: T_SEGMENT[]): T_ROOM[] => {
     return segments
 }
 
-const createSingleWay = (options: T_LONG_WAY): { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
+const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
     const { p0, dir0, p1, dir1 } = options
 
     // central
@@ -331,8 +331,10 @@ const createSingleWay = (options: T_LONG_WAY): { geomData: IArrayForBuffers, seg
 
                 let typeColumn = 'COLUMN01'
                 const ran = Math.random()
-                if (ran < .33) typeColumn = 'COLUMN02'
-                if (ran < .66) typeColumn = 'COLUMN03'
+                if (ran < .5) typeColumn = 'COLUMN02'
+                if (i === segments2.length - 1 && isLastHelix) {
+                    typeColumn = 'HELIX' 
+                }
 
 
                 if (typeColumn === 'COLUMN01') {
@@ -353,18 +355,13 @@ const createSingleWay = (options: T_LONG_WAY): { geomData: IArrayForBuffers, seg
                     createColumns(r2, offsetDir2_0)
                     const r3 = createColumn02(1, 2)
                     createColumns(r3, offsetDir2_1)
-                } else if (typeColumn === 'COLUMN03') {
-                    // const r0 = createHelix00()
-                    // createColumns(r0, offsetDir1_0)
-                    // const r1 = createHelix00()
-                    // createColumns(r1, offsetDir1_1)
-                    // const r2 = createHelix00()
-                    // createColumns(r2, offsetDir2_0)
-                    // const r3 = createHelix00()
-                    // createColumns(r3, offsetDir2_1)
+                } else if (typeColumn === 'HELIX') {
+                    const r0 = createHelix00()
+                    createColumns(r0, s.axisP1.clone().add(s.axisP0).multiplyScalar(.5))
                 }
             }
         }
+
 
         const platformData = createPlatform00(s)
         _M.fill(platformData.v, v)
@@ -381,9 +378,9 @@ type T_LONG_WAY = { p0: THREE.Vector3, dir0: THREE.Vector3, p1: THREE.Vector3, d
 
 export const createLongWay = (options: T_LONG_WAY):  { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
 
-    const { geomData: { v, c, uv, vCollide }, segments } = createSingleWay(options)
+    const { geomData: { v, c, uv, vCollide }, segments } = createSingleWay(options, false)
 
-    const L_SLEEP_WAYS = 100
+    const L_SLEEP_WAYS = 45
     
     let count = 0
     let currentN = 1
@@ -407,7 +404,7 @@ export const createLongWay = (options: T_LONG_WAY):  { geomData: IArrayForBuffer
                 end = dirSeg.clone().multiplyScalar(L_SLEEP_WAYS).add(start) 
             }
 
-            const { geomData } = createSingleWay({ p0: start, dir0: dirSeg, p1: end, dir1: dirSeg })
+            const { geomData } = createSingleWay({ p0: start, dir0: dirSeg, p1: end, dir1: dirSeg }, true)
 
             _M.fill(geomData.v, v)
             _M.fill(geomData.c, c)
