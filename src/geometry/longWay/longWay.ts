@@ -5,6 +5,7 @@ import * as THREE from "three"
 import { createPlatform00 } from "geometry/platform00/platform00"
 import { createColumn01 } from "../column01/column01";
 import { createColumn02 } from "../column02/column02";
+import { createHelix00 } from "geometry/helix00/helix00"
 
 type T_SEGMENT = {
     p0: THREE.Vector3
@@ -316,72 +317,51 @@ const createSingleWay = (options: T_LONG_WAY): { geomData: IArrayForBuffers, seg
                 const offsetAxis = s.dir.clone().multiplyScalar(.4)
                 const offsetAxisM = s.dir.clone().multiplyScalar(-.4)
 
-                if (Math.random() < .5) {
-                    {
-                        const offsetDir1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
-                        const r0 = createColumn01(1, 2)
-                        _M.translateVertices(r0.v, offsetDir1.x, offsetDir1.y, offsetDir1.z)
-                        _M.fill(r0.v, v)
-                        _M.fill(r0.c, c)
-                        _M.fill(r0.uv, uv)
-                    }
-                    {
-                        const offsetDir1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
-                        const r0 = createColumn01(1, 2)
-                        _M.translateVertices(r0.v, offsetDir1.x, offsetDir1.y, offsetDir1.z)
-                        _M.fill(r0.v, v)
-                        _M.fill(r0.c, c)
-                        _M.fill(r0.uv, uv)
-                    }
-                    {
-                        const offsetDir2 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
-                        const r0 = createColumn01(1, 2)
-                        _M.translateVertices(r0.v, offsetDir2.x, offsetDir2.y, offsetDir2.z)
-                        _M.fill(r0.v, v)
-                        _M.fill(r0.c, c)
-                        _M.fill(r0.uv, uv)
-                    }
-                    {
-                        const offsetDir2 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
-                        const r0 = createColumn01(1, 2)
-                        _M.translateVertices(r0.v, offsetDir2.x, offsetDir2.y, offsetDir2.z)
-                        _M.fill(r0.v, v)
-                        _M.fill(r0.c, c)
-                        _M.fill(r0.uv, uv)
-                    }
-                } else {
-                                        {
-                        const offsetDir1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
-                        const r0 = createColumn02(1, 2)
-                        _M.translateVertices(r0.v, offsetDir1.x, offsetDir1.y, offsetDir1.z)
-                        _M.fill(r0.v, v)
-                        _M.fill(r0.c, c)
-                        _M.fill(r0.uv, uv)
-                    }
-                    {
-                        const offsetDir1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
-                        const r0 = createColumn02(1, 2)
-                        _M.translateVertices(r0.v, offsetDir1.x, offsetDir1.y, offsetDir1.z)
-                        _M.fill(r0.v, v)
-                        _M.fill(r0.c, c)
-                        _M.fill(r0.uv, uv)
-                    }
-                    {
-                        const offsetDir2 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
-                        const r0 = createColumn02(1, 2)
-                        _M.translateVertices(r0.v, offsetDir2.x, offsetDir2.y, offsetDir2.z)
-                        _M.fill(r0.v, v)
-                        _M.fill(r0.c, c)
-                        _M.fill(r0.uv, uv)
-                    }
-                    {
-                        const offsetDir2 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
-                        const r0 = createColumn02(1, 2)
-                        _M.translateVertices(r0.v, offsetDir2.x, offsetDir2.y, offsetDir2.z)
-                        _M.fill(r0.v, v)
-                        _M.fill(r0.c, c)
-                        _M.fill(r0.uv, uv)
-                    }
+                const offsetDir1_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
+                const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
+                const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
+                const offsetDir2_1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
+
+                const createColumns = (r: IArrayForBuffers, coord: THREE.Vector3 ) => {
+                    _M.translateVertices(r.v, coord.x, coord.y, coord.z)
+                    _M.fill(r.v, v)
+                    _M.fill(r.c, c)
+                    _M.fill(r.uv, uv)
+                }
+
+                let typeColumn = 'COLUMN01'
+                const ran = Math.random()
+                if (ran < .33) typeColumn = 'COLUMN02'
+                if (ran < .66) typeColumn = 'COLUMN03'
+
+
+                if (typeColumn === 'COLUMN01') {
+                    const r0 = createColumn01(1, 2)
+                    createColumns(r0, offsetDir1_0)
+                    const r1 = createColumn01(1, 2)
+                    createColumns(r1, offsetDir1_1)
+                    const r2 = createColumn01(1, 2)
+                    createColumns(r2, offsetDir2_0)
+                    const r3 = createColumn01(1, 2)
+                    createColumns(r3, offsetDir2_1)
+                } else if (typeColumn === 'COLUMN02') {
+                    const r0 = createColumn02(1, 2)
+                    createColumns(r0, offsetDir1_0)
+                    const r1 = createColumn02(1, 2)
+                    createColumns(r1, offsetDir1_1)
+                    const r2 = createColumn02(1, 2)
+                    createColumns(r2, offsetDir2_0)
+                    const r3 = createColumn02(1, 2)
+                    createColumns(r3, offsetDir2_1)
+                } else if (typeColumn === 'COLUMN03') {
+                    // const r0 = createHelix00()
+                    // createColumns(r0, offsetDir1_0)
+                    // const r1 = createHelix00()
+                    // createColumns(r1, offsetDir1_1)
+                    // const r2 = createHelix00()
+                    // createColumns(r2, offsetDir2_0)
+                    // const r3 = createHelix00()
+                    // createColumns(r3, offsetDir2_1)
                 }
             }
         }

@@ -2,6 +2,7 @@ import { Root } from "../index"
 import { _M } from "../geometry/_m"
 import * as THREE from "three"
 import { Way } from "./Way"
+import { createHelix00 } from "geometry/helix00/helix00"
 
 export class Labyrinth {
     static isCanBuild = true 
@@ -24,6 +25,8 @@ export class Labyrinth {
         this._way2 = new Way('way2', this._root)
 
         this._mCollisionNextBuild = this._createCollisionCenter()
+
+        this._buildHelix()
     }
 
     async buildNext () {
@@ -63,5 +66,13 @@ export class Labyrinth {
         const m = new THREE.Mesh(geomColT, this._root.materials.collision)
         m.name = 'collisionNextBuild'
         return m
-    }  
+    } 
+    
+    private _buildHelix() {
+        const { v, c, uv, vCollide } = createHelix00(true)
+
+        const m = _M.createMesh({ v, c, uv, material: this._root.materials.materialLab })
+
+        this._root.studio.add(m)
+    }
 }
