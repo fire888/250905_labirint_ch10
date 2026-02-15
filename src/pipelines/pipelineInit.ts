@@ -59,10 +59,6 @@ export const pipelineInit = async (root: Root) => {
     //    LEVELS[0].positionTeleporter[0], 0, LEVELS[0].positionTeleporter[1]
     //))
 
-    if (!IS_DEV_START_ORBIT) {
-        studio.setFogNearFar(.2, 1)
-    }
-
     //particles.init(root)
     //ticker.on(particles.update.bind(particles))
     //studio.add(particles.m)
@@ -76,9 +72,10 @@ export const pipelineInit = async (root: Root) => {
 
     if (IS_DEV_START_ORBIT) {
         await ui.hideStartScreenForce()
-        studio.removeFog()
+        //studio.removeFog()
     } else {
         //await ui.hideStartScreenForce()
+        root.studio.addFog()
         await ui.hideStartScreen()
     }
 

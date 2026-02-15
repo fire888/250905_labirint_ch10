@@ -6,6 +6,7 @@ import { createPlatform00 } from "geometry/platform00/platform00"
 import { createColumn01 } from "../column01/column01";
 import { createColumn02 } from "../column02/column02";
 import { createHelix00 } from "geometry/helix00/helix00"
+import { createPlatform01Round } from "geometry/platform01Round/platfotm01Round"
 
 type T_SEGMENT = {
     p0: THREE.Vector3
@@ -356,8 +357,36 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                     const r3 = createColumn02(1, 2)
                     createColumns(r3, offsetDir2_1)
                 } else if (typeColumn === 'HELIX') {
-                    const r0 = createHelix00()
-                    createColumns(r0, s.axisP1.clone().add(s.axisP0).multiplyScalar(.5))
+                    const rPlatform = Math.random() * 5 + 2
+                    const hHelix = rPlatform + Math.random() * 40
+
+                    {
+                        const r0 = createHelix00(hHelix, rPlatform)
+
+                        const offset = s.dir.clone().multiplyScalar(rPlatform).add(s.axisP1)
+                        _M.translateVertices(r0.v, offset.x, offset.y - 2, offset.z)
+                        _M.fill(r0.v, v)
+                        _M.fill(r0.c, c)
+                        _M.fill(r0.uv, uv)
+                    }
+
+                    {
+                        const pl = createPlatform01Round(rPlatform)
+                        const v3Diff = s.axisP1.clone().sub(s.axisP0)
+                        const angle = _M.angleFromCoords(v3Diff.x, v3Diff.z)
+
+                        _M.rotateVerticesY(pl.v, -angle - Math.PI * .5)
+                        _M.translateVertices(pl.v, s.axisP1.x, s.axisP1.y, s.axisP1.z)
+
+                        _M.rotateVerticesY(pl.vCollide, -angle - Math.PI * .5)
+                        _M.translateVertices(pl.vCollide, s.axisP1.x, s.axisP1.y, s.axisP1.z)
+
+                        _M.fill(pl.v, v)
+                        _M.fill(pl.c, c)
+                        _M.fill(pl.uv, uv)
+                        _M.fill(pl.vCollide, vCollide)
+                    }
+
                 }
             }
         }

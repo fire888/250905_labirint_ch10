@@ -677,7 +677,7 @@ export const _M = {
 
     toleranceToZero: (num: number, tolerance = 1e-10) => Math.abs(num) < tolerance ? 0 : num,
 
-    appendMirrorX: (v: number[], c: number[], uv: number[]) => {
+    appendMirrorX: (v: number[], c: number[] = [], uv: number[] = []) => {
         const copyV = []
         const copyC = []
         for (let i = 0; i < v.length; i += 18) {

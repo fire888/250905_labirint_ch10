@@ -7,6 +7,7 @@ import { createColumn01 } from "geometry/column01/column01"
 import { createColumn02 } from "geometry/column02/column02"
 import { createFloor00 } from "geometry/floor00/floor00"
 import { createPlatform00 } from "geometry/platform00/platform00"
+import { createPlatform01Round } from "geometry/platform01Round/platfotm01Round"
 
 export class Labyrinth {
     static isCanBuild = true 
@@ -73,30 +74,11 @@ export class Labyrinth {
     } 
     
     private _buildTest() {
-        const { v, c, uv, vCollide } = createPlatform00({
-                p0: new THREE.Vector3(0, 0, 0),
-                p1: new THREE.Vector3(10, 0, 0),
-                p2: new THREE.Vector3(10, 0, -10),
-                p3: new THREE.Vector3(0, 0, -10),
-                d: 10,
-                w: 10,
+        //const { v, c, uv, vCollide } = createPlatform01Round()
 
+        //const m = _M.createMesh({ v, c, uv, material: this._root.materials.materialLab })
+        //m.position.set(0, 5, 0)
 
-                axisP0: new THREE.Vector3(0, 0, -5),
-                axisP1: new THREE.Vector3(10, 0, -5),
-                dir0: new THREE.Vector3(0, 0, 1),
-                dir1: new THREE.Vector3(0, 0, 1),
-                dir: new THREE.Vector3(1, 0, 0),
-
-                id: 1,
-                
-                
-                type: 'FLOOR'
-        })
-
-        const m = _M.createMesh({ v, c, uv, material: this._root.materials.materialLab })
-        m.position.set(-20, 0, 0)
-
-        this._root.studio.add(m)
+        //this._root.studio.add(m)
     }
 }

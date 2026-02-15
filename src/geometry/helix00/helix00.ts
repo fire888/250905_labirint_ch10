@@ -22,7 +22,7 @@ export type T_Floor = {
     isFillEnd: boolean
 }
 
-export const createHelix00 = (isConsole: boolean = false): IArrayForBuffers => {
+export const createHelix00 = (H = 8, R: number = 1, isConsole: boolean = false): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
@@ -30,39 +30,43 @@ export const createHelix00 = (isConsole: boolean = false): IArrayForBuffers => {
 
     const clockDir: number = Math.random() < .5 ? 1 : -1 
 
-    const rM = .5 + Math.random() * 1
+    const rM = R
     const vR = new THREE.Vector3(rM, 1, rM)
+    const vR_2 = new THREE.Vector3(rM - .3, 1, rM - .3)
 
     const vDir = new THREE.Vector3(0, 0, clockDir)
     const addY = new THREE.Vector3(0, .02, 0)
     const heightS = new THREE.Vector3(0, .1, 0)
-    const addAngle = Math.PI * .2 * clockDir
+    const addAngle = Math.PI * .04 * clockDir
 
     const isSpherize = Math.random() < .5
 
     const startPhase = Math.random()
     const H_PHASE = Math.random() * 8 + 2  
-    const H = Math.random() * 8 + 2 
 
     while (vDir.y < H) {
+        const vDirNext = vDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), addAngle).add(addY)
+
         let phase = Math.abs(Math.cos((vDir.y / H_PHASE + startPhase) * Math.PI))
+        let phase2 = Math.abs(Math.cos((vDirNext.y / H_PHASE + startPhase) * Math.PI))
         //if (isConsole) console.log('phase', phase)
         if (isSpherize) {
             phase = Math.abs(Math.sin((vDir.y / H_PHASE + startPhase) * Math.PI))
+            phase2 = Math.abs(Math.sin((vDirNext.y / H_PHASE + startPhase) * Math.PI))
         }
-        phase = Math.max(.2, phase)
 
         const _vR = vR.clone().multiplyScalar(phase).setY(1)
-        const _vR_0 = _vR.clone().sub(new THREE.Vector3(.05, 0, 0.05))
+        const _vR_n = vR.clone().multiplyScalar(phase2).setY(1)
+        const _vR_0 = vR_2.clone().multiplyScalar(phase).setY(1)
+        const _vR_0_n = vR_2.clone().multiplyScalar(phase2).setY(1)
 
         const vPos0 = vDir.clone().multiply(_vR)
-        const vDirNext = vDir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), addAngle).add(addY)
-        const vPos1 = vDirNext.clone().multiply(_vR)
+        const vPos1 = vDirNext.clone().multiply(_vR_n)
         const vPos2 = vPos1.clone().add(heightS)
         const vPos3 = vPos0.clone().add(heightS)
 
         const vPos0_0 = vDir.clone().multiply(_vR_0)
-        const vPos1_0 = vDirNext.clone().multiply(_vR_0)
+        const vPos1_0 = vDirNext.clone().multiply(_vR_0_n)
         const vPos2_0 = vPos1_0.clone().add(heightS)
         const vPos3_0 = vPos0_0.clone().add(heightS)
 
@@ -111,11 +115,7 @@ export const createHelix00 = (isConsole: boolean = false): IArrayForBuffers => {
                 : _M.createPolygonV(vPos3, vPos2, vPos1, vPos0)
             v.push(..._v)
             c.push(...COL_NORM)
-            if (Math.random() < .9) {
-                uv.push(...UV_EMPTY)
-            } else {
-                uv.push(...UV_GRAY)
-            }
+            uv.push(...UV_EMPTY)
         }
 
         // top
