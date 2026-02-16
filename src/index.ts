@@ -11,6 +11,7 @@ import { DeviceData } from "./entities/DeviceData"
 import { Ui } from "./entities/Ui"
 import { Phisics } from "./entities/Phisics"
 import { Labyrinth } from './entityLab01/Lab'
+import { BackTower } from "./entities/backTower/BackTower"
 //import { AudioManager } from "./entities/AudioManager"
 import { Materials } from "./entities/Materials"
 import { pipelineInit } from "./pipelines/pipelineInit"
@@ -30,6 +31,7 @@ export type Root = {
     ui: Ui,
     phisics: Phisics,
     lab: Labyrinth,
+    backTower: BackTower,
     //audio: AudioManager,
     materials: Materials,
 }
@@ -52,6 +54,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         deviceData: new DeviceData(),
         phisics: new Phisics(),
         lab: new Labyrinth(),
+        backTower: new BackTower(),
         //audio: new AudioManager(),
         materials: new Materials()
     }

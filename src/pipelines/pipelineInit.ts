@@ -17,6 +17,7 @@ export const pipelineInit = async (root: Root) => {
         texturesCanvas,
         phisics,
         lab,
+        backTower,
         //audio,
         materials,
         deviceData,
@@ -52,6 +53,8 @@ export const pipelineInit = async (root: Root) => {
     
     await lab.init(root)
     await lab.buildNext()
+
+    await backTower.init(root)
 
     //energySystem.init(root, lab.positionsEnergy)
     //antigravSystem.init(root, lab.positionsAntigravs)

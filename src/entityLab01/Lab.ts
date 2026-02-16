@@ -53,6 +53,8 @@ export class Labyrinth {
 
         await nextWay.build(startPoint)
 
+        this._root.backTower.setPositionX(nextWay.endPoint.x + 100)
+
         this._mCollisionNextBuild.name += '|_'
         this._mCollisionNextBuild.position.copy(nextWay.centerPoint)
         this._root.phisics.addMeshToCollision(this._mCollisionNextBuild)
