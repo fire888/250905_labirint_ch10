@@ -41,7 +41,7 @@ self.onmessage = (e) => {
         _M.fillStart(uv, sabUv)
         const n = _M.computeNormalsV(v)
         _M.fillStart(n, sabNormals)
-        _M.fillStart(vCollide, sabVertexCollide)
+        _M.fillStartAndThousandLast(vCollide, sabVertexCollide)
 
         const firstSeg = segments[0]
         coordsLongWayPartsSAB[0] = firstSeg.axisP0.x

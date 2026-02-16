@@ -793,6 +793,20 @@ export const _M = {
         }
     },
 
+    fillStartAndThousandLast(src: number[], tgt: number[] | Float32Array) {
+        let n = 0
+        for (let i = 0; i < src.length; i++) {
+            tgt[i] = src[i]
+            n = i
+        }
+
+        if (tgt[n + 1]) {
+            for (let i = n + 1; i < tgt.length; i++) {
+                tgt[i] = 1000
+            }
+        }
+    },
+
     clone(src: number[]) {
         const a = []
         for (let i = 0; i < src.length; i++) {

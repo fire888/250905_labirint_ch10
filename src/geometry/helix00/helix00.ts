@@ -22,7 +22,7 @@ export type T_Floor = {
     isFillEnd: boolean
 }
 
-export const createHelix00 = (H = 8, R: number = 1, isConsole: boolean = false): IArrayForBuffers => {
+export const createHelix00 = (H = 8, R: number = 1, R_MIN: number = .5): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
@@ -54,6 +54,9 @@ export const createHelix00 = (H = 8, R: number = 1, isConsole: boolean = false):
             phase = Math.abs(Math.sin((vDir.y / H_PHASE + startPhase) * Math.PI))
             phase2 = Math.abs(Math.sin((vDirNext.y / H_PHASE + startPhase) * Math.PI))
         }
+
+        phase = Math.max(R_MIN / R, phase)
+        phase2 = Math.max(R_MIN / R, phase2)
 
         const _vR = vR.clone().multiplyScalar(phase).setY(1)
         const _vR_n = vR.clone().multiplyScalar(phase2).setY(1)

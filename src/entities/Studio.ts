@@ -67,15 +67,15 @@ export class Studio {
         //this.scene.add(this.spotLight)
         this.scene.add(this.camera)
 
-        const COLOR = 0x35373b
-        const COLOR_BACK = 0x707365
+        const COLOR = 0x525c81
+        const COLOR_FOG = 0x4d67c1
 
         //this.scene.environment = root.loader.assets.env
         this.scene.environment = root.texturesCanvas.env
         this.scene.background = new THREE.Color(COLOR)
         //this.scene.background = root.loader.assets.env
         //this.scene.background = root.texturesCanvas.env
-        this.fog = new THREE.Fog(COLOR_BACK, .2, 100)
+        this.fog = new THREE.Fog(COLOR_FOG, 10, 200)
         // this.addFog()
 
         this.amb = new THREE.AmbientLight(0xffffff, .5) 

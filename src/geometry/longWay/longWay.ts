@@ -6,6 +6,7 @@ import { createPlatform00 } from "geometry/platform00/platform00"
 import { createColumn01 } from "../column01/column01";
 import { createColumn02 } from "../column02/column02";
 import { createHelix00 } from "geometry/helix00/helix00"
+import { createHelix01 } from "geometry/helix01/helix01"
 import { createPlatform01Round } from "geometry/platform01Round/platfotm01Round"
 
 type T_SEGMENT = {
@@ -409,6 +410,12 @@ export const createLongWay = (options: T_LONG_WAY):  { geomData: IArrayForBuffer
 
     const { geomData: { v, c, uv, vCollide }, segments } = createSingleWay(options, false)
 
+    const helixGlobal = createHelix01(400, 50)
+    _M.rotateVerticesZ(helixGlobal.v, -Math.PI * .5)
+    _M.fill(helixGlobal.v, v)
+    _M.fill(helixGlobal.c, c)
+    _M.fill(helixGlobal.uv, uv)
+
     const L_SLEEP_WAYS = 45
     
     let count = 0
@@ -445,6 +452,8 @@ export const createLongWay = (options: T_LONG_WAY):  { geomData: IArrayForBuffer
 
         currentN += 1
     }
+
+
 
     return { geomData: { v, uv, c, vCollide }, segments }
 }
