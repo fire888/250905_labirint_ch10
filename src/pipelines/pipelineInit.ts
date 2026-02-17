@@ -80,7 +80,7 @@ export const pipelineInit = async (root: Root) => {
     } else {
         //await ui.hideStartScreenForce()
         root.studio.addFog()
-        await ui.hideStartScreen()
+        await ui.hideStartScreen().then()
     }
 
     //audio.init(root)
@@ -90,7 +90,7 @@ export const pipelineInit = async (root: Root) => {
     controls.init(root, IS_DEV_START_ORBIT)
     ticker.on(controls.update.bind(controls))
 
-    await pause(100)
+    //await pause(100)
     
     // if (!IS_DEV_START_ORBIT) {
     //     controls.disconnect()

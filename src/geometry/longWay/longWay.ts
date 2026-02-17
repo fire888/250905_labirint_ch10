@@ -8,6 +8,7 @@ import { createColumn02 } from "../column02/column02";
 import { createHelix00 } from "geometry/helix00/helix00"
 import { createHelix01 } from "geometry/helix01/helix01"
 import { createPlatform01Round } from "geometry/platform01Round/platfotm01Round"
+import { createSphereHel } from "geometry/sphereHel/sphereHel"
 
 type T_SEGMENT = {
     p0: THREE.Vector3
@@ -388,6 +389,23 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                         _M.fill(pl.vCollide, vCollide)
                     }
 
+                }
+
+                if (s.w > 6 && s.d > 6) {
+                    // let sss
+                    // let r1 = Math.random() * .12 + 0.01
+                    // const r2 = Math.random() * .12 + 0.01
+                    // if (Math.abs(r1 - r2) < 0.015) {
+                    //     r1 += 0.05
+                    // }
+                    // sss = [r1, r2]
+
+                    // const r = createSphereHel(sss[0], sss[1])
+                    // const center = s.axisP0.clone().add(s.axisP1).multiplyScalar(.5) 
+                    // _M.translateVertices(v, center.x, center.y, center.z)
+                    // _M.fill(r.v, v)
+                    // _M.fill(r.c, c)
+                    // _M.fill(r.uv, uv)
                 }
             }
         }

@@ -1,0 +1,103 @@
+import { _M, A2, A3 } from "../_m"
+import { IArrayForBuffers } from "types/GeomTypes"
+import { Root } from "index"
+import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, COL_RED, UV_EMPTY } from "../tileMapWall"
+import * as THREE from "three"
+
+
+export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArrayForBuffers => {
+    const v: number[] = []
+    const c: number[] = []
+    const uv: number[] = []
+
+    //const spd1 = Math.random() * .5
+    let dist1 = 1
+    const savedVec_1 = new THREE.Vector2(1, 0)
+
+    //const spd2 = Math.random() * .5
+    let dist2 = 1
+    const savedVec_2 = new THREE.Vector2(1, 0)
+
+    console.log('!@@!@', '[' + spd1 + ', ' +  spd2 + ']')
+
+    const currentPoint = new THREE.Vector3(1, 0, 0)
+    let savedPoint = null
+
+    let prevP0
+    let prevP1
+    let prevP3
+
+    let n = 0
+    while (n < 200) {
+        ++n
+
+        dist1 += spd1
+        const vec_1 = new THREE.Vector2(Math.cos(dist1), Math.sin(dist1))
+        const vec1_Diff = vec_1.clone().sub(savedVec_1)
+        savedVec_1.copy(vec_1)
+        
+        dist2 += spd2
+        const vec_2 = new THREE.Vector2(Math.cos(dist2), Math.sin(dist2))
+        const vec2_Diff = vec_2.clone().sub(savedVec_2)
+        savedVec_2.copy(vec_2)
+
+        currentPoint.x += vec1_Diff.x + vec2_Diff.x
+        currentPoint.z += vec1_Diff.y
+        currentPoint.y += vec2_Diff.y
+
+        if (savedPoint) {
+            const dirFront = currentPoint.clone().sub(savedPoint).normalize()
+            const dirLeft = currentPoint.clone().cross(dirFront).normalize()
+
+            const w = 0.1
+
+            const p0 = dirLeft.clone().multiplyScalar(w).add(currentPoint)
+            const p1 = dirLeft.clone().multiplyScalar(-w).add(currentPoint)
+            const p3 = currentPoint.clone().multiplyScalar(0.9)
+
+            if (prevP0 && prevP1) {
+                {
+                    const _v = _M.createPolygonV(
+                        prevP0.clone(), 
+                        prevP1.clone(), 
+                        p1.clone(),
+                        p0.clone(), 
+                    )
+                    v.push(..._v)
+                    c.push(...COL_NORM)
+                    uv.push(...UV_EMPTY)
+                }
+                {
+                    const _v = _M.createPolygonV(
+                        p3.clone(), 
+                        prevP3.clone(), 
+                        prevP0.clone(),
+                        p0.clone(), 
+                    )
+                    v.push(..._v)
+                    c.push(...COL_RED)
+                    uv.push(...UV_EMPTY)
+                }
+                {
+                    const _v = _M.createPolygonV(
+                        prevP3.clone(), 
+                        p3.clone(), 
+                        p1.clone(),
+                        prevP1.clone(), 
+                    )
+                    v.push(..._v)
+                    c.push(...COL_RED)
+                    uv.push(...UV_EMPTY)
+                }
+            }
+
+            prevP0 = p0.clone()
+            prevP1 = p1.clone()
+            prevP3 = p3.clone()
+        }
+
+        savedPoint = currentPoint.clone()
+    }
+
+    return { v, c, uv }
+}

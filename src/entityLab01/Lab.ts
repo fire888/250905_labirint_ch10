@@ -8,6 +8,7 @@ import { createColumn02 } from "geometry/column02/column02"
 import { createFloor00 } from "geometry/floor00/floor00"
 import { createPlatform00 } from "geometry/platform00/platform00"
 import { createPlatform01Round } from "geometry/platform01Round/platfotm01Round"
+import { createSphereHel } from "geometry/sphereHel/sphereHel"
 
 export class Labyrinth {
     static isCanBuild = true 
@@ -74,11 +75,40 @@ export class Labyrinth {
     } 
     
     private _buildTest() {
-        //const { v, c, uv, vCollide } = createPlatform01Round()
 
-        //const m = _M.createMesh({ v, c, uv, material: this._root.materials.materialLab })
-        //m.position.set(0, 5, 0)
+        const PARAMS_SPD = [
+            [0.234867, 0.103870],
+            [0.175979, 0.211112],
+            [0.14154, 0.43470],
+            [0.05083, 0.171100],
+            [0.041409, 0.08345],
+            [7.55512, 0.63606],
+        ]
 
-        //this._root.studio.add(m)
+        for (let i = 0; i < 20; ++i) {
+            console.log('i', i)
+
+            let sss
+            if (PARAMS_SPD[i]) {
+                sss = PARAMS_SPD[i]
+            } else {
+                let r1 = Math.random() * .12 + 0.01
+                const r2 = Math.random() * .12 + 0.01
+
+                if (Math.abs(r1 - r2) < 0.015) {
+                    r1 += 0.05
+                }
+
+                sss = [r1, r2]
+            }
+
+            const { v, c, uv, vCollide } = createSphereHel(sss[0], sss[1])
+
+            const m = _M.createMesh({ v, c, uv, material: this._root.materials.materialLab })
+            m.position.set(2, 1, i * 10)
+            m.scale.z = 1.5
+
+            this._root.studio.add(m)
+        }
     }
 }
