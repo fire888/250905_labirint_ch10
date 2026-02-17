@@ -39,18 +39,10 @@ const createSingle = (h: number, w: number = 20): IArrayForBuffers => {
     return { v, c, uv }
 }
 
-export const createTowerSilhouette = ( root: Root): IArrayForBuffers => {
+const createGround = (): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
-
-    for (let i = 0; i < 7; ++i) {
-        const r = createSingle(50 + Math.random() * 200, Math.random() * 10 + 2)
-        _M.translateVertices(r.v, Math.random() * 50 - 25, 0, 0)
-        _M.fill(r.v, v)
-        _M.fill(r.c, c)
-        _M.fill(r.uv, uv)
-    }
 
     const N = 50
     const lh = .5
@@ -60,7 +52,7 @@ export const createTowerSilhouette = ( root: Root): IArrayForBuffers => {
     let pB: A3 = [0, 0, 0]
 
     for (let i = 0; i < N + 10; ++i) {
-        const absX = Math.sin(i / N * Math.PI * .5) * 100 + Math.random() * 20
+        const absX = Math.sin(i / N * Math.PI * .5) * 75 + Math.random() * 20
         const signX = Math.abs(i % 2) > 0 ? -1 : 1
 
         const hAdd = -Math.random() * 2 - 10
@@ -87,31 +79,32 @@ export const createTowerSilhouette = ( root: Root): IArrayForBuffers => {
 
         const _v = _M.createPolygon(p0, p1, p2, p3)
         v.push(..._v)
-        c.push(...COL_GRAY)
-        uv.push(...UV_GRAY)
+        c.push(...COL_NORM)
+        uv.push(...UV_NORM)
     }
 
-        
-        //const l = -Math.random() * 100 * (Math.cos(i / N)) 
-        //const r = Math.random() * 100  * (Math.cos(i / N))
+    return { v, c, uv }
+}
 
-        
-        //const l = -Math.random() * 100 * (Math.cos(i / N)) 
-        //const r = Math.random() * 100  * (Math.cos(i / N))
+export const createTowerSilhouette = ( root: Root): IArrayForBuffers => {
+    const v: number[] = []
+    const c: number[] = []
+    const uv: number[] = []
 
-        // const h = i * (i / N) * (-1) + 15
+    for (let i = 0; i < 7; ++i) { // towers
+        const r = createSingle(50 + Math.random() * 300, Math.random() * 10 + 2)
+        _M.translateVertices(r.v, Math.random() * 75 - 37.5, 0, 0)
+        _M.fill(r.v, v)
+        _M.fill(r.c, c)
+        _M.fill(r.uv, uv)
+    }
 
-        // const _v = _M.createPolygon(
-        //     [l, h, 0],
-        //     [r, h, 0],
-        //     [r, h + 1, 0],
-        //     [l, h + 1, 0],
-        // )
-
-        // v.push(..._v)
-        // c.push(...COL_NORM)
-        // uv.push(...UV_NORM)
-    //}
+    { // ground
+        const r = createGround()
+        _M.fill(r.v, v)
+        _M.fill(r.c, c)
+        _M.fill(r.uv, uv)
+    }
 
     return { v, c, uv }
 }

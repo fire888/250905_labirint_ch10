@@ -55,12 +55,17 @@ export const pipelineInit = async (root: Root) => {
     await lab.buildNext()
 
     await backTower.init(root)
+    const TOWER_OFFSET = 900
+    root.backTower.setPositionX(phisics.playerBody.position.x + TOWER_OFFSET)
+    let n = 100
+    ticker.on(() => {
+        --n
+        if (n < 0) {
+            n = 100
+            root.backTower.setPositionX(phisics.playerBody.position.x + TOWER_OFFSET)
+        }
 
-    //energySystem.init(root, lab.positionsEnergy)
-    //antigravSystem.init(root, lab.positionsAntigravs)
-    //antigravLast.init(root, new THREE.Vector3(
-    //    LEVELS[0].positionTeleporter[0], 0, LEVELS[0].positionTeleporter[1]
-    //))
+    })
 
     //particles.init(root)
     //ticker.on(particles.update.bind(particles))
@@ -68,10 +73,6 @@ export const pipelineInit = async (root: Root) => {
 
     ui.init(root)
     //ui.setEnergyLevel(0)
-
-    //materials.changeWallMaterial(LEVELS[0].theme.materialWalls)
-    //materials.changeRoadMaterial(LEVELS[0].theme.materialRoad)
-    //materials.changeDesertMaterial(LEVELS[0].theme.materialGround)
 
     if (IS_DEV_START_ORBIT) {
         await ui.hideStartScreenForce()
@@ -102,8 +103,6 @@ export const pipelineInit = async (root: Root) => {
     //     studio.animateLightTo(LEVELS[0].theme.dirLightColor, LEVELS[0].theme.ambientLightColor, 3000)
     //     controls.connect()
     // }
-
-    //controls.
 
     createChangerGameTheme(root)
 }
