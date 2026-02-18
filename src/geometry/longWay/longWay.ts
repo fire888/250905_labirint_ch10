@@ -334,7 +334,11 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
 
                 let typeColumn = 'COLUMN01'
                 const ran = Math.random()
-                if (ran < .5) typeColumn = 'COLUMN02'
+                if (ran < .3) { 
+                    typeColumn = 'COLUMN02' 
+                } else if (ran < .7) {
+                    typeColumn = 'SPHERE_HEL'
+                }
                 if (i === segments2.length - 1 && isLastHelix) {
                     typeColumn = 'HELIX' 
                 }
@@ -389,23 +393,20 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                         _M.fill(pl.vCollide, vCollide)
                     }
 
-                }
-
-                if (s.w > 6 && s.d > 6) {
-                    // let sss
-                    // let r1 = Math.random() * .12 + 0.01
-                    // const r2 = Math.random() * .12 + 0.01
-                    // if (Math.abs(r1 - r2) < 0.015) {
-                    //     r1 += 0.05
-                    // }
-                    // sss = [r1, r2]
-
-                    // const r = createSphereHel(sss[0], sss[1])
-                    // const center = s.axisP0.clone().add(s.axisP1).multiplyScalar(.5) 
-                    // _M.translateVertices(v, center.x, center.y, center.z)
-                    // _M.fill(r.v, v)
-                    // _M.fill(r.c, c)
-                    // _M.fill(r.uv, uv)
+                } else if (typeColumn === 'SPHERE_HEL') {
+                    let sss
+                    let r1 = Math.random() * .12 + 0.01
+                    const r2 = Math.random() * .12 + 0.01
+                    if (Math.abs(r1 - r2) < 0.015) {
+                        r1 += 0.05
+                    }
+                    sss = [r1, r2]
+                    const r = createSphereHel(sss[0], sss[1])
+                    const center = s.axisP0.clone().add(s.axisP1.clone().sub(s.axisP0).multiplyScalar(.5)) 
+                    _M.translateVertices(r.v, center.x, center.y + 1.05, center.z)
+                    _M.fill(r.v, v)
+                    _M.fill(r.c, c)
+                    _M.fill(r.uv, uv)
                 }
             }
         }

@@ -10,25 +10,21 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
     const c: number[] = []
     const uv: number[] = []
 
-    //const spd1 = Math.random() * .5
     let dist1 = 1
     const savedVec_1 = new THREE.Vector2(1, 0)
-
-    //const spd2 = Math.random() * .5
     let dist2 = 1
     const savedVec_2 = new THREE.Vector2(1, 0)
 
-    console.log('!@@!@', '[' + spd1 + ', ' +  spd2 + ']')
-
     const currentPoint = new THREE.Vector3(1, 0, 0)
-    let savedPoint = null
 
+    let savedPoint = null
     let prevP0
     let prevP1
     let prevP3
 
     let n = 0
-    while (n < 200) {
+    const maxN = 200
+    while (n < maxN) {
         ++n
 
         dist1 += spd1
@@ -54,6 +50,25 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
             const p0 = dirLeft.clone().multiplyScalar(w).add(currentPoint)
             const p1 = dirLeft.clone().multiplyScalar(-w).add(currentPoint)
             const p3 = currentPoint.clone().multiplyScalar(0.9)
+
+            if (!prevP0 && !prevP1) { // cap start 
+                const _v = [
+                    ...p3.toArray(),
+                    ...p1.toArray(),
+                    ...p0.toArray(),
+                ]
+                v.push(..._v)
+                c.push(
+                    0, 1, 0, 
+                    0, 1, 0, 
+                    0, 1, 0
+                )
+                uv.push(
+                    0, 0,
+                    0, 0,
+                    0, 0
+                )
+            }
 
             if (prevP0 && prevP1) {
                 {
@@ -89,6 +104,25 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
                     c.push(...COL_RED)
                     uv.push(...UV_EMPTY)
                 }
+            }
+
+            if (n === maxN) { // cap end
+                const _v = [
+                    ...p0.toArray(),
+                    ...p1.toArray(),
+                    ...p3.toArray(),
+                ]
+                v.push(..._v)
+                c.push(
+                    0, 1, 0, 
+                    0, 1, 0, 
+                    0, 1, 0
+                )
+                uv.push(
+                    0, 0,
+                    0, 0,
+                    0, 0
+                )
             }
 
             prevP0 = p0.clone()
