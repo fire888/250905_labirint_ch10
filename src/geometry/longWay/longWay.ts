@@ -334,13 +334,15 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
 
                 let typeColumn = 'COLUMN01'
                 const ran = Math.random()
-                if (ran < .3) { 
+                if (ran < .5) { 
                     typeColumn = 'COLUMN02' 
-                } else if (ran < .7) {
-                    typeColumn = 'SPHERE_HEL'
                 }
                 if (i === segments2.length - 1 && isLastHelix) {
                     typeColumn = 'HELIX' 
+                } else {
+                    if (s.w > 6 && s.d > 6) {
+                        typeColumn = 'SPHERE_HEL'
+                    }
                 }
 
 
@@ -407,6 +409,9 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                     _M.fill(r.v, v)
                     _M.fill(r.c, c)
                     _M.fill(r.uv, uv)
+                    
+                    _M.translateVertices(r.vCollide, center.x, center.y + 1.05, center.z)
+                    _M.fill(r.vCollide, vCollide)
                 }
             }
         }

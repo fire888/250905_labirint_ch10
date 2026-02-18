@@ -9,6 +9,7 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
+    const vCollide: number[] = []
 
     let dist1 = 1
     const savedVec_1 = new THREE.Vector2(1, 0)
@@ -22,10 +23,15 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
     let prevP1
     let prevP3
 
+    let collidePrevPC
+    let collidePrevP3
+
     let n = 0
+    let collideCount = 0
     const maxN = 200
     while (n < maxN) {
         ++n
+        ++collideCount
 
         dist1 += spd1
         const vec_1 = new THREE.Vector2(Math.cos(dist1), Math.sin(dist1))
@@ -69,8 +75,10 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
                     0, 0
                 )
             }
+            if (!collidePrevPC) collidePrevPC = currentPoint.clone()
+            if (!collidePrevP3) collidePrevP3 = p3.clone()
 
-            if (prevP0 && prevP1) {
+            if (prevP0 && prevP1 && prevP3) {
                 {
                     const _v = _M.createPolygonV(
                         prevP0.clone(), 
@@ -104,6 +112,14 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
                     c.push(...COL_RED)
                     uv.push(...UV_EMPTY)
                 }
+
+                if (collideCount > 7) {
+                    collideCount = 0
+                    const vCol = _M.createPolygonV(p3.clone().add(new THREE.Vector3(0, 0.1, 0)), collidePrevP3.clone().add(new THREE.Vector3(0, 0.1, 0)), collidePrevPC.clone(), currentPoint.clone())
+                    vCollide.push(...vCol)
+                    collidePrevP3 = p3.clone()
+                    collidePrevPC = currentPoint.clone()
+                }
             }
 
             if (n === maxN) { // cap end
@@ -133,5 +149,5 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
         savedPoint = currentPoint.clone()
     }
 
-    return { v, c, uv }
+    return { v, c, uv, vCollide }
 }

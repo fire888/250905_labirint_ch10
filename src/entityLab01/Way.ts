@@ -63,7 +63,7 @@ export class Way {
 
         /////////////////////////////////////////
 
-        const COLLIDE_VERT_COUNT = 5000 * 3 * 4
+        const COLLIDE_VERT_COUNT = 6000 * 3 * 4
         const sabVertexCollide = new SharedArrayBuffer(COLLIDE_VERT_COUNT)
         const posF32Collide = new Float32Array(sabVertexCollide)
         
