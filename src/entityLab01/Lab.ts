@@ -9,6 +9,7 @@ import { createFloor00 } from "geometry/floor00/floor00"
 import { createPlatform00 } from "geometry/platform00/platform00"
 import { createPlatform01Round } from "geometry/platform01Round/platfotm01Round"
 import { createSphereHel } from "geometry/sphereHel/sphereHel"
+import { createArc00 } from "geometry/arc00/arc00"
 
 export class Labyrinth {
     static isCanBuild = true 
@@ -75,6 +76,9 @@ export class Labyrinth {
     } 
     
     private _buildTest() {
+        // const { v, c, uv, vCollide } = createArc00(1, 1, this._root)
+        // const m = _M.createMesh({ v, c, uv, material: this._root.materials.materialLab })
+        // this._root.studio.add(m)
 
         // const PARAMS_SPD = [
         //     [0.234867, 0.103870],

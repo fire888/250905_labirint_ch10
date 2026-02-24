@@ -3,8 +3,9 @@ import { IArrayForBuffers, T_ROOM, I_TypeSeg } from "types/GeomTypes"
 import { Root } from "index"
 import * as THREE from "three" 
 import { createPlatform00 } from "geometry/platform00/platform00"
-import { createColumn01 } from "../column01/column01";
-import { createColumn02 } from "../column02/column02";
+import { createColumn01 } from "../column01/column01"
+import { createColumn02 } from "../column02/column02"
+import { createArc00 } from "geometry/arc00/arc00"
 import { createHelix00 } from "geometry/helix00/helix00"
 import { createHelix01 } from "geometry/helix01/helix01"
 import { createPlatform01Round } from "geometry/platform01Round/platfotm01Round"
@@ -324,6 +325,7 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                 const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
                 const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
                 const offsetDir2_1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
+                const offsetRoof = s.dir.clone().multiplyScalar(.4).add(s.axisP0)
 
                 const createColumns = (r: IArrayForBuffers, coord: THREE.Vector3 ) => {
                     _M.translateVertices(r.v, coord.x, coord.y, coord.z)
@@ -364,6 +366,16 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                     createColumns(r2, offsetDir2_0)
                     const r3 = createColumn02(1, 2)
                     createColumns(r3, offsetDir2_1)
+
+                    if (s.w > 5 && s.d > 2) {
+                        const arc = createArc00(s.w * .5 - .4, s.d - .8)
+                        const angle = _M.angleFromCoords(s.dir.x, s.dir.z)
+                        _M.rotateVerticesY(arc.v, -angle - Math.PI * .5)
+                        _M.translateVertices(arc.v, offsetRoof.x, offsetRoof.y + 2, offsetRoof.z)
+                        _M.fill(arc.v, v)
+                        _M.fill(arc.c, c)
+                        _M.fill(arc.uv, uv)
+                    }
                 } else if (typeColumn === 'HELIX') {
                     const rPlatform = Math.random() * 5 + 2
                     const hHelix = rPlatform + Math.random() * 40

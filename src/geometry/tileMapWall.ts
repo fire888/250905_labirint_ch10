@@ -121,7 +121,6 @@ export const COL_RED: number[] = _M.fillColorFace([1, 0, 0])
 export const COL_BLUE: number[] = _M.fillColorFace([.5, .1, 1])
 
 export const UV_NORM: number[] = _M.createUv([S * 1, S * 3], [S * 2, S * 3], [S * 2, S * 4], [S * 1, S * 4])
-//export const COL_NORM: number[] = _M.fillColorFace([1, 1, 0])
 export const COL_NORM: number[] = _M.fillColorFace([1, 1, 1])
 export const COL_NORM_2: number[] = _M.fillColorFace([.7, .6, 1])
 
@@ -136,3 +135,6 @@ export const COL_GRID_C = COL_GRID
 
 export const UV_HT: number[] = _M.createUv([S * 2, S * 2], [S * 3, S * 2], [S * 3, S * 3], [S * 2, S * 3])
 export const COL_HT: number[] = _M.fillColorFace([1, 1, 1])
+
+export const COL_GOLD = _M.fillColorFace([1, 1, 0])
+export const COL_BLACK = _M.fillColorFace([0.5, 0.5, 1])
