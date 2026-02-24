@@ -10,7 +10,7 @@ import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY,
 import * as THREE from 'three'
 
 
-export const createColumn02 = (w: number = .5, h: number = 20, n: number = 8): IArrayForBuffers => {
+export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
@@ -26,8 +26,6 @@ export const createColumn02 = (w: number = .5, h: number = 20, n: number = 8): I
     }
 
     {
-        let rS1 = .3
-        let rS2 = .3
         const nS = 8
 
         const points0 = [] 
@@ -128,14 +126,21 @@ export const createColumn02 = (w: number = .5, h: number = 20, n: number = 8): I
                 const pol = _M.createPolygonV(
                     points0[prev].clone().setY(TT + .18),
                     points0[cur].clone().setY(TT + .18),
-                    points0[cur].clone().setY(TT + .25),
-                    points0[prev].clone().setY(TT + .25),
+                    points0[cur].clone().setY(h),
+                    points0[prev].clone().setY(h),
                 )
                 v.push(...pol)
                 uv.push(...UV_RED)
                 c.push(...COL_RED)
             }
 
+            v.push(
+                points0[prev].x, 2, points0[prev].z,
+                points0[cur].x, 2, points0[cur].z,
+                0, 2, 0
+            )
+            uv.push(.55, .55,  .55, .55,  .55, .55)
+            c.push(1, 0, 0,  1, 0, 0,   1, 0, 0)
         }
     }
 

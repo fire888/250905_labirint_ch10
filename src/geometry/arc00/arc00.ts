@@ -6,6 +6,7 @@ import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, UV_GRID, UV_GRID_C, UV_EMPTY, COL
     COL_GRID_C,
     UV_RED
  } from "../tileMapWall"
+ import * as THREE from "three"
 
 
 //export const createArc00 = (w: number = 1, d: number = 20, root: Root): IArrayForBuffers => {
@@ -17,43 +18,56 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
     const S = .8
     const wP = .1
     const hP = .7
+    const ROOF_H = .2
 
     const TYPE = Math.random() < .5 ? 'CIRCLE' : 'CROSS'
 
     { // arc
-        const arrPoints = []
+        const arrPoints0 = []
         let currAng = Math.PI * .5
         const maxAngle = Math.PI * 0.85
         const count = Math.ceil(w / S)
         const stepAngle = (maxAngle - currAng) / count
+        const scaleX = Math.abs((w - .1) / Math.cos(maxAngle))
 
         while (currAng <= maxAngle) {
-            const newP = [Math.cos(currAng), Math.sin(currAng)]
-            arrPoints.push(newP)
+            const newP = [Math.cos(currAng) * scaleX, Math.sin(currAng) * scaleX]
+            arrPoints0.push(newP)
             currAng += stepAngle
         }
     
-        const lastP = arrPoints[arrPoints.length - 1]
-        const scaleX = Math.abs(w / lastP[0])
-        const startY: number = (lastP[1]) * scaleX
+        const lastP = arrPoints0[arrPoints0.length - 1]
+        const startY: number = (lastP[1])
+
+        const arrPoints1 = []
+        for (let i = 0; i < arrPoints0.length; ++i) {
+            const copyP = new THREE.Vector3(arrPoints0[i][0], arrPoints0[i][1] - startY, 0).normalize()
+            const angle = _M.angleFromCoords(copyP.x, copyP.y)
+            const offsetX = Math.cos(angle) * ROOF_H
+            const offsetY = Math.sin(angle) * ROOF_H
+            arrPoints1.push([arrPoints0[i][0] + offsetX, arrPoints0[i][1] + offsetY]) 
+        }
 
         const DZ = -d
         const countZ = Math.abs(Math.ceil(DZ / S))
         const stepD = Math.abs(DZ / countZ)
 
-        const ROOF_H = .25
+        for (let i = 1; i < arrPoints0.length; ++i) {
+            const prev = arrPoints0[i - 1]
+            const prevT = arrPoints1[i - 1]
+            const curr = arrPoints0[i]
+            const currT = arrPoints1[i]
 
-        for (let i = 1; i < arrPoints.length; ++i) {
-            const prev = arrPoints[i - 1]
-            const curr = arrPoints[i]
+            const prevP = [prev[0], prev[1]]
+            let currP = [curr[0], curr[1]]
 
             for (let j = 1; j < countZ + 1; ++j) {
                 // bottom
                 const _v = _M.createPolygon(
-                    [prev[0] * scaleX, prev[1] * scaleX, DZ + j * stepD],
-                    [curr[0] * scaleX, curr[1] * scaleX, DZ + j * stepD],
-                    [curr[0] * scaleX, curr[1] * scaleX, DZ + (j - 1) * stepD],
-                    [prev[0] * scaleX, prev[1] * scaleX, DZ + (j - 1) * stepD],
+                    [prevP[0], prevP[1], DZ + j * stepD],
+                    [currP[0], currP[1], DZ + j * stepD],
+                    [currP[0], currP[1], DZ + (j - 1) * stepD],
+                    [prevP[0], prevP[1], DZ + (j - 1) * stepD],
                 )
                 v.push(..._v)
                 if (j === 1 || j === countZ) {
@@ -79,36 +93,22 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
 
                 // top
                 const _vt = _M.createPolygon(
-                    [prev[0] * scaleX, prev[1] * scaleX + ROOF_H, DZ + (j - 1) * stepD],
-                    [curr[0] * scaleX, curr[1] * scaleX + ROOF_H, DZ + (j - 1) * stepD],
-                    [curr[0] * scaleX, curr[1] * scaleX + ROOF_H, DZ + (j) * stepD],
-                    [prev[0] * scaleX, prev[1] * scaleX + ROOF_H, DZ + (j) * stepD],
+                    [prevT[0], prevT[1], DZ + (j - 1) * stepD],
+                    [currT[0], currT[1], DZ + (j - 1) * stepD],
+                    [currT[0], currT[1], DZ + (j) * stepD],
+                    [prevT[0], prevT[1], DZ + (j) * stepD],
                 )
                 v.push(..._vt)
                 c.push(...COL_GRAY)
                 uv.push(...UV_GRID)
-
-                // left
-                if (i === arrPoints.length - 1) {
-                    const _vl = _M.createPolygon(
-                        [curr[0] * scaleX, curr[1] * scaleX, DZ + (j - 1) * stepD],
-                        [curr[0] * scaleX, curr[1]* scaleX, DZ + (j) * stepD],
-                        [curr[0] * scaleX, curr[1]* scaleX + ROOF_H, DZ + (j) * stepD],
-                        [curr[0] * scaleX, curr[1]* scaleX + ROOF_H, DZ + (j - 1) * stepD],
-                    )
-                    v.push(..._vl)
-                    c.push(...COL_GRAY)
-                    uv.push(...UV_EMPTY)
-                }
-
             }
 
             // fill front
             const _v = _M.createPolygon(
-                [curr[0] * scaleX, curr[1]* scaleX, 0],
-                [prev[0] * scaleX, prev[1]* scaleX, 0],
-                [prev[0] * scaleX, prev[1]* scaleX + ROOF_H, 0],
-                [curr[0] * scaleX, curr[1]* scaleX + ROOF_H, 0],
+                [currP[0], currP[1], 0],
+                [prevP[0], prevP[1], 0],
+                [prevT[0], prevT[1], 0],
+                [currT[0], currT[1], 0],
             )
             v.push(..._v)
             c.push(...COL_NORM)
@@ -116,10 +116,10 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
 
             // fill back
             const _vb = _M.createPolygon(
-                [prev[0] * scaleX, prev[1]* scaleX, DZ],
-                [curr[0] * scaleX, curr[1]* scaleX, DZ],
-                [curr[0] * scaleX, curr[1]* scaleX + ROOF_H, DZ],
-                [prev[0] * scaleX, prev[1]* scaleX + ROOF_H, DZ],
+                [prevP[0], prevP[1], DZ],
+                [currP[0], currP[1], DZ],
+                [currT[0], currT[1], DZ],
+                [prevT[0], prevT[1], DZ],
             )
             v.push(..._vb)
             c.push(...COL_NORM)
@@ -191,9 +191,6 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
             uv.push(...UV_EMPTY)
         }
     }
-
-
-
 
     _M.appendMirrorX(v, c, uv)
 
