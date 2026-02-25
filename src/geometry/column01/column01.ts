@@ -1,7 +1,12 @@
 import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, UV_GRID, UV_GRID_C } from "../tileMapWall"
+import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, UV_GRID, UV_GRID_C, COL_RED, UV_EMPTY, 
+    UV_GRID_C3, 
+    UV_GRID_3, 
+    UV_GRID_3L, 
+    COL_BLACK,
+} from "../tileMapWall"
 
 
 export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IArrayForBuffers => {
@@ -9,20 +14,65 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
     const c: number[] = []
     const uv: number[] = []
 
+    const HH = 2
+
     {
+
+        const R0 = .2
+        const R1 = .1
+        const R2 = .3
+
+        let r_Prev = R0
+        let r_Curr = null
+
         let rS1 = .3
         let rS2 = .3
         const nS = 8
 
         let curH = 0
-        let i = 0
-        while (curH < h) {
-            rS1 = rS2
+        let n = 0
+        while (curH < HH) {
             ++n
-            if (i % 2 === 0) {
-                rS2 = (.2 + Math.random() * .5) * .3
+
+            let col = COL_NORM
+            let __uv = UV_GRID_C
+            let segH = 0
+            if (n === 1) {
+                r_Curr = R0
+                segH = .1
+                col = COL_RED
+                __uv = UV_EMPTY
             }
-            const segH = Math.random() * .2 + .2
+            if (n === 2) {
+                r_Curr = R1
+                segH = .1
+                col = COL_RED
+                __uv = UV_EMPTY
+            }
+            if (n === 3) {
+                r_Curr = R2
+                segH = .3
+                col = COL_RED
+                __uv = UV_EMPTY
+            }
+            if (n === 4) {
+                r_Curr = R2 - .1
+                segH = 0
+                col = COL_RED
+                __uv = UV_EMPTY
+            }
+            if (n === 5) {
+                r_Curr = R2 - .1
+                segH = -.1
+                col = COL_RED
+                __uv = UV_EMPTY
+            }
+            if (n > 5) {
+                r_Curr = Math.random() * .2 + 0.05
+                segH = Math.random() * .2 + .2
+            }
+
+
 
             const __v = []
 
@@ -33,10 +83,10 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
                 if (i === 0) cur = (nS - 1) / nS
 
                 const _v = _M.createPolygon(
-                    [Math.cos(prev * Math.PI * 2) * rS1, 0, Math.sin(prev * Math.PI * 2) * rS1],
-                    [Math.cos(cur * Math.PI * 2) * rS1, 0, Math.sin(cur * Math.PI * 2) * rS1],
-                    [Math.cos(cur * Math.PI * 2) * rS2, segH, Math.sin(cur * Math.PI * 2) * rS2],
-                    [Math.cos(prev * Math.PI * 2) * rS2, segH, Math.sin(prev * Math.PI * 2) * rS2],
+                    [Math.cos(prev * Math.PI * 2) * r_Prev, 0, Math.sin(prev * Math.PI * 2) * r_Prev],
+                    [Math.cos(cur * Math.PI * 2) * r_Prev, 0, Math.sin(cur * Math.PI * 2) * r_Prev],
+                    [Math.cos(cur * Math.PI * 2) * r_Curr, segH, Math.sin(cur * Math.PI * 2) * r_Curr],
+                    [Math.cos(prev * Math.PI * 2) * r_Curr, segH, Math.sin(prev * Math.PI * 2) * r_Curr],
                 )
 
                 __v.push(..._v)
@@ -49,27 +99,52 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
                     uv.push(...UV_GRAY)
                     c.push(...COL_GRAY)
                 } else {
-                    //uv.push(...UV_NORM)
-                    uv.push(...UV_GRID_C)
-                    c.push(...COL_NORM)
+                    uv.push(...__uv)
+                    c.push(...col)
                 }
 
-                // last 
-                if (curH + segH > h) {
+                if (curH + segH >= HH) {
                     __v.push(
-                        Math.cos(prev * Math.PI * 2) * rS2, segH, Math.sin(prev * Math.PI * 2) * rS2,
-                        Math.cos(cur * Math.PI * 2) * rS2, segH, Math.sin(cur * Math.PI * 2) * rS2,
-                        0, segH, 0
+                        Math.cos(prev * Math.PI * 2) * r_Curr, segH, Math.sin(prev * Math.PI * 2) * r_Curr,
+                        Math.cos(cur * Math.PI * 2) * r_Curr, segH, Math.sin(cur * Math.PI * 2) * r_Curr,
+                        0, curH, 0
                     )
-                    c.push(1, 1, 1, 1, 1, 1, 1, 1, 1)
-                    uv.push(.55, .55,  .55, .55,  .55, .55)
+                    uv.push(...UV_GRID_3)
+                    c.push(
+                        COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                        COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                        COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                    )
                 }
             }
+
+            r_Prev = r_Curr
             
             _M.translateVertices(__v, 0, curH, 0)
             v.push(...__v)                        
             
             curH += segH
+        }
+
+        for (let i = 0; i < 15; ++i) {
+            let p0 = [0, 0, 0]
+            let p1 = [Math.random() + .3, 0, 0]
+            let p2 = [p1[0] - Math.random() * .3, Math.random() * .5 + .1, 0]
+
+            const _v = [...p0, ...p1, ...p2, ...p0, ...p2, ...p1]
+            _M.rotateVerticesX(_v, Math.random() * .3)
+            _M.rotateVerticesY(_v, Math.random() * Math.PI * 2)
+            _M.translateVertices(_v, 0, curH, 0)
+            v.push(..._v)
+            uv.push(...UV_GRID_3, ...UV_GRID_3L)
+            c.push(
+                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+            )
         }
     }
 

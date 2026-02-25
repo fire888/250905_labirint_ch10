@@ -128,9 +128,12 @@ export const UV_GRAY: number[] = _M.createUv([S * 3, S * 3], [S * 4, S * 3], [S 
 export const COL_GRAY: number[] = _M.fillColorFace([.7, .7, 1])
 
 export const UV_GRID: number[] = _M.createUv([0, S * 2], [S * 1, S * 2], [S * 1, S * 3], [0, S * 3])
+export const UV_GRID_3: number[] = [0, S * 2, S * 1, S * 3,  S * 1, S * 2]
+export const UV_GRID_3L: number[] = [0, S * 2, 0, S * 3, S * 1, S * 3]
 export const COL_GRID: number[] = _M.fillColorFace([.7, 1, .7])
 
 export const UV_GRID_C: number[] = _M.createUv([S, S * 2], [S * 2, S * 2], [S * 2, S * 3], [S, S * 3])
+export const UV_GRID_C3: number[] = [S, S * 2, S * 2, S * 2, S * 2, S * 3]
 export const COL_GRID_C = COL_GRID
 
 export const UV_HT: number[] = _M.createUv([S * 2, S * 2], [S * 3, S * 2], [S * 3, S * 3], [S * 2, S * 3])

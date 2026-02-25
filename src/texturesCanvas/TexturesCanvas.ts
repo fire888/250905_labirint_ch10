@@ -46,7 +46,7 @@ export class TexturesCanvas {
             ctx.drawImage(tex4, S, S)
             ctx.drawImage(texHighTech, S * 2, S)
 
-            // show(canMain)
+            //show(canMain)
 
             this.iron00Map = new THREE.CanvasTexture(canMain) 
             this.iron00Map.minFilter = THREE.LinearMipmapLinearFilter

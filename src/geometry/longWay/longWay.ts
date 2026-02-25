@@ -349,20 +349,22 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
 
 
                 if (typeColumn === 'COLUMN01') {
-                    const Y = new THREE.Vector3(0, -.5, 0)
-                    const offsetDir1_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p0).add(Y)
-                    const offsetDir1_1 = s.dir0.clone().multiplyScalar(.4).add(offsetAxis).add(s.p3).add(Y)
-                    const offsetDir2_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p2).add(Y)
-                    const offsetDir2_1 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p1).add(Y)
+                    if (Math.random() < .6) {
+                        const Y = new THREE.Vector3(0, 0, 0)
+                        const offsetDir1_0 = s.dir1.clone().multiplyScalar(.3).add(offsetAxis).add(s.p0).add(Y)
+                        const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.3).add(offsetAxis).add(s.p3).add(Y)
+                        const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.3).add(offsetAxisM).add(s.p2).add(Y)
+                        const offsetDir2_1 = s.dir1.clone().multiplyScalar(.3).add(offsetAxisM).add(s.p1).add(Y)
 
-                    const r0 = createColumn01(1, Math.random() * 3 + 1)
-                    createColumns(r0, offsetDir1_0)
-                    const r1 = createColumn01(1, Math.random() * 3 + 1)
-                    createColumns(r1, offsetDir1_1)
-                    const r2 = createColumn01(1, Math.random() * 3 + 1)
-                    createColumns(r2, offsetDir2_0)
-                    const r3 = createColumn01(1, Math.random() * 3 + 1)
-                    createColumns(r3, offsetDir2_1)
+                        const r0 = createColumn01(1, Math.random() * 3 + 1)
+                        createColumns(r0, offsetDir1_0)
+                        const r1 = createColumn01(1, Math.random() * 3 + 1)
+                        createColumns(r1, offsetDir1_1)
+                        const r2 = createColumn01(1, Math.random() * 3 + 1)
+                        createColumns(r2, offsetDir2_0)
+                        const r3 = createColumn01(1, Math.random() * 3 + 1)
+                        createColumns(r3, offsetDir2_1) 
+                    }
                 } else if (typeColumn === 'COLUMN02') {
                     if (s.w > 2 && s.d > 2) {
                         const offsetDir1_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
