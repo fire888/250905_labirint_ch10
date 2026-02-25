@@ -15,7 +15,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
     const c: number[] = []
     const uv: number[] = []
 
-    const S = .8
+    const S = .5
     const wP = .1
     const hP = .7
     const ROOF_H = .2
@@ -26,11 +26,11 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
         const arrPoints0 = []
         let currAng = Math.PI * .5
         const maxAngle = Math.PI * 0.85
-        const count = Math.ceil(w / S)
+        const count = Math.ceil((w - .1) / S)
         const stepAngle = (maxAngle - currAng) / count
         const scaleX = Math.abs((w - .1) / Math.cos(maxAngle))
 
-        while (currAng <= maxAngle) {
+        while (currAng <= (maxAngle + .01)) {
             const newP = [Math.cos(currAng) * scaleX, Math.sin(currAng) * scaleX]
             arrPoints0.push(newP)
             currAng += stepAngle

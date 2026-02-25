@@ -358,16 +358,20 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                     const r3 = createColumn01(1, 2)
                     createColumns(r3, offsetDir2_1)
                 } else if (typeColumn === 'COLUMN02') {
-                    const r0 = createColumn02(1, 2)
-                    createColumns(r0, offsetDir1_0)
-                    const r1 = createColumn02(1, 2)
-                    createColumns(r1, offsetDir1_1)
-                    const r2 = createColumn02(1, 2)
-                    createColumns(r2, offsetDir2_0)
-                    const r3 = createColumn02(1, 2)
-                    createColumns(r3, offsetDir2_1)
+                    if (s.w > 4 && s.d > 2) {
+                        const d = offsetDir1_1.distanceTo(offsetDir2_0)
+                        const count = Math.ceil(d / 1.3)
 
-                    if (s.w > 5 && s.d > 2) {
+                        for (let i = 0; i < count + 1; i++) {
+                            const r0 = createColumn02(1, 2)
+                            const p = offsetDir1_1.clone().lerp(offsetDir2_0, i / (count))
+                            createColumns(r0, p)
+
+                            const r1 = createColumn02(1, 2)
+                            const p1 = offsetDir1_0.clone().lerp(offsetDir2_1, i / (count))
+                            createColumns(r1, p1)
+                        }
+
                         const arc = createArc00(s.w * .5 - .4, s.d - .8)
                         const angle = _M.angleFromCoords(s.dir.x, s.dir.z)
                         _M.rotateVerticesY(arc.v, -angle - Math.PI * .5)
