@@ -321,11 +321,11 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                 const offsetAxis = s.dir.clone().multiplyScalar(.4)
                 const offsetAxisM = s.dir.clone().multiplyScalar(-.4)
 
-                const offsetDir1_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
-                const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
-                const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
-                const offsetDir2_1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
-                const offsetRoof = s.dir.clone().multiplyScalar(.4).add(s.axisP0)
+                // const offsetDir1_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
+                // const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
+                // const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
+                // const offsetDir2_1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
+                // const offsetRoof = s.dir.clone().multiplyScalar(.4).add(s.axisP0)
 
                 const createColumns = (r: IArrayForBuffers, coord: THREE.Vector3 ) => {
                     _M.translateVertices(r.v, coord.x, coord.y, coord.z)
@@ -349,16 +349,29 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
 
 
                 if (typeColumn === 'COLUMN01') {
-                    const r0 = createColumn01(1, 2)
+                    const Y = new THREE.Vector3(0, -.5, 0)
+                    const offsetDir1_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p0).add(Y)
+                    const offsetDir1_1 = s.dir0.clone().multiplyScalar(.4).add(offsetAxis).add(s.p3).add(Y)
+                    const offsetDir2_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p2).add(Y)
+                    const offsetDir2_1 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p1).add(Y)
+
+                    const r0 = createColumn01(1, Math.random() * 3 + 1)
                     createColumns(r0, offsetDir1_0)
-                    const r1 = createColumn01(1, 2)
+                    const r1 = createColumn01(1, Math.random() * 3 + 1)
                     createColumns(r1, offsetDir1_1)
-                    const r2 = createColumn01(1, 2)
+                    const r2 = createColumn01(1, Math.random() * 3 + 1)
                     createColumns(r2, offsetDir2_0)
-                    const r3 = createColumn01(1, 2)
+                    const r3 = createColumn01(1, Math.random() * 3 + 1)
                     createColumns(r3, offsetDir2_1)
                 } else if (typeColumn === 'COLUMN02') {
                     if (s.w > 4 && s.d > 2) {
+                        const offsetDir1_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
+                        const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
+                        const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
+                        const offsetDir2_1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
+                        const offsetRoof = s.dir.clone().multiplyScalar(.4).add(s.axisP0)
+
+
                         const d = offsetDir1_1.distanceTo(offsetDir2_0)
                         const count = Math.ceil(d / 1.3)
 
