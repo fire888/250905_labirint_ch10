@@ -364,23 +364,23 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                     const r3 = createColumn01(1, Math.random() * 3 + 1)
                     createColumns(r3, offsetDir2_1)
                 } else if (typeColumn === 'COLUMN02') {
-                    if (s.w > 4 && s.d > 2) {
+                    if (s.w > 2 && s.d > 2) {
                         const offsetDir1_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
                         const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
                         const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
                         const offsetDir2_1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
                         const offsetRoof = s.dir.clone().multiplyScalar(.4).add(s.axisP0)
 
-
+                        const h = Math.random() * 3 + .5
                         const d = offsetDir1_1.distanceTo(offsetDir2_0)
                         const count = Math.ceil(d / 1.3)
 
                         for (let i = 0; i < count + 1; i++) {
-                            const r0 = createColumn02(1, 2)
+                            const r0 = createColumn02(.08 + Math.random() * .12, h)
                             const p = offsetDir1_1.clone().lerp(offsetDir2_0, i / (count))
                             createColumns(r0, p)
 
-                            const r1 = createColumn02(1, 2)
+                            const r1 = createColumn02(.08 + Math.random() * .12, h)
                             const p1 = offsetDir1_0.clone().lerp(offsetDir2_1, i / (count))
                             createColumns(r1, p1)
                         }
@@ -388,7 +388,7 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                         const arc = createArc00(s.w * .5 - .4, s.d - .8)
                         const angle = _M.angleFromCoords(s.dir.x, s.dir.z)
                         _M.rotateVerticesY(arc.v, -angle - Math.PI * .5)
-                        _M.translateVertices(arc.v, offsetRoof.x, offsetRoof.y + 2, offsetRoof.z)
+                        _M.translateVertices(arc.v, offsetRoof.x, offsetRoof.y + h, offsetRoof.z)
                         _M.fill(arc.v, v)
                         _M.fill(arc.c, c)
                         _M.fill(arc.uv, uv)

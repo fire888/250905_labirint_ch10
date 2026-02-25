@@ -30,8 +30,8 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
 
         const points0 = [] 
         const points1 = []
-        const v3 = new THREE.Vector3(.2, 0, 0)
-        const v3_1 = new THREE.Vector3(.15, 0, 0)
+        const v3 = new THREE.Vector3(w + .05, 0, 0)
+        const v3_1 = new THREE.Vector3(w, 0, 0)
         for (let i = 0; i < nS; ++i) {
             const vec = v3.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), i / nS * Math.PI * 2) 
             points0.push(vec)
@@ -67,15 +67,17 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
                 c.push(...COL_RED)
             }
 
+            let currentH = .2 
             const hs = .15
 
             {
-                for (let i = 0; i < 10; ++i) {
+                while (currentH < h - .3) {
+                    currentH += hs
                     const pol = _M.createPolygonV(
-                        points1[prev].clone().setY(.2 + i * hs),
-                        points1[cur].clone().setY(.2 + i * hs),
-                        points1[cur].clone().setY(.2 + (i + 1) * hs),
-                        points1[prev].clone().setY(.2 + (i + 1) * hs),
+                        points1[prev].clone().setY(currentH - hs),
+                        points1[cur].clone().setY(currentH - hs),
+                        points1[cur].clone().setY(currentH),
+                        points1[prev].clone().setY(currentH),
                     )
                     v.push(...pol)
 
@@ -109,13 +111,12 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
                 }
             }
 
-            const TT = .2 + 10 * hs
             {
                 const pol = _M.createPolygonV(
-                    points1[prev].clone().setY(TT),
-                    points1[cur].clone().setY(TT),
-                    points0[cur].clone().setY(TT + .18),
-                    points0[prev].clone().setY(TT + .18),
+                    points1[prev].clone().setY(currentH),
+                    points1[cur].clone().setY(currentH),
+                    points0[cur].clone().setY(currentH + .12),
+                    points0[prev].clone().setY(currentH + .12),
                 )
                 v.push(...pol)
                 uv.push(...UV_EMPTY)
@@ -124,8 +125,8 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
 
             {
                 const pol = _M.createPolygonV(
-                    points0[prev].clone().setY(TT + .18),
-                    points0[cur].clone().setY(TT + .18),
+                    points0[prev].clone().setY(currentH + .12),
+                    points0[cur].clone().setY(currentH + .12),
                     points0[cur].clone().setY(h),
                     points0[prev].clone().setY(h),
                 )
@@ -135,9 +136,9 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
             }
 
             v.push(
-                points0[prev].x, 2, points0[prev].z,
-                points0[cur].x, 2, points0[cur].z,
-                0, 2, 0
+                points0[prev].x, h, points0[prev].z,
+                points0[cur].x, h, points0[cur].z,
+                0, h, 0
             )
             uv.push(.55, .55,  .55, .55,  .55, .55)
             c.push(1, 0, 0,  1, 0, 0,   1, 0, 0)

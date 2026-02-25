@@ -15,17 +15,18 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
     const c: number[] = []
     const uv: number[] = []
 
-    const S = .5
+    const S = Math.random() * .2 + w * .2
     const wP = .1
-    const hP = .7
+    //const hP = .7
     const ROOF_H = .2
+    const H_SIDES = .1 + Math.random() * .8
 
     const TYPE = Math.random() < .5 ? 'CIRCLE' : 'CROSS'
 
     { // arc
         const arrPoints0 = []
         let currAng = Math.PI * .5
-        const maxAngle = Math.PI * 0.85
+        const maxAngle = Math.PI * (Math.random() * .7 + .55)
         const count = Math.ceil((w - .1) / S)
         const stepAngle = (maxAngle - currAng) / count
         const scaleX = Math.abs((w - .1) / Math.cos(maxAngle))
@@ -125,7 +126,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
             c.push(...COL_NORM)
             uv.push(...UV_EMPTY)
         }
-        _M.translateVertices(v, 0, -startY + hP, 0)
+        _M.translateVertices(v, 0, -startY + H_SIDES, 0)
     }
 
     { // sides balks
@@ -133,8 +134,8 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
             const _v = _M.createPolygon(
                 [-w - wP, 0, 0],
                 [-w + wP, 0, 0],
-                [-w + wP, hP, 0],
-                [-w - wP, hP, 0],
+                [-w + wP, H_SIDES, 0],
+                [-w - wP, H_SIDES, 0],
             )
             v.push(..._v)
             c.push(...COL_NORM)
@@ -145,15 +146,15 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
             const _v = _M.createPolygon(
                 [-w + wP, 0, -d],
                 [-w - wP, 0, -d],
-                [-w - wP, hP, -d],
-                [-w + wP, hP, -d],
+                [-w - wP, H_SIDES, -d],
+                [-w + wP, H_SIDES, -d],
             )
             v.push(..._v)
             c.push(...COL_NORM)
             uv.push(...UV_NORM)
         }
 
-        const countZ = Math.ceil(d / S)
+        const countZ = Math.ceil(d / .45)
         const stepZ = d / countZ
 
         for (let i = 1; i < countZ + 1; ++i) {
@@ -161,8 +162,8 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
             const _v = _M.createPolygon(
                 [-w + wP, 0, -d + stepZ * i],
                 [-w + wP, 0, -d + stepZ * (i - 1)],
-                [-w + wP, hP, -d + stepZ * (i - 1)],
-                [-w + wP, hP, -d + stepZ * i],
+                [-w + wP, H_SIDES, -d + stepZ * (i - 1)],
+                [-w + wP, H_SIDES, -d + stepZ * i],
             )
             v.push(..._v)
             c.push(...COL_NORM)
@@ -172,8 +173,8 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
             const _v2 = _M.createPolygon(
                 [-w - wP, 0, -d + stepZ * (i - 1)],
                 [-w - wP, 0, -d + stepZ * i],
-                [-w - wP, hP, -d + stepZ * i],
-                [-w - wP, hP, -d + stepZ * (i - 1)],
+                [-w - wP, H_SIDES, -d + stepZ * i],
+                [-w - wP, H_SIDES, -d + stepZ * (i - 1)],
             )
             v.push(..._v2)
             c.push(...COL_NORM)
