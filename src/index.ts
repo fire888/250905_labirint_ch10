@@ -4,15 +4,14 @@ import { Studio } from "./entities/Studio"
 import { ControlsSystem } from "./entities/controls/ControlsSystem"
 import { Ticker } from "./entities/Ticker"
 import { Floor } from "./entities/Floor"
-//import { Particles } from './entities/Particles'
-//import { LoaderAssets } from "./entities/Loader"
+import { LoaderAssets } from "./entities/Loader"
 import { TexturesCanvas } from "texturesCanvas/TexturesCanvas"
 import { DeviceData } from "./entities/DeviceData"
 import { Ui } from "./entities/Ui"
 import { Phisics } from "./entities/Phisics"
 import { Labyrinth } from './entityLab01/Lab'
 import { BackTower } from "./entities/backTower/BackTower"
-//import { AudioManager } from "./entities/AudioManager"
+// import { AudioManager } from "./entities/AudioManager"
 import { Materials } from "./entities/Materials"
 import { pipelineInit } from "./pipelines/pipelineInit"
 import { pipelinePlay } from "./pipelines/pipelinePlay"
@@ -25,14 +24,14 @@ export type Root = {
     controls: ControlsSystem,
     floor: Floor,
     //particles: Particles,
-    // loader: LoaderAssets,
+    loader: LoaderAssets,
     texturesCanvas: TexturesCanvas,
     deviceData: DeviceData,
     ui: Ui,
     phisics: Phisics,
     lab: Labyrinth,
     backTower: BackTower,
-    //audio: AudioManager,
+    // audio: AudioManager,
     materials: Materials,
 }
 
@@ -48,14 +47,13 @@ window.addEventListener("DOMContentLoaded", async () => {
         controls: new ControlsSystem(),
         ui: new Ui(),
         floor: new Floor(),
-        //particles: new Particles(),
-        //loader: new LoaderAssets(),
+        loader: new LoaderAssets(),
         texturesCanvas: new TexturesCanvas(),
         deviceData: new DeviceData(),
         phisics: new Phisics(),
         lab: new Labyrinth(),
         backTower: new BackTower(),
-        //audio: new AudioManager(),
+        // audio: new AudioManager(),
         materials: new Materials()
     }
 

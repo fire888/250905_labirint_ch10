@@ -7,28 +7,21 @@ import { createChangerGameTheme } from 'helpers/changerGameTheme'
 
 export const pipelineInit = async (root: Root) => {
     const {
-        CONSTANTS,
         studio,
         controls,
         ui,
         ticker,
-        floor,
-        //loader,
+        loader,
         texturesCanvas,
         phisics,
         lab,
         backTower,
-        //audio,
+        // audio,
         materials,
-        deviceData,
-        //particles,
-        //energySystem,
-        //antigravSystem,
-        //antigravLast,
     } = root
 
-    //loader.init()
-    //await loader.loadAssets()
+    loader.init()
+    await loader.loadAssets()
 
     await texturesCanvas.init()
 
@@ -45,10 +38,6 @@ export const pipelineInit = async (root: Root) => {
 
     phisics.init(root)
     phisics.createPlayerPhisicsBody([3, 2, 0])
-
-    //floor.init(root)
-    //floor.mesh.position.set(0, -10, 0)
-    //studio.add(floor.mesh)
     
     await lab.init(root)
     await lab.buildNext()
@@ -66,25 +55,19 @@ export const pipelineInit = async (root: Root) => {
 
     })
 
-    //particles.init(root)
-    //ticker.on(particles.update.bind(particles))
-    //studio.add(particles.m)
-
     ui.init(root)
     ui.setTransparentBackground()
 
     if (IS_DEV_START_ORBIT) {
         await ui.hideStartScreenForce()
-        //studio.removeFog()
     } else {
-        //await ui.hideStartScreenForce()
         root.studio.addFog()
         await ui.hideStartScreen().then()
     }
 
     ticker.on(phisics.update.bind(phisics))
 
-    //audio.init(root)
+    // audio.init(root)
     //ticker.on(audio.update.bind(audio))
     //audio.playAmbient()
     
