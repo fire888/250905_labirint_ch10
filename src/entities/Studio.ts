@@ -48,8 +48,8 @@ export class Studio {
         this._root = root
         this.containerDom = document.getElementById('container-game')
         this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000)
-        this.camera.position.set(1, 30, 70)
-        this.camera.lookAt(150, 1, 150)
+        this.camera.position.set(3, 2, 0)
+        this.camera.lookAt(150, 0, 0)
 
         // this.spotLight = new SpotLight(0xffffff, 15)
         // this.spotLight.position.set(0, 3, 5)

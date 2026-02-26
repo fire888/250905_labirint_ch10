@@ -321,12 +321,6 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                 const offsetAxis = s.dir.clone().multiplyScalar(.4)
                 const offsetAxisM = s.dir.clone().multiplyScalar(-.4)
 
-                // const offsetDir1_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
-                // const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
-                // const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.4).add(offsetAxisM).add(s.p2)
-                // const offsetDir2_1 = s.dir1.clone().multiplyScalar(.4).add(offsetAxisM).add(s.p1)
-                // const offsetRoof = s.dir.clone().multiplyScalar(.4).add(s.axisP0)
-
                 const createColumns = (r: IArrayForBuffers, coord: THREE.Vector3 ) => {
                     _M.translateVertices(r.v, coord.x, coord.y, coord.z)
                     _M.fill(r.v, v)
@@ -431,7 +425,7 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                         _M.fill(pl.vCollide, vCollide)
                     }
 
-                } else if (typeColumn === 'SPHERE_HEL') {
+                } else if (i !== 0 && typeColumn === 'SPHERE_HEL') {
                     let sss
                     let r1 = Math.random() * .12 + 0.01
                     const r2 = Math.random() * .12 + 0.01

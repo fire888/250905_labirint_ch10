@@ -44,7 +44,6 @@ export const pipelineInit = async (root: Root) => {
     ticker.on(studio.render.bind(studio))
 
     phisics.init(root)
-    ticker.on(phisics.update.bind(phisics))
     phisics.createPlayerPhisicsBody([3, 2, 0])
 
     //floor.init(root)
@@ -72,7 +71,7 @@ export const pipelineInit = async (root: Root) => {
     //studio.add(particles.m)
 
     ui.init(root)
-    //ui.setEnergyLevel(0)
+    ui.setTransparentBackground()
 
     if (IS_DEV_START_ORBIT) {
         await ui.hideStartScreenForce()
@@ -82,6 +81,8 @@ export const pipelineInit = async (root: Root) => {
         root.studio.addFog()
         await ui.hideStartScreen().then()
     }
+
+    ticker.on(phisics.update.bind(phisics))
 
     //audio.init(root)
     //ticker.on(audio.update.bind(audio))
@@ -104,5 +105,5 @@ export const pipelineInit = async (root: Root) => {
     //     controls.connect()
     // }
 
-    createChangerGameTheme(root)
+    //createChangerGameTheme(root)
 }

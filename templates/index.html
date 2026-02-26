@@ -34,7 +34,7 @@
             bottom: 0;
             display: flex;
             flex-direction: column;
-            background: linear-gradient(to top, #3e5e73 60%, #0e0924 60%);
+            background: linear-gradient(to top, #3e4961 60%, #b40000 60%);
             z-index: 500;
             justify-content: center;
             align-items: center;
@@ -47,10 +47,15 @@
             /* font-weight: bold; */
         }
         h1 {
-            font-size: 15vw;
-            line-height: 90px;
-            color: #6490ad;
+            font-size: 120px;
+            line-height: 130px;
+            color: #ffffff;
             font-style: normal;
+            text-shadow:
+                -5px 0 #250c0c, /* left shadow */
+                0 5px #34093a, /* bottom shadow */
+                5px 0 #ff0000, /* right shadow */
+                0 -5px #ff6363; /* top shadow */
         }
         .message img {
             width: 250px;
@@ -60,7 +65,7 @@
             margin-bottom: 30px;
         }
         .loader {
-            border: 8px solid #a1ccea;
+            border: 8px solid #ff3737;
             border-top: 8px solid #0e0924;
             border-radius: 50%;
             width: 30px;
@@ -74,15 +79,15 @@
             100% { transform: rotate(360deg); }
         }
         .start-but {
-            background-color:  #0e0924;
-            border: 2px solid #a1ccea;
+            background-color:  #cb2525;
+            border: 2px solid #ffffff;
             min-height: 46px;
             width: 350px;
             max-width: 90vw;
             border-radius: 5px;
             font-size: 20px;
             font-style: italic;
-            color: #a1ccea;;
+            color: #ffffff;
             cursor: pointer;
             transition: 1s;
             font-style: normal;
@@ -101,6 +106,17 @@
             top: 0;
             left: 0;
         }
+        .controls-mess {
+            font-size: 20px;
+            font-style: normal;
+            font-weight: bold;
+            color: #ffffff;
+            text-shadow:
+                -2px 0 #250c0c, /* left shadow */
+                0 2px #34093a, /* bottom shadow */
+                2px 0 #ff0000, /* right shadow */
+                0 -2px #ff6363; /* top shadow */
+        }
     </style>
 </head>
 
@@ -108,7 +124,7 @@
     <div class='start-screen'>
         <div class='message'>
             <div class='name'>
-                <h1>10</h1>
+                <h1>HELIX</h1>
             </div>
             <!-- <img src="./start-img.webp"> -->
             <button class="start-but" style="display: none;">P&nbsp;L&nbsp;A&nbsp;Y</button>
