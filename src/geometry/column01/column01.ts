@@ -6,6 +6,7 @@ import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, UV_GRID, UV_GRID_C, COL_RED, UV_E
     UV_GRID_3, 
     UV_GRID_3L, 
     COL_BLACK,
+    UV_TREE_3,
 } from "../tileMapWall"
 
 
@@ -13,11 +14,11 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
+    const vCollide: number[] = []
 
-    const HH = 2
+    const HH = h
 
     {
-
         const R0 = .2
         const R1 = .1
         const R2 = .3
@@ -25,8 +26,6 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
         let r_Prev = R0
         let r_Curr = null
 
-        let rS1 = .3
-        let rS2 = .3
         const nS = 8
 
         let curH = 0
@@ -107,9 +106,9 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
                     __v.push(
                         Math.cos(prev * Math.PI * 2) * r_Curr, segH, Math.sin(prev * Math.PI * 2) * r_Curr,
                         Math.cos(cur * Math.PI * 2) * r_Curr, segH, Math.sin(cur * Math.PI * 2) * r_Curr,
-                        0, curH, 0
+                        0, segH + 1, 0
                     )
-                    uv.push(...UV_GRID_3)
+                    uv.push(...UV_TREE_3)
                     c.push(
                         COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
                         COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
@@ -136,7 +135,7 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
             _M.rotateVerticesY(_v, Math.random() * Math.PI * 2)
             _M.translateVertices(_v, 0, curH, 0)
             v.push(..._v)
-            uv.push(...UV_GRID_3, ...UV_GRID_3L)
+            uv.push(...UV_TREE_3, ...UV_TREE_3)
             c.push(
                 COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
                 COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
@@ -148,5 +147,20 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
         }
     }
 
-    return { v, c, uv }
+    vCollide.push(
+        ..._M.createPolygon(
+            [-.3, 0, 0],
+            [.3, 0, 0],
+            [.3, HH, 0],
+            [-.3, HH, 0],
+        ),
+        // ..._M.createPolygon(
+        //     [0, 0, -.3],
+        //     [0, 0, .3],
+        //     [0, HH, .3],
+        //     [0, HH, -.3],
+        // )
+    )
+
+    return { v, c, uv, vCollide }
 }

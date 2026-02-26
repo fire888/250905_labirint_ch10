@@ -332,6 +332,11 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                     _M.fill(r.v, v)
                     _M.fill(r.c, c)
                     _M.fill(r.uv, uv)
+
+                    if (r.vCollide) {
+                        _M.translateVertices(r.vCollide, coord.x, coord.y, coord.z)
+                        _M.fill(r.vCollide, vCollide)
+                    }
                 }
 
                 let typeColumn = 'COLUMN01'

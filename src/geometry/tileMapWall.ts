@@ -141,3 +141,5 @@ export const COL_HT: number[] = _M.fillColorFace([1, 1, 1])
 
 export const COL_GOLD = _M.fillColorFace([1, 1, 0])
 export const COL_BLACK = _M.fillColorFace([0.5, 0.5, 1])
+
+export const UV_TREE_3: number[] = [S * 3, S * 3, S * 4, S * 3, S * 3.5, S * 2] 

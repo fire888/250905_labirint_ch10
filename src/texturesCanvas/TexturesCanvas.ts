@@ -12,6 +12,7 @@ const show = (iron00Map: HTMLCanvasElement) => {
 }
 
 const ROAD_COLOR = "#234e6c"
+const ROAD_COLOR_L = "#4db5ff"
 
 export class TexturesCanvas {
     iron00Map: THREE.CanvasTexture
@@ -28,7 +29,8 @@ export class TexturesCanvas {
             const tex3 = createTex3() 
             const tex4 = createTex4()
             const texHighTech = createTexHighTech()
-            //show(texHighTech)
+            const texTree = createTree()
+           // show(texTree)
 
             ///////////////////////////////
 
@@ -45,6 +47,7 @@ export class TexturesCanvas {
             ctx.drawImage(tex3, 0, S)
             ctx.drawImage(tex4, S, S)
             ctx.drawImage(texHighTech, S * 2, S)
+            ctx.drawImage(texTree, S * 3, S)
 
             //show(canMain)
 
@@ -198,7 +201,6 @@ const createSide = () => { // решетка
     return iron00Map
 }
 
-
 const createTex2 = () => { // решетка паралельная
     const iron00Map = document.createElement('canvas')
     iron00Map.width = S
@@ -269,6 +271,7 @@ const createTex3 = () => { // решетка крестик
 
     return iron00Map
 }
+
 const createTex4 = () => { // решетка крестик + кружок
     const iron00Map = document.createElement('canvas')
     iron00Map.width = S
@@ -313,8 +316,6 @@ const createTex4 = () => { // решетка крестик + кружок
     bolt(0, S, S * .15, false)
     bolt(S * .5, S * .5, S * .45, true)
 
-    // show(iron00Map)
-
     return iron00Map
 }
 
@@ -342,6 +343,44 @@ const createTexHighTech = () => { // высокотехнологичная ре
     ctx.moveTo(S * .438, 0)
     ctx.lineTo(S * .73, S * .7)
     ctx.lineTo(S * 1.3, S * .7)
+
+    ctx.stroke()
+
+    return iron00Map
+}
+
+const createTree = () => {
+    const iron00Map = document.createElement('canvas')
+    iron00Map.width = S
+    iron00Map.height = S
+    const ctx = iron00Map.getContext('2d')
+    
+    ctx.fillStyle = ROAD_COLOR_L
+    const offset2 = S * 0
+    const s2 = S - 2 * offset2
+    ctx.fillRect(offset2, offset2, s2, s2)
+    
+    ///////////////////////////
+
+    ctx.fillStyle = "#000000"
+    const N = 15
+    for (let i = 0; i < N; ++i) {
+        for (let j = 0; j < N; ++ j) {
+            ctx.fillStyle = "#ffffff"
+            ctx.fillRect(S / N * i + 3, S / N * j + 3, S / 50, S / 50)
+            ctx.fillStyle = "#000000"
+            ctx.fillRect(S / N * i, S / N * j, S / 50, S / 50)
+        }
+    }
+
+    ctx.strokeStyle = "#ffffff" 
+    ctx.lineWidth = S * .05  
+    
+    ctx.beginPath()
+    ctx.moveTo(0, 0)
+    ctx.lineTo(S * .5, S)
+    ctx.lineTo(S, S * 0.025)
+    ctx.lineTo(0, S * 0.025)
 
     ctx.stroke()
 

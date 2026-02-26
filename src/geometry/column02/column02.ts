@@ -14,6 +14,7 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
+    const vCollide: number[] = []
 
     let mode = 'ARROW'
     const r = Math.random()
@@ -145,5 +146,22 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
         }
     }
 
-    return { v, c, uv }
+    const wC = w * .5
+
+    vCollide.push(
+        ..._M.createPolygon(
+            [-wC, 0, 0],
+            [wC, 0, 0],
+            [wC, h, 0],
+            [-wC, h, 0],
+        ),
+        // ..._M.createPolygon(
+        //     [0, 0, -wC],
+        //     [0, 0, wC],
+        //     [0, h, wC],
+        //     [0, h, -wC],
+        // )
+    )
+
+    return { v, c, uv, vCollide }
 }
