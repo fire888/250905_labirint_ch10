@@ -16,7 +16,7 @@ export const pipelineInit = async (root: Root) => {
         phisics,
         lab,
         backTower,
-        // audio,
+        audio,
         materials,
     } = root
 
@@ -67,9 +67,9 @@ export const pipelineInit = async (root: Root) => {
 
     ticker.on(phisics.update.bind(phisics))
 
-    // audio.init(root)
-    //ticker.on(audio.update.bind(audio))
-    //audio.playAmbient()
+    audio.init(root)
+    ticker.on(audio.update.bind(audio))
+    audio.playAmbient()
     
     controls.init(root, IS_DEV_START_ORBIT)
     ticker.on(controls.update.bind(controls))

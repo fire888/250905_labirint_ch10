@@ -11,7 +11,7 @@ import { Ui } from "./entities/Ui"
 import { Phisics } from "./entities/Phisics"
 import { Labyrinth } from './entityLab01/Lab'
 import { BackTower } from "./entities/backTower/BackTower"
-// import { AudioManager } from "./entities/AudioManager"
+import { AudioManager } from "./entities/AudioManager"
 import { Materials } from "./entities/Materials"
 import { pipelineInit } from "./pipelines/pipelineInit"
 import { pipelinePlay } from "./pipelines/pipelinePlay"
@@ -23,7 +23,6 @@ export type Root = {
     studio: Studio,
     controls: ControlsSystem,
     floor: Floor,
-    //particles: Particles,
     loader: LoaderAssets,
     texturesCanvas: TexturesCanvas,
     deviceData: DeviceData,
@@ -31,7 +30,7 @@ export type Root = {
     phisics: Phisics,
     lab: Labyrinth,
     backTower: BackTower,
-    // audio: AudioManager,
+    audio: AudioManager,
     materials: Materials,
 }
 
@@ -53,7 +52,7 @@ window.addEventListener("DOMContentLoaded", async () => {
         phisics: new Phisics(),
         lab: new Labyrinth(),
         backTower: new BackTower(),
-        // audio: new AudioManager(),
+        audio: new AudioManager(),
         materials: new Materials()
     }
 
