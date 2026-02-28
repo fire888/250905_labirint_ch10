@@ -8,6 +8,7 @@ export class ControlsPhone {
     _isBack = false
     _isLeft = false
     _isRight = false
+    _isJumping = false
     _isEnabled = false
 
     _isDisabledMovie = false
@@ -133,6 +134,11 @@ export class ControlsPhone {
             this._obj.translateZ(this._currentSpeedForward)
             playerBody.velocity.x = this._obj.position.x
             playerBody.velocity.z = this._obj.position.z
+
+            if (this._isJumping && this._root.phisics.isGround) {
+                playerBody.velocity.y += 5
+            }
+            this._isJumping = false
         }
 
         this._root.studio.camera.position.x = playerBody.position.x
@@ -164,7 +170,7 @@ export class ControlsPhone {
         this._moveLeftDiv.style.display = 'block'
         this._moveRightDiv.style.display = 'block'
 
-        this._obj.rotation.y = Math.PI
+        this._obj.rotation.y = this._root.studio.camera.rotation.y
         this._currentSpeedLeft = 0
         this._timeRot = 1
 
@@ -222,6 +228,10 @@ export class ControlsPhone {
                 if (this._isRight) this._changeLeftSpeedTo(0.)
                 this._isRight = false;
                 break;
+            
+            case 'Space':
+                this._isJumping = false
+                break    
         }
     }
 
@@ -250,6 +260,10 @@ export class ControlsPhone {
                 if (!this._isRight) this._changeLeftSpeedTo(-this._maxSpeedLeft)
                 this._isRight = true;
                 break;
+
+            case 'Space':
+                this._isJumping = true
+                break    
         }
     }
 

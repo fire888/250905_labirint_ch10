@@ -155,6 +155,7 @@ export class Phisics {
                 continue;
             }
             this._bodies[i].addEventListener("collide", (e: any) => {
+                console.log(e.target.myName)
                 f(e.target.myName)
             })
         }

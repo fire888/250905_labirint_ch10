@@ -20,6 +20,8 @@ export class ControlsPointer {
 
     controls: PointerLockControls
 
+    _root: Root
+
     _isMoveDisabled = false
     _mouseEnable = true
 
@@ -41,6 +43,7 @@ export class ControlsPointer {
     _moveBackward = false
     _moveLeft = false
     _moveRight = false
+    _isJumping = false
 
     _dirForward = new THREE.Vector3()
     _dirLeft = new THREE.Vector3()
@@ -54,6 +57,8 @@ export class ControlsPointer {
 
 
     init (root: Root) {
+        this._root = root
+
         this.camera = root.studio.camera
         this.domElem = root.studio.containerDom
 
@@ -128,6 +133,10 @@ export class ControlsPointer {
             playerCollision.velocity.z = this._resultDir.z
         }
 
+        if (!this._isMoveDisabled && this._isJumping && this._root.phisics.isGround) {
+            playerCollision.velocity.y += 6
+        }
+        this._isJumping = false
 
         this.camera.position.x = playerCollision.position.x
         this.camera.position.y = playerCollision.position.y
@@ -273,6 +282,10 @@ export class ControlsPointer {
                     this._moveRight = true
                 }
                 break
+
+            case 'Space':
+                this._isJumping = true
+                break    
         }
     }
 
@@ -301,6 +314,10 @@ export class ControlsPointer {
                 if (this._moveRight) this._changeLeftSpeedTo(0)
                 this._moveRight = false
                 break
+
+            case 'Space':
+                this._isJumping = false
+                break    
         }
     }
 }
