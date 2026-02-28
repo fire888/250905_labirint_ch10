@@ -1,53 +1,81 @@
 import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockControls'
-import { Vector3, Euler, Quaternion, Raycaster } from 'three'
+import * as THREE from 'three'
 import { Tween, Interpolation } from '@tweenjs/tween.js'
+import { Root } from 'index'
+import { 
+    Body, 
+    World, 
+    GSSolver, 
+    SplitSolver, 
+    NaiveBroadphase,
+    Material,
+    ContactMaterial,
+    Trimesh,
+    //Box,
+    //Vec3,
+    Sphere,
+} from 'cannon-es'
 
 
 export class ControlsPointer {
     isEnabled = false
+    camera: THREE.PerspectiveCamera
+    domElem: HTMLElement
+
+    velocity: THREE.Vector3
+    direction: THREE.Vector3
+
+    savedPosition: THREE.Vector3
+    diffVec: THREE.Vector3
+    savedRotation: THREE.Quaternion
+    raycaster: THREE.Raycaster
+
+    controls: PointerLockControls
 
     _isMoveDisabled = false
     _mouseEnable = true
 
-    _timeLastLocked = null
+    _prevTime: number
+
+    _timeLastLocked: number = null
     _delayNextLock = 2000
     _isFirstLock = true
 
     _currentSpeedForward = 0.
     _maxSpeedForward = 5.
-    _tweenSpeedForward = null
+    _tweenSpeedForward: Tween<any> | null = null
 
     _currentSpeedLeft = 0.
     _maxSpeedLeft = 5.
-    _tweenSpeedLeft = null
+    _tweenSpeedLeft: Tween<any> | null = null
 
     _moveForward = false
     _moveBackward = false
     _moveLeft = false
     _moveRight = false
 
-    _dirForward = new Vector3()
-    _dirLeft = new Vector3()
-    _resultDir = new Vector3()
-    _topVec = new Vector3(0, 1, 0)
+    _dirForward = new THREE.Vector3()
+    _dirLeft = new THREE.Vector3()
+    _resultDir = new THREE.Vector3()
+    _topVec = new THREE.Vector3(0, 1, 0)
 
     _timeRot = 0 
-    _eulerRot = new Euler(0, 0, 0, 'YXZ')
+    _eulerRot = new THREE.Euler(0, 0, 0, 'YXZ')
 
     _strengthIdle = 0.
 
 
-    init (root) {
+    init (root: Root) {
         this.camera = root.studio.camera
         this.domElem = root.studio.containerDom
 
         this._prevTime = performance.now()
-        this.velocity = new Vector3()
-        this.direction = new Vector3()
+        this.velocity = new THREE.Vector3()
+        this.direction = new THREE.Vector3()
 
-        this.savedPosition = new Vector3()
-        this.diffVec = new Vector3()
-        this.savedRotation = new Quaternion().setFromAxisAngle(this._topVec,-Math.PI * .5)
+        this.savedPosition = new THREE.Vector3()
+        this.diffVec = new THREE.Vector3()
+        this.savedRotation = new THREE.Quaternion().setFromAxisAngle(this._topVec,-Math.PI * .5)
 
         this.controls = new PointerLockControls(this.camera, this.domElem)
         this.controls.maxPolarAngle = Math.PI - .01
@@ -63,10 +91,10 @@ export class ControlsPointer {
         document.addEventListener('keydown', this._onKeyDown.bind(this))
         document.addEventListener('keyup', this._onKeyUp.bind(this))
 
-        this.raycaster = new Raycaster(new Vector3(), this._topVec, 0, 1)
+        this.raycaster = new THREE.Raycaster(new THREE.Vector3(), this._topVec, 0, 1)
     }
 
-    update (delta, playerCollision) {
+    update (delta: number, playerCollision: Body) {
         if (this._mouseEnable === false) {
             return;
         }
@@ -170,7 +198,7 @@ export class ControlsPointer {
         this._mouseEnable = true
     }
 
-    onUnlock (cb) {
+    onUnlock (cb: () => void) {
         this.controls.addEventListener('unlock', cb)
     }
 
@@ -188,7 +216,7 @@ export class ControlsPointer {
         this._isMoveDisabled = false
     }
 
-    _changeForwardSpeedTo(v) {
+    _changeForwardSpeedTo(v: number) {
         if (this._tweenSpeedForward) {
             this._tweenSpeedForward.stop()
         }
@@ -204,11 +232,9 @@ export class ControlsPointer {
                 this._tweenSpeedForward = null
             })
             .start()
-
-        return null
     }
 
-    _changeLeftSpeedTo(v) {
+    _changeLeftSpeedTo(v: number) {
         if (this._tweenSpeedLeft) {
             this._tweenSpeedLeft.stop()
         }
@@ -226,7 +252,7 @@ export class ControlsPointer {
             .start()
     }
 
-    _onKeyDown (event) {
+    _onKeyDown (event: KeyboardEvent) {
         switch ( event.code ) {
             case 'ArrowUp':
             case 'KeyW':
@@ -262,7 +288,7 @@ export class ControlsPointer {
         }
     }
 
-    _onKeyUp (event) {
+    _onKeyUp (event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowUp':
             case 'KeyW':
