@@ -15,6 +15,7 @@ import { Object3D } from 'three'
 import CannonDebugger from 'cannon-es-debugger'
 import * as THREE from 'three'
 import { Root } from 'index'
+import { IS_PHISICS_DEBUG } from 'constants/CONSTANTS'
 
 class BodyN extends Body {
     myName: string
@@ -76,7 +77,7 @@ export class Phisics {
         // We must add the contact materials to the world
         this.world.addContactMaterial(physicsContactMaterial);
 
-        if (root.CONSTANTS.PHISICS_CONF.IS_DEBUG) {
+        if (IS_PHISICS_DEBUG) {
             // @ts-ignore
             this.cannonDebugger = new CannonDebugger(root.studio.scene, this.world, {})
         }

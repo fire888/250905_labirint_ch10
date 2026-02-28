@@ -1,5 +1,5 @@
-import { Root } from "../../index"
-import { _M } from "../../geometry/_m"
+import { Root } from "../index"
+import { _M } from "../geometry/_m"
 import * as THREE from "three"
 import { createTowerSilhouette } from "geometry/towerSilhouette/towerSilhouette"
 
