@@ -96,20 +96,20 @@ export class ControlsSystem {
         this._phone.update(delta, this._root.phisics.playerBody)
     }
 
-    disconnect () {
+    disableRotation () {
         if (this._orbit.isEnabled) {
             return
         }
-        this._pointer.cameraDisconnect()
+        this._pointer.mouseDisable()
         this._phone.disable()
     }
 
-    connect () {
+    enableRotation () {
         if (this._phone.constructor.name === this._currentWalkingControls.constructor.name) {
             this._phone.enable()
         }
         if (this._pointer.constructor.name === this._currentWalkingControls.constructor.name) {
-            this._pointer.cameraConnect()
+            this._pointer.mouseEnable()
         }
     }
 

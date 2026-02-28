@@ -7,7 +7,7 @@ export class ControlsPointer {
     isEnabled = false
 
     _isMoveDisabled = false
-    _cameraFree = false
+    _mouseEnable = true
 
     _timeLastLocked = null
     _delayNextLock = 2000
@@ -67,7 +67,7 @@ export class ControlsPointer {
     }
 
     update (delta, playerCollision) {
-        if (this._cameraFree) {
+        if (this._mouseEnable === false) {
             return;
         }
 
@@ -162,12 +162,12 @@ export class ControlsPointer {
         this.controls.unlock()
     }
 
-    cameraDisconnect () {
-        this._cameraFree = true
+    mouseDisable() {
+        this._mouseEnable = false
     } 
 
-    cameraConnect () {
-        this._cameraFree = false
+    mouseEnable() {
+        this._mouseEnable = true
     }
 
     onUnlock (cb) {
