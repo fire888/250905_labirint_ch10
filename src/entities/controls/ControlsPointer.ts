@@ -2,19 +2,7 @@ import { PointerLockControls } from 'three/examples/jsm/controls/PointerLockCont
 import * as THREE from 'three'
 import { Tween, Interpolation } from '@tweenjs/tween.js'
 import { Root } from 'index'
-import { 
-    Body, 
-    World, 
-    GSSolver, 
-    SplitSolver, 
-    NaiveBroadphase,
-    Material,
-    ContactMaterial,
-    Trimesh,
-    //Box,
-    //Vec3,
-    Sphere,
-} from 'cannon-es'
+import { Body } from 'cannon-es'
 
 
 export class ControlsPointer {

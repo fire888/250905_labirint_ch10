@@ -1,5 +1,7 @@
-import { Object3D, Vector3 } from 'three'
+import * as THREE from 'three'
 import { Tween, Interpolation } from '@tweenjs/tween.js'
+import { Root } from 'index'
+import { Body } from 'cannon-es'
 
 export class ControlsPhone {
     _isForward = false
@@ -12,17 +14,24 @@ export class ControlsPhone {
 
     _currentSpeedForward = 0.
     _maxSpeedForward = 5.
-    _tweenSpeedForward = null
+    _tweenSpeedForward: Tween<any> | null = null
 
     _currentSpeedLeft = 0.
     _maxSpeedLeft = .035
-    _tweenSpeedLeft = null
+    _tweenSpeedLeft: Tween<any> | null = null
 
-    _vecRotMovie = new Vector3(0, 0, 0)
+    _vecRotMovie = new THREE.Vector3(0, 0, 0)
     _strengthIdle = 0.
     _timeRot = 0
 
-    init(root) {
+    _root: Root
+    _moveForwardDiv: HTMLElement
+    _moveBackDiv: HTMLElement
+    _moveLeftDiv: HTMLElement
+    _moveRightDiv: HTMLElement
+    _obj: THREE.Object3D
+
+    init(root: Root) {
         this._root = root
 
         this._moveForwardDiv = document.createElement('div')
@@ -108,11 +117,11 @@ export class ControlsPhone {
         window.addEventListener('keyup', this._onKeyUp.bind(this))
 
 
-        this._obj = new Object3D()
+        this._obj = new THREE.Object3D()
         this._obj.rotation.y = Math.PI
     }
 
-    update(delta, playerBody) {
+    update(delta: number, playerBody: Body) {
         if (!this._isEnabled) {
             return
         }
@@ -188,7 +197,7 @@ export class ControlsPhone {
         this._isDisabledMovie = false
     }
 
-    _onKeyUp(event) {
+    _onKeyUp(event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowUp':
             case 'KeyW':
@@ -216,7 +225,7 @@ export class ControlsPhone {
         }
     }
 
-    _onKeyDown(event) {
+    _onKeyDown(event: KeyboardEvent) {
         switch (event.code) {
             case 'ArrowUp':
             case 'KeyW':
@@ -244,7 +253,7 @@ export class ControlsPhone {
         }
     }
 
-    _changeForwardSpeedTo(v) {
+    _changeForwardSpeedTo(v: number) {
         if (this._tweenSpeedForward) {
             this._tweenSpeedForward.stop()
         }
@@ -262,7 +271,7 @@ export class ControlsPhone {
             .start()
     }
 
-    _changeLeftSpeedTo(v) {
+    _changeLeftSpeedTo(v: number) {
         if (this._tweenSpeedLeft) {
             this._tweenSpeedLeft.stop()
         }

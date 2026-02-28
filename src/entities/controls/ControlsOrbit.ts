@@ -1,10 +1,12 @@
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import * as THREE from 'three'
 
 export class ControlsOrbit {
     isEnabled = false
+    controls: OrbitControls
     constructor () {}
 
-    init (camera, domElem) {
+    init (camera: THREE.PerspectiveCamera, domElem: HTMLElement) {
         this.controls = new OrbitControls(camera, domElem)
         this.controls.target.set( 0, 0.5, 0 )
         this.controls.update()
