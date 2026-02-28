@@ -13,20 +13,36 @@ import {
 } from 'cannon-es'
 import { Object3D } from 'three'
 import CannonDebugger from 'cannon-es-debugger'
+import * as THREE from 'three'
+import { Root } from 'index'
 
-const createTrimesh = geometry => {
+class BodyN extends Body {
+    myName: string
+    myObject3D: THREE.Object3D
+}
+
+const createTrimesh = (geometry: THREE.BufferGeometry) => {
     const vertices = geometry.attributes.position.array
+    const vv: number[] = []
+    for (let i = 0; i < vertices.length; ++i) {
+        vv[i] = vertices[i]
+    }
     const indices = Object.keys(vertices).map(Number)
-    return new Trimesh(vertices, indices)
+    return new Trimesh(vv, indices)
 }
 
 export class Phisics {
-    _cbsOnCollision = []
-    _bodies = []
-    _bodiesToRemove = []
+    _cbsOnCollision: (() => void)[] = []
+    _bodies: BodyN[] = []
+    _bodiesToRemove: BodyN[] = []
+    world: World
     isGround = false
+    physicsMaterial: Material
+    ground: BodyN
+    playerBody: BodyN
+    cannonDebugger: any
 
-    init (root) {
+    init (root: Root) {
         this.world = new World()
         this.world.gravity.set(0, -9.82, 0)
         this.world.quatNormalizeSkip = 0
@@ -60,59 +76,48 @@ export class Phisics {
         // We must add the contact materials to the world
         this.world.addContactMaterial(physicsContactMaterial);
 
-        // this.ground = new Body({
-        //     type: Body.STATIC,
-        //     shape: new Box(new Vec3(500, 0.1, 500)),
-        // })
-        // //this.ground.scale.set(1000, 1, 1000)
-        // this.ground._myName = 'ground'
-        // //this.ground.quaternion.setFromEuler(-Math.PI / 2, 0, 0)
-        // this.world.addBody(this.ground)
-
-        this._levelsPhisicsMeshes = []
-
-
         if (root.CONSTANTS.PHISICS_CONF.IS_DEBUG) {
+            // @ts-ignore
             this.cannonDebugger = new CannonDebugger(root.studio.scene, this.world, {})
         }
     }
 
-    createPlayerPhisicsBody (playerPosition) {
+    createPlayerPhisicsBody (playerPosition: number[]) {
         const sphere = new Sphere(.5);
-        this.playerBody = new Body({ 
+        this.playerBody = new BodyN({ 
             mass: 5,
             linearDamping: 0.9,
         })
-        this.playerBody._myName = 'playerBody'
+        this.playerBody.myName = 'playerBody'
         this.playerBody.addShape(sphere)
 
         this.playerBody.position.x = playerPosition[0]
         this.playerBody.position.y = playerPosition[1]
         this.playerBody.position.z = playerPosition[2]
 
-        this.playerBody._object3D = new Object3D()
-        this.playerBody._object3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
+        this.playerBody.myObject3D = new Object3D()
+        this.playerBody.myObject3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
 
-        this.playerBody._object3D.rotation.y = Math.PI
+        this.playerBody.myObject3D.rotation.y = Math.PI
 
-        this.playerBody._object3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
+        this.playerBody.myObject3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
         this.playerBody.quaternion.set(
-            this.playerBody._object3D.quaternion.x,
-            this.playerBody._object3D.quaternion.y,
-            this.playerBody._object3D.quaternion.z,
-            this.playerBody._object3D.quaternion.w,
+            this.playerBody.myObject3D.quaternion.x,
+            this.playerBody.myObject3D.quaternion.y,
+            this.playerBody.myObject3D.quaternion.z,
+            this.playerBody.myObject3D.quaternion.w,
         )
 
 
         this.world.addBody(this.playerBody)
 
-        this.world.addEventListener('beginContact', (event) => {
+        this.world.addEventListener('beginContact', (event: any) => {
             const { bodyA, bodyB } = event;
             if (bodyA.id === 0 && bodyB.id === 1) {
                 this.isGround = true 
             }
         })
-        this.world.addEventListener('endContact', (event) => {
+        this.world.addEventListener('endContact', (event: any) => {
             const { bodyA, bodyB } = event;
             if (bodyA && bodyB && bodyA.id === 0 && bodyB.id === 1) {
                 this.isGround = false
@@ -120,15 +125,14 @@ export class Phisics {
         })
     }
     
-    addMeshToCollision (mesh) {
+    addMeshToCollision (mesh: THREE.Mesh) {
         const cannonShape = createTrimesh(mesh.geometry)
-        const body = new Body({ 
+        const body = new BodyN({ 
             mass: 0, 
             type: Body.STATIC, 
         })
-        //mesh.geometry.dispose()
         body.addShape(cannonShape)
-        body._myName = mesh.name
+        body.myName = mesh.name
         //body.collisionResponse = 0;
 
         body.position.x = mesh.position.x
@@ -144,20 +148,20 @@ export class Phisics {
         this._bodies.push(body)
     }
 
-    onCollision (meshNameIncludeStr, f) {
+    onCollision (meshNameIncludeStr: string, f: (name: string) => void) {
         for (let i = 0; i < this._bodies.length; ++i) {
-            if (!this._bodies[i]._myName.includes(meshNameIncludeStr)) {
+            if (!this._bodies[i].myName.includes(meshNameIncludeStr)) {
                 continue;
             }
-            this._bodies[i].addEventListener("collide", e => {
-                f(e.target._myName)
+            this._bodies[i].addEventListener("collide", (e: any) => {
+                f(e.target.myName)
             })
         }
     }
 
-    removeMeshFromCollision (name) {
+    removeMeshFromCollision (name: string) {
         for (let i = 0; i < this._bodies.length; ++i) {
-            if (this._bodies[i]._myName !== name) {
+            if (this._bodies[i].myName !== name) {
                 continue
             }
             this._bodiesToRemove.push(this._bodies[i])
@@ -179,19 +183,19 @@ export class Phisics {
         }
     }
 
-    setPlayerPosition (x, y, z, rotY = Math.PI) {
+    setPlayerPosition (x: number, y: number, z: number, rotY = Math.PI) {
         this.playerBody.position.x = x
         this.playerBody.position.y = y
         this.playerBody.position.z = z
 
-        this.playerBody._object3D.rotation.y = rotY
+        this.playerBody.myObject3D.rotation.y = rotY
 
-        this.playerBody._object3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
+        this.playerBody.myObject3D.position.set(this.playerBody.position.x, this.playerBody.position.y, this.playerBody.position.z)
         this.playerBody.quaternion.set(
-            this.playerBody._object3D.quaternion.x,
-            this.playerBody._object3D.quaternion.y,
-            this.playerBody._object3D.quaternion.z,
-            this.playerBody._object3D.quaternion.w,
+            this.playerBody.myObject3D.quaternion.x,
+            this.playerBody.myObject3D.quaternion.y,
+            this.playerBody.myObject3D.quaternion.z,
+            this.playerBody.myObject3D.quaternion.w,
         )
         
     }
