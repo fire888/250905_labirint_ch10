@@ -1,10 +1,9 @@
 import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, UV_GRID, UV_GRID_C, UV_EMPTY, COL_BLUE, COL_GRID, 
-    COL_GOLD, COL_BLACK,
-    COL_GRID_C,
-    UV_RED
+import { 
+    UV_NORM, COL_NORM, COL_GRAY, UV_GRID, UV_GRID_C, UV_EMPTY, 
+    COL_BLACK, UV_RED
  } from "../tileMapWall"
  import * as THREE from "three"
 
@@ -17,7 +16,6 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
 
     const S = Math.random() * .2 + w * .2
     const wP = .1
-    //const hP = .7
     const ROOF_H = .2
     const H_SIDES = .1 + Math.random() * .8
 

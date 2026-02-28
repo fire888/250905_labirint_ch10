@@ -154,12 +154,6 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
             [.3, HH, 0],
             [-.3, HH, 0],
         ),
-        // ..._M.createPolygon(
-        //     [0, 0, -.3],
-        //     [0, 0, .3],
-        //     [0, HH, .3],
-        //     [0, HH, -.3],
-        // )
     )
 
     return { v, c, uv, vCollide }
