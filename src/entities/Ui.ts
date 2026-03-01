@@ -1,6 +1,7 @@
 import { Tween, Interpolation } from '@tweenjs/tween.js'
 import { elementClickOnce } from '../helpers/htmlHelpers'
 import { Root } from 'index'
+import { IS_SHOW_INFO } from 'constants/CONSTANTS'
 
 export class Ui {
     _root: Root
@@ -16,14 +17,16 @@ export class Ui {
         this.lockButton.style.display = 'none'
         document.body.appendChild(this.lockButton)
 
-        this._infoButton = document.createElement('div')
-        this._infoButton.classList.add('butt-info')
-        this._infoButton.classList.add('control-small')
-        this._infoButton.style.display = 'none'
-        this._infoButton.addEventListener('pointerdown', () => {
-            this._showInfo()
-        })
-        document.body.appendChild(this._infoButton)
+        if (IS_SHOW_INFO) {
+            this._infoButton = document.createElement('div')
+            this._infoButton.classList.add('butt-info')
+            this._infoButton.classList.add('control-small')
+            this._infoButton.style.display = 'none'
+            this._infoButton.addEventListener('pointerdown', () => {
+                this._showInfo()
+            })
+            document.body.appendChild(this._infoButton)
+        }
     }
 
     setTransparentBackground() {

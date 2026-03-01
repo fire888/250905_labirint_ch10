@@ -788,13 +788,13 @@ export const _M = {
         }
     },
 
-    fillStart(src: number[], tgt: number[] | Float32Array) {
+    fillStart(src: number[], tgt: any) {
         for (let i = 0; i < src.length; i++) {
             tgt[i] = src[i]
         }
     },
 
-    fillStartAndThousandLast(src: number[], tgt: number[] | Float32Array) {
+    fillStartAndThousandLast(src: number[], tgt: any) {
         let n = 0
         for (let i = 0; i < src.length; i++) {
             tgt[i] = src[i]
