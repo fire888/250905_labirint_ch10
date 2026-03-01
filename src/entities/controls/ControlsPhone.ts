@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import { Tween, Interpolation } from '@tweenjs/tween.js'
 import { Root } from 'index'
 import { Body } from 'cannon-es'
+import { _M } from 'geometry/_m'
 
 export class ControlsPhone {
     _isForward = false
@@ -119,7 +120,8 @@ export class ControlsPhone {
 
 
         this._obj = new THREE.Object3D()
-        this._obj.rotation.y = Math.PI
+        const rotY = _M.getAngleDirY(this._root.studio.camera) + Math.PI
+        this._obj.rotation.y = rotY
     }
 
     update(delta: number, playerBody: Body) {
@@ -135,10 +137,10 @@ export class ControlsPhone {
             playerBody.velocity.x = this._obj.position.x
             playerBody.velocity.z = this._obj.position.z
 
-            if (this._isJumping && this._root.phisics.isGround) {
-                playerBody.velocity.y += 5
+            if (this._isJumping)  { 
+                this._isJumping = false 
+                if (this._root.phisics.isGround) playerBody.velocity.y += 6
             }
-            this._isJumping = false
         }
 
         this._root.studio.camera.position.x = playerBody.position.x
@@ -170,7 +172,11 @@ export class ControlsPhone {
         this._moveLeftDiv.style.display = 'block'
         this._moveRightDiv.style.display = 'block'
 
-        this._obj.rotation.y = this._root.studio.camera.rotation.y
+        this._obj.rotation.x = 0
+        this._obj.rotation.z = 0
+        const rotY = _M.getAngleDirY(this._root.studio.camera) + Math.PI
+        this._obj.rotation.y = rotY
+
         this._currentSpeedLeft = 0
         this._timeRot = 1
 

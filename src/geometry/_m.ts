@@ -13,6 +13,7 @@ export type A3 = [number, number, number]
 export type A2 = [number, number]
 
 let geomLabel: THREE.PlaneGeometry | null = null
+const testObject = new THREE.Object3D() 
 
 export const _M = {
     createPolygon: function(v0: A3, v1: A3, v2: A3, v3: A3) { return  [...v0, ...v1, ...v2, ...v0, ...v2, ...v3] },
@@ -852,7 +853,13 @@ export const _M = {
         }
 
         return n
-    }
+    },
 
+    getAngleDirY(obj: THREE.Object3D) {
+        const direction = new THREE.Vector3()
+        obj.getWorldDirection(direction)
+        const angle = Math.atan2(direction.x, direction.z)
+        return angle
+    },
 
 }

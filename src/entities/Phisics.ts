@@ -134,7 +134,7 @@ export class Phisics {
         })
         body.addShape(cannonShape)
         body.myName = mesh.name
-        //body.collisionResponse = 0;
+        // body.collisionResponse = 0;
 
         body.position.x = mesh.position.x
         body.position.y = mesh.position.y

@@ -149,7 +149,5 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
         savedPoint = currentPoint.clone()
     }
 
-    _M.translateVertices(v, 0, 3, 0)
-
     return { v, c, uv, vCollide }
 }

@@ -3,6 +3,7 @@ import * as THREE from 'three'
 import { Tween, Interpolation } from '@tweenjs/tween.js'
 import { Root } from 'index'
 import { Body } from 'cannon-es'
+import { _M } from 'geometry/_m'
 
 
 export class ControlsPointer {
@@ -29,7 +30,6 @@ export class ControlsPointer {
 
     _timeLastLocked: number = null
     _delayNextLock = 2000
-    _isFirstLock = true
 
     _currentSpeedForward = 0.
     _maxSpeedForward = 5.
@@ -73,6 +73,8 @@ export class ControlsPointer {
         this.controls = new PointerLockControls(this.camera, this.domElem)
         this.controls.maxPolarAngle = Math.PI - .01
         this.controls.minPolarAngle = .01
+        const rotY = _M.getAngleDirY(this._root.studio.camera)
+        this.controls.getObject().rotation.set(0, rotY, 0)
         this.controls.addEventListener('lock', () => {
             this.isEnabled = true
         })
@@ -133,10 +135,10 @@ export class ControlsPointer {
             playerCollision.velocity.z = this._resultDir.z
         }
 
-        if (!this._isMoveDisabled && this._isJumping && this._root.phisics.isGround) {
-            playerCollision.velocity.y += 6
+        if (this._isJumping) {
+            this._isJumping = false 
+            if (this._root.phisics.isGround) playerCollision.velocity.y += 6
         }
-        this._isJumping = false
 
         this.camera.position.x = playerCollision.position.x
         this.camera.position.y = playerCollision.position.y
@@ -160,9 +162,9 @@ export class ControlsPointer {
             if (this._timeLastLocked + this._delayNextLock > Date.now()) { 
                 return res(false)
             }
-            if (this._isFirstLock) {
-                this.controls.getObject().rotation.set(0, Math.PI * 1.5, 0)
-            }
+
+            const rotY = _M.getAngleDirY(this.camera) + Math.PI
+            this.controls.getObject().rotation.set(0, rotY, 0)
             this.controls.lock()
             this.isEnabled = true
 

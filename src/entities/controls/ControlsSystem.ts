@@ -3,7 +3,6 @@ import { ControlsPointer } from "./ControlsPointer"
 import { ControlsPhone } from "./ControlsPhone"
 import { Root } from "index"
 
-
 export class ControlsSystem {
     _orbit: ControlsOrbit
     _pointer: ControlsPointer
@@ -11,7 +10,7 @@ export class ControlsSystem {
     _root: Root
     _currentWalkingControls: ControlsPointer | ControlsPhone | null
     _isDisabled = false
-
+    
     init (root: Root, isStartOrbit: boolean) {
         this._root = root
     
