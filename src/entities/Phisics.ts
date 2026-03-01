@@ -114,13 +114,13 @@ export class Phisics {
 
         this.world.addEventListener('beginContact', (event: any) => {
             const { bodyA, bodyB } = event;
-            if (bodyA.id === 0 && bodyB.id === 1) {
+            if (bodyA.id === 0 && bodyB.id !== 0) {
                 this.isGround = true 
             }
         })
         this.world.addEventListener('endContact', (event: any) => {
             const { bodyA, bodyB } = event;
-            if (bodyA && bodyB && bodyA.id === 0 && bodyB.id === 1) {
+            if (bodyA && bodyB && bodyA.id === 0 && bodyB.id !== 0) {
                 this.isGround = false
             }
         })
