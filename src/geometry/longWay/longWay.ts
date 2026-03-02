@@ -49,16 +49,6 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
     const s = point0.clone()
     const e = point1.clone()
 
-    // {
-    //     const sL = _M.createLabel('s', [0, 0, 1], 10)
-    //     sL.position.set(s.x, s.y, s.z)
-    //     root.studio.add(sL)
-
-    //     const eL = _M.createLabel('e', [0, 0, 1], 10)
-    //     eL.position.set(e.x, e.y, e.z)
-    //     root.studio.add(eL)
-    // }
-
     const curP = new THREE.Vector3().copy(s)
     const curDir = dir0.clone()
     let nnDir = dir0.clone()
@@ -93,11 +83,7 @@ const prepareSegments = (point0: THREE.Vector3, dir0: THREE.Vector3, point1: THR
                     type: 'FLOOR',
                     count: ++count
                 }
-                segments.push(el)
-
-                // const l = _M.createLabel('l', [0, 1, 1], 10)
-                // l.position.set(el.p0.x, el.p0.y, el.p0.z)
-                // root.studio.add(l)      
+                segments.push(el)    
 
                 pS = pE.clone()
                 pE.add(newDir.clone().multiplyScalar(eDist * .2)).setY(newP.y)
@@ -458,7 +444,12 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
 }
 
 
-type T_LONG_WAY = { p0: THREE.Vector3, dir0: THREE.Vector3, p1: THREE.Vector3, dir1: THREE.Vector3 }
+type T_LONG_WAY = { 
+    p0: THREE.Vector3, 
+    dir0: THREE.Vector3, 
+    p1: THREE.Vector3, 
+    dir1: THREE.Vector3 
+}
 
 export const createLongWay = (options: T_LONG_WAY):  { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
 
