@@ -1,7 +1,7 @@
 import { _M, A2, A3 } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { UV_TRIANGLE, COL_WHITE, UV_DARK, COL_GRAY } from "../tileMapWall"
+import { UV_TRIANGLE, COL_WHITE, UV_DARK, COL_BLUE_TOP } from "../tileMapWall"
 
 
 const createSingle = (h: number, w: number = 20): IArrayForBuffers => {

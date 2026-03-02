@@ -3,9 +3,9 @@ import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
 import * as THREE from "three" 
 import { 
-    UV_POINTS, COL_RED, COL_BLUE,
-    UV_DARK, COL_GRAY, 
-    UV_TRIANGLE, COL_NORM_2,
+    UV_POINTS, COL_RED, COL_GREEN_BLUE,
+    UV_DARK, COL_BLUE_TOP, 
+    UV_TRIANGLE, COL_BLUE_HIGHT,
     UV_GRID, UV_GRID_CIRCLE,
     UV_HT, COL_WHITE
 } from "../tileMapWall"
@@ -82,7 +82,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                     const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                     v.push(..._v)
                     uv.push(...UV_DARK)
-                    c.push(...COL_GRAY)
+                    c.push(...COL_BLUE_TOP)
                 } else {
                     let isSide = false
 
@@ -102,7 +102,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                             const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                             v.push(..._v)
                             uv.push(...UV_TRIANGLE)
-                            c.push(...COL_NORM_2)
+                            c.push(...COL_BLUE_HIGHT)
                         } else {
                             const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                             v.push(..._v)
@@ -132,7 +132,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
                         uv.push(...UV_DARK)
-                        c.push(...COL_GRAY)
+                        c.push(...COL_BLUE_TOP)
                     }
                 } else { // normal
                     const ran = Math.random()
@@ -145,7 +145,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
                         uv.push(...UV_DARK)
-                        c.push(...COL_GRAY)
+                        c.push(...COL_BLUE_TOP)
                     } else if (ran < .135) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
@@ -174,7 +174,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                         v.push(..._v)
                         uv.push(...UV_POINTS)
                         if (Math.random() > .06) {
-                            c.push(...COL_BLUE) 
+                            c.push(...COL_GREEN_BLUE) 
                         } else {
                             c.push(...COL_RED) 
                         }
@@ -182,7 +182,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
                         uv.push(...UV_DARK)
-                        c.push(...COL_GRAY)
+                        c.push(...COL_BLUE_TOP)
                     }
                 } else {
                     const r = Math.random()
@@ -195,12 +195,12 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
                         uv.push(...UV_POINTS)
-                        c.push(...COL_BLUE)
+                        c.push(...COL_GREEN_BLUE)
                     } else {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
                         uv.push(...UV_DARK)
-                        c.push(...COL_GRAY)
+                        c.push(...COL_BLUE_TOP)
                     }
                 }
             }
@@ -227,7 +227,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
                         uv.push(...UV_DARK)
-                        c.push(...COL_GRAY)
+                        c.push(...COL_BLUE_TOP)
                     }
                 } else {
                     const r = Math.random()
@@ -240,7 +240,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
                         uv.push(...UV_POINTS)
-                        c.push(...COL_BLUE)
+                        c.push(...COL_GREEN_BLUE)
                     } else if (r < .07) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)

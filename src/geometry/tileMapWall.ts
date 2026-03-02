@@ -10,13 +10,9 @@ export const UV_GRID_CIRCLE: number[] = _M.createUv([S, S * 2], [S * 2, S * 2], 
 export const UV_HT: number[] = _M.createUv([S * 2, S * 2], [S * 3, S * 2], [S * 3, S * 3], [S * 2, S * 3])
 export const UV_POINTS_TREE: number[] = [S * 3, S * 3, S * 4, S * 3, S * 3.5, S * 2]
 
-export const COL_BLACK = _M.fillColorFace([0.5, 0.5, 1])
-
-
 export const COL_WHITE: number[] = _M.fillColorFace([1, 1, 1])
 export const COL_RED: number[] = _M.fillColorFace([1, 0, 0])
-export const COL_GRAY: number[] = _M.fillColorFace([.7, .7, 1])
-export const COL_BLUE: number[] = _M.fillColorFace([.5, .1, 1])
-export const COL_NORM_2: number[] = _M.fillColorFace([.7, .6, 1])
-export const COL_GRID: number[] = _M.fillColorFace([.7, 1, .7])
-export const COL_GRID_C = COL_GRID
+export const COL_BLUE_TOP: number[] = _M.fillColorFace([.7, .7, 1])
+export const COL_BLUE_HIGHT: number[] = _M.fillColorFace([.7, .6, 1])
+export const COL_BLUE_LIGHT = _M.fillColorFace([0.5, 0.5, 1])
+export const COL_GREEN_BLUE: number[] = _M.fillColorFace([.5, .1, 1])

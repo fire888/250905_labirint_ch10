@@ -1,8 +1,8 @@
 import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { COL_WHITE, UV_DARK, COL_GRAY, UV_GRID_CIRCLE, COL_RED, UV_EMPTY, 
-    COL_BLACK,
+import { COL_WHITE, UV_DARK, COL_BLUE_TOP, UV_GRID_CIRCLE, COL_RED, UV_EMPTY, 
+    COL_BLUE_LIGHT,
     UV_POINTS_TREE,
 } from "../tileMapWall"
 
@@ -90,10 +90,10 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
                 const ran = Math.random()
                 if (ran < .02) {
                     uv.push(...UV_DARK)
-                    c.push(...COL_GRAY)
+                    c.push(...COL_BLUE_TOP)
                 } else if (ran < .04) {
                     uv.push(...UV_DARK)
-                    c.push(...COL_GRAY)
+                    c.push(...COL_BLUE_TOP)
                 } else {
                     uv.push(...__uv)
                     c.push(...col)
@@ -107,9 +107,9 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
                     )
                     uv.push(...UV_POINTS_TREE)
                     c.push(
-                        COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
-                        COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
-                        COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                        COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+                        COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+                        COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
                     )
                 }
             }
@@ -134,12 +134,12 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
             v.push(..._v)
             uv.push(...UV_POINTS_TREE, ...UV_POINTS_TREE)
             c.push(
-                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
-                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
-                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
-                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
-                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
-                COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
+                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
             )
         }
     }

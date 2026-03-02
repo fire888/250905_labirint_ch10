@@ -2,8 +2,8 @@ import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
 import { 
-    UV_TRIANGLE, COL_WHITE, COL_GRAY, UV_GRID, UV_GRID_CIRCLE, UV_EMPTY, 
-    COL_BLACK, UV_POINTS
+    UV_TRIANGLE, COL_WHITE, COL_BLUE_TOP, UV_GRID, UV_GRID_CIRCLE, UV_EMPTY, 
+    COL_BLUE_LIGHT, UV_POINTS
  } from "../tileMapWall"
  import * as THREE from "three"
 
@@ -79,14 +79,14 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                         } else {
                             uv.push(...UV_GRID)
                         }
-                        c.push(...COL_BLACK)
+                        c.push(...COL_BLUE_LIGHT)
                     } else if (TYPE === 'CROSS') {
                         if (Math.random() < .95) {
                             uv.push(...UV_GRID) 
                         } else {
                             uv.push(...UV_GRID_CIRCLE)
                         }
-                        c.push(...COL_BLACK)
+                        c.push(...COL_BLUE_LIGHT)
                     }
                 }
 
@@ -98,7 +98,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                     [prevT[0], prevT[1], DZ + (j) * stepD],
                 )
                 v.push(..._vt)
-                c.push(...COL_GRAY)
+                c.push(...COL_BLUE_TOP)
                 uv.push(...UV_GRID)
             }
 

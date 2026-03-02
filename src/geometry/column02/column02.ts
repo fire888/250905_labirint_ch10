@@ -1,7 +1,7 @@
 import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { UV_TRIANGLE, COL_WHITE, UV_DARK, COL_GRAY, 
+import { UV_TRIANGLE, COL_WHITE, UV_DARK, COL_BLUE_TOP, 
     UV_POINTS, COL_RED,
     UV_EMPTY,
     UV_GRID, UV_GRID_CIRCLE,
