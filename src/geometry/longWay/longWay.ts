@@ -3,7 +3,7 @@ import { IArrayForBuffers, T_ROOM, I_TypeSeg } from "types/GeomTypes"
 import { Root } from "index"
 import * as THREE from "three" 
 import { createPlatform00 } from "geometry/platform00/platform00"
-import { createColumn01 } from "../column01/column01"
+import { createTree00 } from "../tree00/tree00"
 import { createColumn02 } from "../column02/column02"
 import { createArc00 } from "geometry/arc00/arc00"
 import { createHelix00 } from "geometry/helix00/helix00"
@@ -321,7 +321,7 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                 const offsetAxis = s.dir.clone().multiplyScalar(.4)
                 const offsetAxisM = s.dir.clone().multiplyScalar(-.4)
 
-                const createColumns = (r: IArrayForBuffers, coord: THREE.Vector3 ) => {
+                const moveAndFill = (r: IArrayForBuffers, coord: THREE.Vector3 ) => {
                     _M.translateVertices(r.v, coord.x, coord.y, coord.z)
                     _M.fill(r.v, v)
                     _M.fill(r.c, c)
@@ -355,14 +355,14 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                         const offsetDir2_0 = s.dir1.clone().multiplyScalar(-.3).add(offsetAxisM).add(s.p2).add(Y)
                         const offsetDir2_1 = s.dir1.clone().multiplyScalar(.3).add(offsetAxisM).add(s.p1).add(Y)
 
-                        const r0 = createColumn01(1, Math.random() * 3 + 1)
-                        createColumns(r0, offsetDir1_0)
-                        const r1 = createColumn01(1, Math.random() * 3 + 1)
-                        createColumns(r1, offsetDir1_1)
-                        const r2 = createColumn01(1, Math.random() * 3 + 1)
-                        createColumns(r2, offsetDir2_0)
-                        const r3 = createColumn01(1, Math.random() * 3 + 1)
-                        createColumns(r3, offsetDir2_1) 
+                        const r0 = createTree00(1, Math.random() * 3 + 1)
+                        moveAndFill(r0, offsetDir1_0)
+                        const r1 = createTree00(1, Math.random() * 3 + 1)
+                        moveAndFill(r1, offsetDir1_1)
+                        const r2 = createTree00(1, Math.random() * 3 + 1)
+                        moveAndFill(r2, offsetDir2_0)
+                        const r3 = createTree00(1, Math.random() * 3 + 1)
+                        moveAndFill(r3, offsetDir2_1) 
                     }
                 } else if (typeColumn === 'COLUMN02') {
                     if (s.w > 2 && s.d > 2) {
@@ -379,11 +379,11 @@ const createSingleWay = (options: T_LONG_WAY, isLastHelix: boolean): { geomData:
                         for (let i = 0; i < count + 1; i++) {
                             const r0 = createColumn02(.08 + Math.random() * .12, h)
                             const p = offsetDir1_1.clone().lerp(offsetDir2_0, i / (count))
-                            createColumns(r0, p)
+                            moveAndFill(r0, p)
 
                             const r1 = createColumn02(.08 + Math.random() * .12, h)
                             const p1 = offsetDir1_0.clone().lerp(offsetDir2_1, i / (count))
-                            createColumns(r1, p1)
+                            moveAndFill(r1, p1)
                         }
 
                         const arc = createArc00(s.w * .5 - .4, s.d - .8)

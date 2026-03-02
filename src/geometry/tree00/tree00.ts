@@ -7,7 +7,7 @@ import { COL_WHITE, UV_DARK, COL_BLUE_TOP, UV_GRID_CIRCLE, COL_RED, UV_EMPTY,
 } from "../tileMapWall"
 
 
-export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IArrayForBuffers => {
+export const createTree00 = (w: number = 1, h: number = 20, n: number = 8): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
