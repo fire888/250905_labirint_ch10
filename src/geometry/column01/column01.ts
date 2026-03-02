@@ -1,12 +1,9 @@
 import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, UV_GRID, UV_GRID_C, COL_RED, UV_EMPTY, 
-    UV_GRID_C3, 
-    UV_GRID_3, 
-    UV_GRID_3L, 
+import { COL_WHITE, UV_DARK, COL_GRAY, UV_GRID_CIRCLE, COL_RED, UV_EMPTY, 
     COL_BLACK,
-    UV_TREE_3,
+    UV_POINTS_TREE,
 } from "../tileMapWall"
 
 
@@ -33,8 +30,8 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
         while (curH < HH) {
             ++n
 
-            let col = COL_NORM
-            let __uv = UV_GRID_C
+            let col = COL_WHITE
+            let __uv = UV_GRID_CIRCLE
             let segH = 0
             if (n === 1) {
                 r_Curr = R0
@@ -92,10 +89,10 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
 
                 const ran = Math.random()
                 if (ran < .02) {
-                    uv.push(...UV_GRAY)
+                    uv.push(...UV_DARK)
                     c.push(...COL_GRAY)
                 } else if (ran < .04) {
-                    uv.push(...UV_GRAY)
+                    uv.push(...UV_DARK)
                     c.push(...COL_GRAY)
                 } else {
                     uv.push(...__uv)
@@ -108,7 +105,7 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
                         Math.cos(cur * Math.PI * 2) * r_Curr, segH, Math.sin(cur * Math.PI * 2) * r_Curr,
                         0, segH + 1, 0
                     )
-                    uv.push(...UV_TREE_3)
+                    uv.push(...UV_POINTS_TREE)
                     c.push(
                         COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
                         COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
@@ -135,7 +132,7 @@ export const createColumn01 = (w: number = 1, h: number = 20, n: number = 8): IA
             _M.rotateVerticesY(_v, Math.random() * Math.PI * 2)
             _M.translateVertices(_v, 0, curH, 0)
             v.push(..._v)
-            uv.push(...UV_TREE_3, ...UV_TREE_3)
+            uv.push(...UV_POINTS_TREE, ...UV_POINTS_TREE)
             c.push(
                 COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],
                 COL_BLACK[0], COL_BLACK[1], COL_BLACK[2],

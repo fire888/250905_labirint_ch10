@@ -3,11 +3,11 @@ import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
 import * as THREE from "three" 
 import { 
-    UV_RED, COL_RED, COL_BLUE,
-    UV_GRAY, COL_GRAY, 
-    UV_NORM, COL_NORM, COL_NORM_2,
-    UV_GRID, UV_GRID_C,
-    UV_HT, COL_HT
+    UV_POINTS, COL_RED, COL_BLUE,
+    UV_DARK, COL_GRAY, 
+    UV_TRIANGLE, COL_NORM_2,
+    UV_GRID, UV_GRID_CIRCLE,
+    UV_HT, COL_WHITE
 } from "../tileMapWall"
 
 const S = .3
@@ -76,12 +76,12 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                 if (ran < .08) { // random black
                     const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                     v.push(..._v)
-                    uv.push(...UV_RED)
+                    uv.push(...UV_POINTS)
                     c.push(...COL_RED)
                 } else if (ran < .16) { // random gray
                     const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                     v.push(..._v)
-                    uv.push(...UV_GRAY)
+                    uv.push(...UV_DARK)
                     c.push(...COL_GRAY)
                 } else {
                     let isSide = false
@@ -94,20 +94,20 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                     if (isSide) { // black border
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
+                        uv.push(...UV_POINTS)
                         c.push(...COL_RED)
                     } else { // normal
                         const ran = Math.random()
                         if (ran < .1) { // back
                             const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                             v.push(..._v)
-                            uv.push(...UV_NORM)
+                            uv.push(...UV_TRIANGLE)
                             c.push(...COL_NORM_2)
                         } else {
                             const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                             v.push(..._v)
-                            uv.push(...UV_NORM)
-                            c.push(...COL_NORM)
+                            uv.push(...UV_TRIANGLE)
+                            c.push(...COL_WHITE)
                         }
                     }
                 }
@@ -126,12 +126,12 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                     if (r > .2) { 
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
+                        uv.push(...UV_POINTS)
                         c.push(...COL_RED)
                     } else {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_GRAY)
+                        uv.push(...UV_DARK)
                         c.push(...COL_GRAY)
                     }
                 } else { // normal
@@ -140,22 +140,22 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
                         uv.push(...UV_GRID)
-                        c.push(...COL_NORM)
+                        c.push(...COL_WHITE)
                     } else if (ran < .13) { 
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_GRAY)
+                        uv.push(...UV_DARK)
                         c.push(...COL_GRAY)
                     } else if (ran < .135) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
+                        uv.push(...UV_POINTS)
                         c.push(...COL_RED)
                     } else {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
-                        uv.push(...UV_GRID_C)
-                        c.push(...COL_NORM)
+                        uv.push(...UV_GRID_CIRCLE)
+                        c.push(...COL_WHITE)
                     }
                 }
             }
@@ -172,7 +172,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                     if (Math.random() > .04) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
+                        uv.push(...UV_POINTS)
                         if (Math.random() > .06) {
                             c.push(...COL_BLUE) 
                         } else {
@@ -181,7 +181,7 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                     } else {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
-                        uv.push(...UV_GRAY)
+                        uv.push(...UV_DARK)
                         c.push(...COL_GRAY)
                     }
                 } else {
@@ -189,17 +189,17 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                     if (r < .03) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
+                        uv.push(...UV_POINTS)
                         c.push(...COL_RED)
                     } else if (r < .06) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
+                        uv.push(...UV_POINTS)
                         c.push(...COL_BLUE)
                     } else {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
-                        uv.push(...UV_GRAY)
+                        uv.push(...UV_DARK)
                         c.push(...COL_GRAY)
                     }
                 }
@@ -217,16 +217,16 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                     if (Math.random() > .04) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
+                        uv.push(...UV_POINTS)
                         if (Math.random() > .06) {
-                            c.push(...COL_HT) 
+                            c.push(...COL_WHITE) 
                         } else {
                             c.push(...COL_RED) 
                         }
                     } else {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
-                        uv.push(...UV_GRAY)
+                        uv.push(...UV_DARK)
                         c.push(...COL_GRAY)
                     }
                 } else {
@@ -234,23 +234,23 @@ export const createFloor00 = (floor: T_Floor): IArrayForBuffers => {
                     if (r < .03) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
-                        c.push(...COL_HT)
+                        uv.push(...UV_POINTS)
+                        c.push(...COL_WHITE)
                     } else if (r < .06) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_RED)
+                        uv.push(...UV_POINTS)
                         c.push(...COL_BLUE)
                     } else if (r < .07) {
                         const _v = _M.createPolygon(p0.toArray(), p1.toArray(), p2.toArray(), p3.toArray())
                         v.push(..._v)
-                        uv.push(...UV_GRAY)
-                        c.push(...COL_HT)
+                        uv.push(...UV_DARK)
+                        c.push(...COL_WHITE)
                     } else {
                         const _v = _M.createPolygon(p2.toArray(), p3.toArray(), p0.toArray(), p1.toArray())
                         v.push(..._v)
                         uv.push(...UV_HT)
-                        c.push(...COL_HT)
+                        c.push(...COL_WHITE)
                     }
                 }
             }

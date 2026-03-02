@@ -2,8 +2,8 @@ import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
 import { 
-    UV_NORM, COL_NORM, COL_GRAY, UV_GRID, UV_GRID_C, UV_EMPTY, 
-    COL_BLACK, UV_RED
+    UV_TRIANGLE, COL_WHITE, COL_GRAY, UV_GRID, UV_GRID_CIRCLE, UV_EMPTY, 
+    COL_BLACK, UV_POINTS
  } from "../tileMapWall"
  import * as THREE from "three"
 
@@ -70,12 +70,12 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                 )
                 v.push(..._v)
                 if (j === 1 || j === countZ) {
-                    c.push(...COL_NORM)
-                    uv.push(...UV_RED)
+                    c.push(...COL_WHITE)
+                    uv.push(...UV_POINTS)
                 } else {
                     if (TYPE === 'CIRCLE') {
                         if (Math.random() < .8) {
-                            uv.push(...UV_GRID_C) 
+                            uv.push(...UV_GRID_CIRCLE) 
                         } else {
                             uv.push(...UV_GRID)
                         }
@@ -84,7 +84,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                         if (Math.random() < .95) {
                             uv.push(...UV_GRID) 
                         } else {
-                            uv.push(...UV_GRID_C)
+                            uv.push(...UV_GRID_CIRCLE)
                         }
                         c.push(...COL_BLACK)
                     }
@@ -110,7 +110,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                 [currT[0], currT[1], 0],
             )
             v.push(..._v)
-            c.push(...COL_NORM)
+            c.push(...COL_WHITE)
             uv.push(...UV_EMPTY)
 
             // fill back
@@ -121,7 +121,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                 [prevT[0], prevT[1], DZ],
             )
             v.push(..._vb)
-            c.push(...COL_NORM)
+            c.push(...COL_WHITE)
             uv.push(...UV_EMPTY)
         }
         _M.translateVertices(v, 0, -startY + H_SIDES, 0)
@@ -136,8 +136,8 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                 [-w - wP, H_SIDES, 0],
             )
             v.push(..._v)
-            c.push(...COL_NORM)
-            uv.push(...UV_NORM)
+            c.push(...COL_WHITE)
+            uv.push(...UV_TRIANGLE)
         }
 
         { // back
@@ -148,8 +148,8 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                 [-w + wP, H_SIDES, -d],
             )
             v.push(..._v)
-            c.push(...COL_NORM)
-            uv.push(...UV_NORM)
+            c.push(...COL_WHITE)
+            uv.push(...UV_TRIANGLE)
         }
 
         const countZ = Math.ceil(d / .45)
@@ -164,8 +164,8 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                 [-w + wP, H_SIDES, -d + stepZ * i],
             )
             v.push(..._v)
-            c.push(...COL_NORM)
-            uv.push(...UV_NORM)
+            c.push(...COL_WHITE)
+            uv.push(...UV_TRIANGLE)
 
             // left
             const _v2 = _M.createPolygon(
@@ -175,8 +175,8 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                 [-w - wP, H_SIDES, -d + stepZ * (i - 1)],
             )
             v.push(..._v2)
-            c.push(...COL_NORM)
-            uv.push(...UV_NORM)
+            c.push(...COL_WHITE)
+            uv.push(...UV_TRIANGLE)
 
             // bottom
             const _vb = _M.createPolygon(
@@ -186,7 +186,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
                 [-w + wP, 0, -d + stepZ * (i - 1)],
             )
             v.push(..._vb)
-            c.push(...COL_NORM)
+            c.push(...COL_WHITE)
             uv.push(...UV_EMPTY)
         }
     }

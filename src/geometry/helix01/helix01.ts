@@ -1,26 +1,7 @@
-import { _M, A2, A3 } from "../_m"
+import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import * as THREE from "three" 
-import { 
-    UV_RED, COL_RED, COL_BLUE,
-    UV_GRAY, COL_GRAY, 
-    UV_NORM, COL_NORM, COL_NORM_2,
-    UV_GRID, UV_GRID_C,
-    UV_HT, COL_HT,
-    UV_EMPTY
-} from "../tileMapWall"
-import { Root } from "index"
-
-export type T_Floor = { 
-    p0: THREE.Vector3 
-    p1: THREE.Vector3
-    p2: THREE.Vector3
-    p3: THREE.Vector3
-    d: number
-    w: number
-    isFillStart: boolean
-    isFillEnd: boolean
-}
+import { COL_WHITE, UV_EMPTY } from "../tileMapWall"
 
 export const createHelix01  = (H = 8, R: number = 1): IArrayForBuffers => {
     const v: number[] = []
@@ -47,7 +28,7 @@ export const createHelix01  = (H = 8, R: number = 1): IArrayForBuffers => {
         { 
             const _v = _M.createPolygonV(vPos3, vPos2, vPos1, vPos0)
             v.push(..._v)
-            c.push(...COL_NORM)
+            c.push(...COL_WHITE)
             uv.push(...UV_EMPTY)
         }
 

@@ -1,7 +1,7 @@
 import { _M, A2, A3 } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY } from "../tileMapWall"
+import { UV_TRIANGLE, COL_WHITE, UV_DARK, COL_GRAY } from "../tileMapWall"
 
 
 const createSingle = (h: number, w: number = 20): IArrayForBuffers => {
@@ -31,8 +31,8 @@ const createSingle = (h: number, w: number = 20): IArrayForBuffers => {
             [twl, newH - p + .2, 0],
         )
         v.push(..._v)
-        c.push(...COL_NORM)
-        uv.push(...UV_NORM)
+        c.push(...COL_WHITE)
+        uv.push(...UV_TRIANGLE)
         currH = newH
     }
 
@@ -79,8 +79,8 @@ const createGround = (): IArrayForBuffers => {
 
         const _v = _M.createPolygon(p0, p1, p2, p3)
         v.push(..._v)
-        c.push(...COL_NORM)
-        uv.push(...UV_NORM)
+        c.push(...COL_WHITE)
+        uv.push(...UV_TRIANGLE)
     }
 
     return { v, c, uv }

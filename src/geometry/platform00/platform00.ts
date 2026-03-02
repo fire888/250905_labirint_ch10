@@ -2,7 +2,7 @@ import { IArrayForBuffers, T_ROOM } from "types/GeomTypes"
 import { createFloor00, T_Floor } from "geometry/floor00/floor00"
 import { _M } from "../_m"
 import { Root } from "index"
-import { COL_RED, UV_RED } from "geometry/tileMapWall"
+import { COL_RED, UV_POINTS } from "geometry/tileMapWall"
 
 export const createPlatform00 = (s: T_ROOM): IArrayForBuffers => {
     const v: number[] = []
@@ -36,7 +36,7 @@ export const createPlatform00 = (s: T_ROOM): IArrayForBuffers => {
         )
         _M.fill(_v, v)
         _M.fill(COL_RED, c)
-        _M.fill(UV_RED, uv)
+        _M.fill(UV_POINTS, uv)
     }
 
     { // right
@@ -48,7 +48,7 @@ export const createPlatform00 = (s: T_ROOM): IArrayForBuffers => {
         )
         _M.fill(_v, v)
         _M.fill(COL_RED, c)
-        _M.fill(UV_RED, uv)
+        _M.fill(UV_POINTS, uv)
     }
 
     { // фронт
@@ -60,7 +60,7 @@ export const createPlatform00 = (s: T_ROOM): IArrayForBuffers => {
         )
         _M.fill(_v, v)
         _M.fill(COL_RED, c)
-        _M.fill(UV_RED, uv)
+        _M.fill(UV_POINTS, uv)
     }
 
     { // бэк
@@ -72,7 +72,7 @@ export const createPlatform00 = (s: T_ROOM): IArrayForBuffers => {
         )
         _M.fill(_v, v)
         _M.fill(COL_RED, c)
-        _M.fill(UV_RED, uv)
+        _M.fill(UV_POINTS, uv)
     }
 
     { // боттом
@@ -84,7 +84,7 @@ export const createPlatform00 = (s: T_ROOM): IArrayForBuffers => {
         )
         _M.fill(_v, v)
         _M.fill(COL_RED, c)
-        _M.fill(UV_RED, uv)
+        _M.fill(UV_POINTS, uv)
     }
     
     return { v, c, uv, vCollide }

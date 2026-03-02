@@ -1,11 +1,11 @@
 import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, 
-    UV_RED, COL_RED,
-    UV_EMPTY, COL_EMPTY,
-    UV_GRID, UV_GRID_C,
-    COL_GRID, COL_NORM_2, UV_HT, COL_HT
+import { UV_TRIANGLE, COL_WHITE, UV_DARK, COL_GRAY, 
+    UV_POINTS, COL_RED,
+    UV_EMPTY,
+    UV_GRID, UV_GRID_CIRCLE,
+    UV_HT
 } from "../tileMapWall"
 import * as THREE from 'three'
 
@@ -52,7 +52,7 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
                     points0[prev].clone().setY(.1),
                 )
                 v.push(...pol)
-                uv.push(...UV_RED)
+                uv.push(...UV_POINTS)
                 c.push(...COL_RED)
             }
 
@@ -86,17 +86,17 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
                         if (Math.random() < .1) { 
                             uv.push(...UV_GRID)
                         } else {
-                            uv.push(...UV_GRID_C)
+                            uv.push(...UV_GRID_CIRCLE)
                         }
                     } else if (mode === 'ARROW') { // arrows
                         if (Math.random() < .1) { 
-                            uv.push(...UV_GRAY)
+                            uv.push(...UV_DARK)
                         } else {
-                            uv.push(...UV_NORM)
+                            uv.push(...UV_TRIANGLE)
                         }
                     } else if (mode === 'HT') { // HT
                         if (Math.random() < .1) { 
-                            uv.push(...UV_RED)
+                            uv.push(...UV_POINTS)
                         } else {
                             uv.push(...UV_HT)
                         }
@@ -104,11 +104,11 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
                         if (Math.random() < .1) { 
                             uv.push(...UV_EMPTY) 
                         } else {
-                            uv.push(...UV_GRAY)
+                            uv.push(...UV_DARK)
                         }
                     }
 
-                    c.push(...COL_NORM)
+                    c.push(...COL_WHITE)
                 }
             }
 
@@ -132,7 +132,7 @@ export const createColumn02 = (w: number = .5, h: number = 2, n: number = 8): IA
                     points0[prev].clone().setY(h),
                 )
                 v.push(...pol)
-                uv.push(...UV_RED)
+                uv.push(...UV_POINTS)
                 c.push(...COL_RED)
             }
 

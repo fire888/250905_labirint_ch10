@@ -1,7 +1,7 @@
 import { _M, A2, A3 } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
-import { UV_NORM, COL_NORM, UV_GRAY, COL_GRAY, COL_RED, UV_EMPTY } from "../tileMapWall"
+import { UV_TRIANGLE, COL_WHITE, UV_DARK, COL_GRAY, COL_RED, UV_EMPTY } from "../tileMapWall"
 import * as THREE from "three"
 
 
@@ -87,7 +87,7 @@ export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArra
                         p0.clone(), 
                     )
                     v.push(..._v)
-                    c.push(...COL_NORM)
+                    c.push(...COL_WHITE)
                     uv.push(...UV_EMPTY)
                 }
                 {

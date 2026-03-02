@@ -1,6 +1,6 @@
 import { IArrayForBuffers } from "types/GeomTypes"
 import { _M } from "../_m"
-import { COL_RED, UV_RED } from "geometry/tileMapWall"
+import { COL_RED, UV_POINTS } from "geometry/tileMapWall"
 import * as THREE from "three"
 
 export const createPlatform01Round = (R2: number = .6): IArrayForBuffers => {
@@ -48,7 +48,7 @@ export const createPlatform01Round = (R2: number = .6): IArrayForBuffers => {
             const _v = _M.createPolygonV(p0, p1, p2, p3)
             _M.fill([..._v], v)
             _M.fill(COL_RED, c)
-            _M.fill(UV_RED, uv)
+            _M.fill(UV_POINTS, uv)
 
             _M.fill([..._v], vCollide)
         }
@@ -56,25 +56,25 @@ export const createPlatform01Round = (R2: number = .6): IArrayForBuffers => {
             const _v = _M.createPolygonV(p0_0, p1_0, p1, p0)
             _M.fill(_v, v)
             _M.fill(COL_RED, c)
-            _M.fill(UV_RED, uv)
+            _M.fill(UV_POINTS, uv)
         }
         { // left
             const _v = _M.createPolygonV(p2_0, p3_0, p3, p2)
             _M.fill(_v, v)
             _M.fill(COL_RED, c)
-            _M.fill(UV_RED, uv)
+            _M.fill(UV_POINTS, uv)
         }
         { // bottom
             const _v = _M.createPolygonV(p3_0, p2_0, p1_0, p0_0)
             _M.fill(_v, v)
             _M.fill(COL_RED, c)
-            _M.fill(UV_RED, uv)
+            _M.fill(UV_POINTS, uv)
         }
         if (n + 1 >= MaxN) { // side last
             const _v = _M.createPolygonV(p1, p1_0, p2_0, p2)
             _M.fill(_v, v)
             _M.fill(COL_RED, c)
-            _M.fill(UV_RED, uv)
+            _M.fill(UV_POINTS, uv)
         }
     }
 
