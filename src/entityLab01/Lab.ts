@@ -61,8 +61,7 @@ export class Labyrinth {
     }
 
     private _createCollisionCenter() {
-        const geomColT = new THREE.BoxGeometry(7, 7, 7)
-        const m = new THREE.Mesh(geomColT, this._root.materials.collision)
+        const m = new THREE.Mesh(new THREE.BoxGeometry(7, 7, 7), this._root.materials.collision)
         m.name = 'collisionNextBuild'
         return m
     } 
