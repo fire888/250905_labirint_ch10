@@ -35,9 +35,16 @@ export class Way {
         this.startPoint = new THREE.Vector3()
         this.centerPoint = new THREE.Vector3()
 
-        this._builderGeometries = IS_USE_WORKER 
-            ? new GeometryWorker() 
-            : new GeometryNormal()
+        if (IS_USE_WORKER && window.Worker && window.SharedArrayBuffer) {
+            try {
+                this._builderGeometries = new GeometryWorker()
+            } catch (e) {
+                console.log('NO WORKER !!!', e)
+                this._builderGeometries = new GeometryNormal()
+            }
+        } else {
+            this._builderGeometries = new GeometryNormal()
+        }
 
         this._m = new THREE.Mesh(this._builderGeometries.geometry, this._root.materials.materialLab)
         this._m.frustumCulled = false
