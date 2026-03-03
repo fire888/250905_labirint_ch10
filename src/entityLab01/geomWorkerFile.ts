@@ -1,4 +1,4 @@
-import { createLongWay } from "geometry/longWay/longWay"
+import { createWaySystem } from "geometry/waySystem/waySystem"
 import * as THREE from "three"
 import { _M } from "geometry/_m"
 
@@ -24,7 +24,7 @@ self.onmessage = (e) => {
     }
 
     if (e.data.keyMessage === 'update') {
-        const { geomData: { v, c, uv, vCollide }, segments } = createLongWay()
+        const { geomData: { v, c, uv, vCollide }, segments } = createWaySystem()
         
         console.log('[MESSAGE:] verticies level n:', v.length / 3)
         console.log('[MESSAGE:] verticies collision n:', vCollide.length / 3)

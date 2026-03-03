@@ -1,6 +1,6 @@
 import { _M } from "../geometry/_m"
 import * as THREE from "three"
-import { createLongWay } from "geometry/longWay/longWay"
+import { createWaySystem } from "geometry/waySystem/waySystem"
 import { pause } from "helpers/htmlHelpers"
 
 import { VERT_COUNT, UV_COUNT } from './Way'
@@ -33,7 +33,7 @@ export class GeometryNormal {
     }
 
     async rebuild() {
-        const { geomData: { v, c, uv, vCollide }, segments } = createLongWay()
+        const { geomData: { v, c, uv, vCollide }, segments } = createWaySystem()
 
         await pause(1)
         

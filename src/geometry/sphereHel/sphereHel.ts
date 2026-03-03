@@ -5,11 +5,17 @@ import { UV_TRIANGLE, COL_WHITE, UV_DARK, COL_BLUE_TOP, COL_RED, UV_EMPTY } from
 import * as THREE from "three"
 
 
-export const createSphereHel = (spd1: number = 0.23, spd2: number = 0.11): IArrayForBuffers => {
+export const createSphereHel = (): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
     const vCollide: number[] = []
+
+    let spd1 = Math.random() * .12 + 0.01
+    const spd2 = Math.random() * .12 + 0.01
+    if (Math.abs(spd1 - spd2) < 0.015) {
+        spd1 += 0.05
+    }
 
     let dist1 = 1
     const savedVec_1 = new THREE.Vector2(1, 0)
