@@ -451,7 +451,14 @@ type T_LONG_WAY = {
     dir1: THREE.Vector3 
 }
 
-export const createLongWay = (options: T_LONG_WAY):  { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
+export const createLongWay = ():  { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
+
+    const options: T_LONG_WAY = {
+        p0: new THREE.Vector3(0, 0, 0),
+        dir0: new THREE.Vector3(1, 0, 0),
+        p1: new THREE.Vector3(400, 0, 0),
+        dir1: new THREE.Vector3(1, 0, 0),
+    }
 
     const { geomData: { v, c, uv, vCollide }, segments } = createSingleWay(options, false)
 

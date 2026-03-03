@@ -12,7 +12,7 @@ export class Labyrinth {
     _way1: Way
     _way2: Way
 
-    _mCollisionNextBuild: THREE.Mesh 
+    _mTriggerNextBuild: THREE.Mesh 
 
     _currentWay: Way
 
@@ -23,7 +23,7 @@ export class Labyrinth {
         this._way1 = new Way('way1', this._root)
         this._way2 = new Way('way2', this._root)
 
-        this._mCollisionNextBuild = this._createCollisionCenter()
+        this._mTriggerNextBuild = this._createCollisionCenter()
 
         this._buildTest()
     }
@@ -47,11 +47,11 @@ export class Labyrinth {
 
         await nextWay.build(startPoint)
 
-        this._mCollisionNextBuild.name += '|_'
-        this._mCollisionNextBuild.position.copy(nextWay.centerPoint)
-        this._root.phisics.addMeshToCollision(this._mCollisionNextBuild)
+        this._mTriggerNextBuild.name += '|_'
+        this._mTriggerNextBuild.position.copy(nextWay.centerPoint)
+        this._root.phisics.addMeshToCollision(this._mTriggerNextBuild)
         this._root.phisics.onCollision('collisionNextBuild', () => {
-            this._root.phisics.removeMeshFromCollision(this._mCollisionNextBuild.name)          
+            this._root.phisics.removeMeshFromCollision(this._mTriggerNextBuild.name)          
             this.buildNext()
         })
 

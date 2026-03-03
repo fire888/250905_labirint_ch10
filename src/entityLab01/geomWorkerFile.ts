@@ -24,14 +24,7 @@ self.onmessage = (e) => {
     }
 
     if (e.data.keyMessage === 'update') {
-        const options = {
-            p0: new THREE.Vector3(0, 0, 0),
-            dir0: new THREE.Vector3(1, 0, 0),
-            p1: new THREE.Vector3(400, 0, 0),
-            dir1: new THREE.Vector3(1, 0, 0),
-        }
-
-        const { geomData: { v, c, uv, vCollide }, segments } = createLongWay(options)
+        const { geomData: { v, c, uv, vCollide }, segments } = createLongWay()
         
         console.log('[MESSAGE:] verticies level n:', v.length / 3)
         console.log('[MESSAGE:] verticies collision n:', vCollide.length / 3)
