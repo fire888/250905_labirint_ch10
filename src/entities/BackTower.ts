@@ -11,7 +11,7 @@ export class BackTower {
     async init (root: Root) {
         this._root = root
 
-        const { v, c, uv } = createTowerSilhouette(this._root)
+        const { v, c, uv } = createTowerSilhouette()
 
         this._m = _M.createMesh({ v, c, uv, material: root.materials.materialLab })
         this._m.rotation.y = -Math.PI / 2

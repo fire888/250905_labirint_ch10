@@ -15,4 +15,9 @@ export const COL_RED: number[] = _M.fillColorFace([1, 0, 0])
 export const COL_BLUE_TOP: number[] = _M.fillColorFace([.7, .7, 1])
 export const COL_BLUE_HIGHT: number[] = _M.fillColorFace([.7, .6, 1])
 export const COL_BLUE_LIGHT = _M.fillColorFace([0.5, 0.5, 1])
+export const COL_BLUE_LIGHT_3: number[] = [
+    COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+    COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+    COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
+]
 export const COL_GREEN_BLUE: number[] = _M.fillColorFace([.5, .1, 1])

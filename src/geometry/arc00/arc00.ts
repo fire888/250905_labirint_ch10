@@ -14,7 +14,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
     const c: number[] = []
     const uv: number[] = []
 
-    const S = Math.random() * .2 + w * .2
+    const S = Math.random() * .5 + w
     const wP = .1
     const ROOF_H = .2
     const H_SIDES = .1 + Math.random() * .8
@@ -25,7 +25,8 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
         const arrPoints0 = []
         let currAng = Math.PI * .5
         const maxAngle = Math.PI * (Math.random() * .7 + .55)
-        const count = Math.ceil((w - .1) / S)
+        const l = Math.abs(2 * (w - .1) * Math.PI * ((maxAngle - currAng) / Math.PI * 2))
+        const count = Math.ceil(l / S)
         const stepAngle = (maxAngle - currAng) / count
         const scaleX = Math.abs((w - .1) / Math.cos(maxAngle))
 
@@ -48,7 +49,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
         }
 
         const DZ = -d
-        const countZ = Math.abs(Math.ceil(DZ / S))
+        const countZ = Math.abs(Math.ceil(DZ / (S * .3)))
         const stepD = Math.abs(DZ / countZ)
 
         for (let i = 1; i < arrPoints0.length; ++i) {

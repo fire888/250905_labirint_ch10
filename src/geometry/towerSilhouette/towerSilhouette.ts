@@ -23,12 +23,13 @@ const createSingle = (h: number, w: number = 20): IArrayForBuffers => {
         const bwr = wS + (Math.random() - .5) * 5 * (1 - currH / h)
         const twr = wS + (Math.random() - .5) * 5 * (1 - currH / h)
         
+        const z = Math.random()
 
         const _v = _M.createPolygon(
-            [bwl, currH, 0],
-            [bwr, currH, 0],
-            [twr, newH - p + .2, 0],
-            [twl, newH - p + .2, 0],
+            [bwl, currH, z],
+            [bwr, currH, z],
+            [twr, newH - p + .2, z],
+            [twl, newH - p + .2, z],
         )
         v.push(..._v)
         c.push(...COL_WHITE)
@@ -52,6 +53,8 @@ const createGround = (): IArrayForBuffers => {
     let pB: A3 = [0, 0, 0]
 
     for (let i = 0; i < N + 10; ++i) {
+        const z = Math.random()
+
         const absX = Math.sin(i / N * Math.PI * .5) * 75 + Math.random() * 20
         const signX = Math.abs(i % 2) > 0 ? -1 : 1
 
@@ -59,19 +62,19 @@ const createGround = (): IArrayForBuffers => {
 
         let p0: A3, p1: A3, p2: A3, p3: A3
         if (signX > 0) {
-            p0 = pB
-            p1 = [absX, i * hStep + hAdd, 0]
-            p2 = [absX, i * hStep + lh + hAdd, 0]
-            p3 = pT
+            p0 = [pB[0], pB[1], z]
+            p1 = [absX, i * hStep + hAdd, z]
+            p2 = [absX, i * hStep + lh + hAdd, z]
+            p3 = [pT[0], pT[1], z]
 
             pT = p2
             pB = p1
         }
         if (signX < 0) {
-            p0 = [-absX, i * hStep + hAdd, 0]
-            p1 = pB
-            p2 = pT
-            p3 = [-absX, i * hStep + lh + hAdd, 0]
+            p0 = [-absX, i * hStep + hAdd, z]
+            p1 = [pB[0], pB[1], z]
+            p2 = [pT[0], pT[1], z]
+            p3 = [-absX, i * hStep + lh + hAdd, z]
 
             pT = p3
             pB = p0
@@ -86,7 +89,7 @@ const createGround = (): IArrayForBuffers => {
     return { v, c, uv }
 }
 
-export const createTowerSilhouette = ( root: Root): IArrayForBuffers => {
+export const createTowerSilhouette = (): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []

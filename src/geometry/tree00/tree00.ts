@@ -2,8 +2,8 @@ import { _M } from "../_m"
 import { IArrayForBuffers } from "types/GeomTypes"
 import { Root } from "index"
 import { COL_WHITE, UV_DARK, COL_BLUE_TOP, UV_GRID_CIRCLE, COL_RED, UV_EMPTY, 
-    COL_BLUE_LIGHT,
     UV_POINTS_TREE,
+    COL_BLUE_LIGHT_3,
 } from "../tileMapWall"
 
 
@@ -106,11 +106,7 @@ export const createTree00 = (w: number = 1, h: number = 20, n: number = 8): IArr
                         0, segH + 1, 0
                     )
                     uv.push(...UV_POINTS_TREE)
-                    c.push(
-                        COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-                        COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-                        COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-                    )
+                    c.push(...COL_BLUE_LIGHT_3)
                 }
             }
 
@@ -133,14 +129,7 @@ export const createTree00 = (w: number = 1, h: number = 20, n: number = 8): IArr
             _M.translateVertices(_v, 0, curH, 0)
             v.push(..._v)
             uv.push(...UV_POINTS_TREE, ...UV_POINTS_TREE)
-            c.push(
-                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-                COL_BLUE_LIGHT[0], COL_BLUE_LIGHT[1], COL_BLUE_LIGHT[2],
-            )
+            c.push(...COL_BLUE_LIGHT_3, ...COL_BLUE_LIGHT_3)
         }
     }
 
