@@ -154,9 +154,9 @@ export class ControlsPhone {
 
         const summSpeed = Math.abs(this._currentSpeedLeft) + Math.abs(this._currentSpeedForward)
         this._timeRot += delta
-        this._vecRotMovie.x = Math.sin(this._timeRot * 0.03) * .0015 * summSpeed * this._strengthIdle
-        this._vecRotMovie.z = Math.sin(this._timeRot * 0.02) * .0015 * summSpeed * this._strengthIdle
-        this._vecRotMovie.y = Math.sin(this._timeRot * 0.025) * .0015 * summSpeed * this._strengthIdle
+        this._vecRotMovie.x = Math.sin(this._timeRot * 0.02) * .0005 * summSpeed * this._strengthIdle
+        this._vecRotMovie.z = Math.sin(this._timeRot * 0.02) * .0005 * summSpeed * this._strengthIdle
+        this._vecRotMovie.y = Math.sin(this._timeRot * 0.02) * .0005 * summSpeed * this._strengthIdle
         this._vecRotMovie.x += Math.sin(this._timeRot * 0.001) * .01 * this._strengthIdle
         this._vecRotMovie.z += Math.sin(this._timeRot * 0.0005) * .01 * this._strengthIdle
         this._vecRotMovie.y += Math.sin(this._timeRot * 0.0007) * .01 * this._strengthIdle

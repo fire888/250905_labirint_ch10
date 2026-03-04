@@ -7,16 +7,14 @@ import {
  } from "../tileMapWall"
  import * as THREE from "three"
 
-
-//export const createArc00 = (w: number = 1, d: number = 20, root: Root): IArrayForBuffers => {
 export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => {
     const v: number[] = []
     const c: number[] = []
     const uv: number[] = []
 
-    const S = Math.random() * .5 + w
-    const wP = .1
-    const ROOF_H = .2
+    const wSegment = .5//Math.random() * .3 + .3
+    const wP = Math.random() * .2 + 0.05
+    const ROOF_H = wP * 2
     const H_SIDES = .1 + Math.random() * .8
 
     const TYPE = Math.random() < .5 ? 'CIRCLE' : 'CROSS'
@@ -25,10 +23,11 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
         const arrPoints0 = []
         let currAng = Math.PI * .5
         const maxAngle = Math.PI * (Math.random() * .7 + .55)
-        const l = Math.abs(2 * (w - .1) * Math.PI * ((maxAngle - currAng) / Math.PI * 2))
-        const count = Math.ceil(l / S)
-        const stepAngle = (maxAngle - currAng) / count
-        const scaleX = Math.abs((w - .1) / Math.cos(maxAngle))
+        const diffAngle = maxAngle - currAng
+        const l = Math.abs((w - wP) * diffAngle)
+        const count = Math.max(1, Math.round(l / wSegment))
+        const stepAngle = diffAngle / count
+        const scaleX = Math.abs((w - wP) / Math.cos(maxAngle))
 
         while (currAng <= (maxAngle + .01)) {
             const newP = [Math.cos(currAng) * scaleX, Math.sin(currAng) * scaleX]
@@ -49,7 +48,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
         }
 
         const DZ = -d
-        const countZ = Math.abs(Math.ceil(DZ / (S * .3)))
+        const countZ = Math.max(1, Math.round(Math.abs(DZ / wSegment)))
         const stepD = Math.abs(DZ / countZ)
 
         for (let i = 1; i < arrPoints0.length; ++i) {
@@ -153,7 +152,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
             uv.push(...UV_TRIANGLE)
         }
 
-        const countZ = Math.ceil(d / .45)
+        const countZ = Math.ceil(d / wSegment)
         const stepZ = d / countZ
 
         for (let i = 1; i < countZ + 1; ++i) {
