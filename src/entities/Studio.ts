@@ -55,7 +55,6 @@ export class Studio {
         this.scene.add(this.camera)
 
         const COLOR = 0x525c81
-        //const COLOR = 0x353571
         const COLOR_FOG = 0x4d67c1
 
         this.scene.environment = root.texturesCanvas.env
