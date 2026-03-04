@@ -57,19 +57,20 @@ export class Studio {
         const COLOR = 0x525c81
         const COLOR_FOG = 0x4d67c1
 
-        this.scene.environment = root.texturesCanvas.env
+        // this.scene.environment = root.texturesCanvas.env
         this.scene.background = new THREE.Color(COLOR)
-        this.fog = new THREE.Fog(COLOR_FOG, 10, 200)
-
-        //this.amb = new THREE.AmbientLight(0xffffff, .5) 
-        //this.scene.add(this.amb)
+        this.fog = new THREE.Fog(COLOR_FOG, 90, 200)
 
         this.dirLight = new DirectionalLight(0xffffff, 5.5)
         this.dirLight.position.set(-3, 3, 2)
         this.scene.add(this.dirLight)
 
-        this.renderer = new WebGLRenderer({ antialias: true })
+        this.renderer = new WebGLRenderer({ antialias: true })    
         this.renderer.setPixelRatio(window.devicePixelRatio)
+        if (root.deviceData.device === 'desktop') {
+            this.renderer.setPixelRatio(window.devicePixelRatio * 1.15)
+        }
+        
         this.renderer.setSize(window.innerWidth, window.innerHeight)
         this.containerDom.appendChild(this.renderer.domElement)
 
@@ -194,9 +195,7 @@ export class Studio {
         })
     }
 
-    animateFogTo(far: number, color: number[], time: number) {
-        const startFogFar = this.fog.far
-        const endFogFar = far
+    animateFogTo(far: number = 90, color: number[], time: number) {
         const startColor = new THREE.Color().copy(this.fog.color)
         const endColor = new THREE.Color().fromArray(color)
         
@@ -206,7 +205,6 @@ export class Studio {
                 .easing(Easing.Exponential.InOut)
                 .to({ v: 1 }, time)
                 .onUpdate(() => {
-                    this.fog.far = startFogFar + (endFogFar - startFogFar) * obj.v
                     this.fog.color.lerpColors(startColor, endColor, obj.v)
                 })
                 .onComplete(() => {
@@ -217,7 +215,8 @@ export class Studio {
     } 
 
     animateBackgroundTo(color: number[], time: number) {
-        const startColor = new THREE.Color().copy(this.fog.color)
+        // @ts-ignore
+        const startColor = new THREE.Color().copy(this.scene.background)
         const endColor = new THREE.Color().fromArray(color)
         
         return new Promise(res => {        
@@ -239,8 +238,6 @@ export class Studio {
     animateLightTo(colorDir: number[], colorAmb: number[], time: number = 3000) {
         const startColorDir = new THREE.Color().copy(this.dirLight.color)
         const endColorDir = new THREE.Color().fromArray(colorDir)
-        const startColorAmb = new THREE.Color().copy(this.amb.color)
-        const endColorAmb = new THREE.Color().fromArray(colorAmb)
 
         return new Promise(res => {        
             const obj = { v: 0 }
@@ -249,7 +246,6 @@ export class Studio {
                 .to({ v: 1 }, time)
                 .onUpdate(() => {
                     this.dirLight.color.lerpColors(startColorDir, endColorDir, obj.v)
-                    this.amb.color.lerpColors(startColorAmb, endColorAmb, obj.v)
                 })
                 .onComplete(() => {
                     res(true)
