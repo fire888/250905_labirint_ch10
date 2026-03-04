@@ -51,38 +51,22 @@ export class Studio {
         this.camera.position.set(3, 2, 0)
         this.camera.lookAt(150, 0, 0)
 
-        // this.spotLight = new SpotLight(0xffffff, 15)
-        // this.spotLight.position.set(0, 3, 5)
-        // this.spotLight.angle = Math.PI * .2
-        // this.spotLight.penumbra = 1
-        // this.spotLight.decay = 1
-        // this.spotLight.distance = 300
-        // const target = new Object3D()
-        // this.spotLight.target = target
-
-        //target.position.z = -50
-        //this.camera.add(this.spotLight.target)
-
         this.scene = new Scene()
-        //this.scene.add(this.spotLight)
         this.scene.add(this.camera)
 
         const COLOR = 0x525c81
+        //const COLOR = 0x353571
         const COLOR_FOG = 0x4d67c1
 
-        //this.scene.environment = root.loader.assets.env
         this.scene.environment = root.texturesCanvas.env
         this.scene.background = new THREE.Color(COLOR)
-        //this.scene.background = root.loader.assets.env
-        //this.scene.background = root.texturesCanvas.env
         this.fog = new THREE.Fog(COLOR_FOG, 10, 200)
-        // this.addFog()
 
-        this.amb = new THREE.AmbientLight(0xffffff, .5) 
-        this.scene.add(this.amb)
+        //this.amb = new THREE.AmbientLight(0xffffff, .5) 
+        //this.scene.add(this.amb)
 
-        this.dirLight = new DirectionalLight(0xffffff, 3)
-        this.dirLight.position.set(-3, 3, -2)
+        this.dirLight = new DirectionalLight(0xffffff, 5.5)
+        this.dirLight.position.set(-3, 3, 2)
         this.scene.add(this.dirLight)
 
         this.renderer = new WebGLRenderer({ antialias: true })
@@ -90,21 +74,21 @@ export class Studio {
         this.renderer.setSize(window.innerWidth, window.innerHeight)
         this.containerDom.appendChild(this.renderer.domElement)
 
-        this.composer = new EffectComposer(this.renderer)
-        const renderPass = new RenderPass(this.scene, this.camera)
-        this.composer.addPass(renderPass)
+        //this.composer = new EffectComposer(this.renderer)
+        //const renderPass = new RenderPass(this.scene, this.camera)
+        //this.composer.addPass(renderPass)
 
-        this.ssaoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight)
-        this.ssaoPass.kernelRadius = 10
-        //this.ssaoPass.minDistance = 0.001
-        this.ssaoPass.minDistance = 2
-        //ssaoPass.maxDistance = 15
-        this.ssaoPass.maxDistance = 0
-        this.ssaoPass.enabled = true
-        this.composer.addPass(this.ssaoPass)
+        // this.ssaoPass = new SSAOPass(this.scene, this.camera, window.innerWidth, window.innerHeight)
+        // this.ssaoPass.kernelRadius = 10
+        // //this.ssaoPass.minDistance = 0.001
+        // this.ssaoPass.minDistance = 2
+        // //ssaoPass.maxDistance = 15
+        // this.ssaoPass.maxDistance = 0
+        // this.ssaoPass.enabled = true
+        // this.composer.addPass(this.ssaoPass)
 
-        const outputPass = new OutputPass()
-        this.composer.addPass(outputPass)
+        //const outputPass = new OutputPass()
+        //this.composer.addPass(outputPass)
 
         window.addEventListener( 'resize', this.onWindowResize.bind(this))
         this.onWindowResize()

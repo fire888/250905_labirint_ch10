@@ -40,11 +40,11 @@ export const createWaySystem = ():  { geomData: IArrayForBuffers, segments: T_RO
 
             let start, dirSeg, end
             if (countWaysMaked % 2 === 0) { // left\right direction
-                start = p2.clone().sub(p3).multiplyScalar(.5).add(p3).setY(p2.y)
+                start = p2.clone().sub(p3).multiplyScalar(.5).add(p3).setY(p2.y + (Math.random() - .5) * .005)
                 dirSeg = dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), Math.PI * .5)
                 end = dirSeg.clone().multiplyScalar(L_SLEEP_WAYS).add(start)
             } else {
-                start = p1.clone().sub(p0).multiplyScalar(.5).add(p0).setY(p1.y)
+                start = p1.clone().sub(p0).multiplyScalar(.5).add(p0).setY(p1.y + (Math.random() - .5) * .005)
                 dirSeg = dir.clone().applyAxisAngle(new THREE.Vector3(0, 1, 0), -Math.PI * .5)
                 end = dirSeg.clone().multiplyScalar(L_SLEEP_WAYS).add(start) 
             }

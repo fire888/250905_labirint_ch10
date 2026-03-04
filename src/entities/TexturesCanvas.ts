@@ -62,7 +62,7 @@ export class TexturesCanvas {
             canEnv.height = S
 
             const ctx = canEnv.getContext('2d')
-            ctx.fillStyle = "#000000"
+            ctx.fillStyle = "#6e7d80"
             ctx.fillRect(0, 0, S, S)
 
             const offset = .04 * S
@@ -72,15 +72,15 @@ export class TexturesCanvas {
 
             const offset2 = .15 * S
             const s2 = S - 2 * offset2
-            ctx.fillStyle = "#444444"
+            ctx.fillStyle = "#6b5e5e"
             ctx.fillRect(offset2, offset2, s2, s2)
 
             ctx.fillStyle = "#ffffff"
             ctx.arc(S * .5, S * .5, S * .3, 0, Math.PI * 2)
             ctx.fill()
 
+            ctx.fillStyle = "#54574f"
             for (let i = 0; i < 10; i++) {
-                ctx.fillStyle = "#444444"
                 ctx.fillRect(offset + i * (S - 2 * offset) / 10, offset + .01 * S, S * .03, S * .9)
                 ctx.fillRect(offset + i * (S - 2 * offset) / 10, S - (.15 * S), S * .03, S * .09)
 
