@@ -322,29 +322,32 @@ export const createWaySingle = (options: T_LONG_WAY, isLastHelix: boolean): { ge
     segments2.forEach((s: T_ROOM, i) => {
         if (s.type === 'FLOOR') {
 
-            let typeColumn: T_SEG_DECOR = null 
+            let typeDecor: T_SEG_DECOR = null 
             const ran = Math.random()
             if (ran < .4) {
                 if (s.w > 2 && s.d > 2) {
-                    typeColumn = 'ARC_HOUSE' 
+                    typeDecor = 'ARC_HOUSE' 
                 }
             } else if (ran < .8) {
                 if (Math.random() < .8) {
-                    typeColumn = 'TREES'
+                    typeDecor = 'TREES'
                 }
             }
             if (i === segments2.length - 1 && isLastHelix) {
-                typeColumn = 'LAST_BIG_HELIX' 
+                typeDecor = 'LAST_BIG_HELIX' 
             } else {
                 if (s.w > 6 && s.d > 6 && i !== 0) {
-                    typeColumn = 'SPHERE_HELIX'
+                    typeDecor = 'SPHERE_HELIX'
                 }
+            }
+            if (i === 0) {
+                typeDecor = null
             }
 
             const offsetAxis = s.dir.clone().multiplyScalar(.4)
             const offsetAxisM = s.dir.clone().multiplyScalar(-.4)
 
-            if (typeColumn === 'TREES') {
+            if (typeDecor === 'TREES') {
                 
                 const Y = new THREE.Vector3(0, 0, 0)
                 const offsetDir1_0 = s.dir1.clone().multiplyScalar(.3).add(offsetAxis).add(s.p0).add(Y)
@@ -361,7 +364,7 @@ export const createWaySingle = (options: T_LONG_WAY, isLastHelix: boolean): { ge
                 const r3 = createTree00(1, Math.random() * 3 + 1)
                 moveAndFill(r3, offsetDir2_1)
 
-            } else if (typeColumn === 'ARC_HOUSE') {
+            } else if (typeDecor === 'ARC_HOUSE') {
                 
                 const offsetDir1_0 = s.dir1.clone().multiplyScalar(.4).add(offsetAxis).add(s.p0)
                 const offsetDir1_1 = s.dir0.clone().multiplyScalar(-.4).add(offsetAxis).add(s.p3)
@@ -391,7 +394,7 @@ export const createWaySingle = (options: T_LONG_WAY, isLastHelix: boolean): { ge
                 _M.fill(arc.c, c)
                 _M.fill(arc.uv, uv)
 
-            } else if (typeColumn === 'LAST_BIG_HELIX') {
+            } else if (typeDecor === 'LAST_BIG_HELIX') {
                 
                 const rPlatform = Math.random() * 5 + 2
                 const hHelix = rPlatform + Math.random() * 40
@@ -421,7 +424,7 @@ export const createWaySingle = (options: T_LONG_WAY, isLastHelix: boolean): { ge
                 _M.fill(pl.uv, uv)
                 _M.fill(pl.vCollide, vCollide)
 
-            } else if (typeColumn === 'SPHERE_HELIX') {
+            } else if (typeDecor === 'SPHERE_HELIX') {
                 
                 const r = createSphereHel()
                 const center = s.axisP0.clone().add(s.axisP1.clone().sub(s.axisP0).multiplyScalar(.5)) 

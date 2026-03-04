@@ -11,7 +11,7 @@ export const pipelinePlay = async (root: Root, currentIndexLevel = 0) => {
     } = root
 
     ticker.on(() => {
-        if (studio.camera.position.y < -20) {
+        if (studio.camera.position.y < lab.getCurrentStartPoint().y - 20) {
             const startPoint = lab.getCurrentStartPoint().clone().add(new THREE.Vector3(1, 2, 0))
             phisics.setPlayerPosition(...startPoint.toArray())
             studio.camera.rotation.y = Math.PI * 1.5
@@ -40,7 +40,7 @@ export const pipelinePlay = async (root: Root, currentIndexLevel = 0) => {
     const themesKeys = Object.keys(THEMES)
     const makeRandomKeys = () => {
         const copyArr = [...themesKeys]
-        const newArr = []
+        const newArr = ['GRAY_GRAY']
         while (copyArr.length) {
             const index = Math.floor(Math.random() * copyArr.length)
             newArr.push(copyArr[index])
@@ -62,7 +62,8 @@ export const pipelinePlay = async (root: Root, currentIndexLevel = 0) => {
         const theme = THEMES[keyTheme]
 
         const { colorB, colorF, fogFar } = theme
-        const time = 120000
+        //const time = 120000
+        const time = 60000
         
         studio.animateBackgroundTo(colorB, time)
         studio.animateFogTo(fogFar, colorF, time)
@@ -73,7 +74,7 @@ export const pipelinePlay = async (root: Root, currentIndexLevel = 0) => {
         const prevDirLightIntensity = studio.dirLight.intensity
         const newDirLightIntensity = Math.random() * 3  + 2
         new Tween(obj)
-            .easing(Easing.Exponential.InOut)
+            .easing(Easing.Linear.In)
             .to({ v: 1 }, time)
             .onUpdate(() => {
                 materials.materialLab.envMapIntensity = (1 - obj.v) * prevAOIntensity + obj.v * newAoMapIntensity

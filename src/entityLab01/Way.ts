@@ -5,6 +5,7 @@ import { T_ROOM } from "types/GeomTypes"
 import { IS_USE_WORKER } from '../constants/CONSTANTS'
 import { GeometryWorker } from "./GeometryWorker"
 import { GeometryNormal } from "./GeometryNormal"
+import * as TWEEN from '@tweenjs/tween.js'
 
 export const VERT_COUNT = 700000 * 3 * 4
 export const UV_COUNT = 700000 * 2 * 4
@@ -54,7 +55,9 @@ export class Way {
         this._mCollision.name = 'Col|' + this.name
     }
 
-    async build (startPoint: THREE.Vector3) {
+    async build (startPoint: THREE.Vector3, mode = 'normal') {
+        this._m.scale.set(1, 0, 1)
+
         const { centerPoint, endPoint } = await this._builderGeometries.rebuild()
 
         this.startPoint = startPoint.clone()
@@ -72,5 +75,14 @@ export class Way {
         this._mCollision.geometry.attributes.position.needsUpdate = true
         this._mCollision.position.copy(this.startPoint)
         this._root.phisics.addMeshToCollision(this._mCollision)
+
+        const obj = { v: 0 }
+        new TWEEN.Tween(obj)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .to({ v: 1 }, mode === 'fast' ? 2500 : 12000)
+            .onUpdate(() => {
+                this._m.scale.set(1, obj.v, 1)
+            })
+            .start()
     }
 }

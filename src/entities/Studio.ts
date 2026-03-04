@@ -18,6 +18,7 @@ import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
 import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js'
 import { Root } from "../index"
 import { Tween, Easing } from '@tweenjs/tween.js'
+import { PLAYER_POS_START } from '../constants/CONSTANTS'
 
 // const params = {
 //     threshold: 0.65,
@@ -48,7 +49,7 @@ export class Studio {
         this._root = root
         this.containerDom = document.getElementById('container-game')
         this.camera = new PerspectiveCamera(45, window.innerWidth / window.innerHeight, .1, 1000)
-        this.camera.position.set(3, 2, 0)
+        this.camera.position.fromArray(PLAYER_POS_START)
         this.camera.lookAt(150, 0, 0)
 
         this.scene = new Scene()
@@ -202,7 +203,8 @@ export class Studio {
         return new Promise(res => {        
             const obj = { v: 0 }
             new Tween(obj)
-                .easing(Easing.Exponential.InOut)
+                //.easing(Easing.Exponential.InOut)
+                .easing(Easing.Linear.In)
                 .to({ v: 1 }, time)
                 .onUpdate(() => {
                     this.fog.color.lerpColors(startColor, endColor, obj.v)
@@ -222,7 +224,7 @@ export class Studio {
         return new Promise(res => {        
             const obj = { v: 0 }
             new Tween(obj)
-                .easing(Easing.Exponential.InOut)
+                .easing(Easing.Linear.In)
                 .to({ v: 1 }, time)
                 .onUpdate(() => {
                     // @ts-ignore

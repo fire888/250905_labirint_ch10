@@ -1,6 +1,7 @@
 import { Root } from '../index'
 import { update } from '@tweenjs/tween.js'
 import { IS_DEV_START_ORBIT } from '../constants/CONSTANTS'
+import { PLAYER_POS_START } from '../constants/CONSTANTS'
 
 export const pipelineInit = async (root: Root) => {
     const {
@@ -34,10 +35,10 @@ export const pipelineInit = async (root: Root) => {
     ticker.on(studio.render.bind(studio))
 
     phisics.init(root)
-    phisics.createPlayerPhisicsBody([3, 2, 0])
+    phisics.createPlayerPhisicsBody(PLAYER_POS_START)
     
     await lab.init(root)
-    await lab.buildNext()
+    await lab.buildNext('fast')
 
     await backTower.init(root)
     const TOWER_OFFSET = 900

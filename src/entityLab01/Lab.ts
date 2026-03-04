@@ -28,7 +28,7 @@ export class Labyrinth {
         this._buildTest()
     }
 
-    async buildNext () {
+    async buildNext (key = 'normal') {
         if (Labyrinth.isCanBuild === false) { return }
         Labyrinth.isCanBuild = false
         setTimeout(() => { Labyrinth.isCanBuild = true }, 5000)
@@ -44,8 +44,8 @@ export class Labyrinth {
         const nextWay = this._currentWay && this._currentWay.name === 'way1' 
             ? this._way2
             : this._way1
-
-        await nextWay.build(startPoint)
+    
+        await nextWay.build(startPoint, key)
 
         this._mTriggerNextBuild.name += '|_'
         this._mTriggerNextBuild.position.copy(nextWay.centerPoint)
