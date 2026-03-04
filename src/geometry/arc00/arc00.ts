@@ -25,7 +25,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
         const maxAngle = Math.PI * (Math.random() * .7 + .55)
         const diffAngle = maxAngle - currAng
         const l = Math.abs((w - wP) * diffAngle)
-        const count = Math.max(1, Math.round(l / wSegment))
+        let count = Math.max(3, Math.round(l / wSegment))
         const stepAngle = diffAngle / count
         const scaleX = Math.abs((w - wP) / Math.cos(maxAngle))
 
