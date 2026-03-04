@@ -22,7 +22,7 @@ export const createArc00 = (w: number = 1, d: number = 20): IArrayForBuffers => 
     { // arc
         const arrPoints0 = []
         let currAng = Math.PI * .5
-        const maxAngle = Math.PI * (Math.random() * .7 + .55)
+        const maxAngle = Math.PI * (Math.random() * .8 + .55)
         const diffAngle = maxAngle - currAng
         const l = Math.abs((w - wP) * diffAngle)
         let count = Math.max(3, Math.round(l / wSegment))

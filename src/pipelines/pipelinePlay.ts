@@ -9,7 +9,7 @@ export const pipelinePlay = async (root: Root, currentIndexLevel = 0) => {
     } = root
 
     ticker.on(() => {
-        if (studio.camera.position.y < -12) {
+        if (studio.camera.position.y < -20) {
             const startPoint = lab.getCurrentStartPoint().clone().add(new THREE.Vector3(1, 2, 0))
             phisics.setPlayerPosition(...startPoint.toArray())
             studio.camera.rotation.y = Math.PI * 1.5
