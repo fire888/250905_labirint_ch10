@@ -1,25 +1,17 @@
 import { Root } from '../index'
+import * as THREE from 'three'
 
 export const pipelinePlay = async (root: Root, currentIndexLevel = 0) => {
     console.log('[MESSAGE:] START PLAY')
 
     const {
-        studio,
-        controls,
-        lab,
-        ticker,
-        phisics
+        studio, lab, ticker, phisics
     } = root
-
 
     ticker.on(() => {
         if (studio.camera.position.y < -12) {
-            phisics.setPlayerPosition(
-                lab._currentWay.startPoint.x, 
-                lab._currentWay.startPoint.y + 2, 
-                lab._currentWay.startPoint.z
-            )
+            const startPoint = lab.getCurrentStartPoint().clone().add(new THREE.Vector3(0, 2, 0))
+            phisics.setPlayerPosition(...startPoint.toArray())
         }
     })
-
 }

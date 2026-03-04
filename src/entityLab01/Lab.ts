@@ -60,6 +60,10 @@ export class Labyrinth {
         console.log('[MESSAGE:] COMPLETE BUILD LEVEL:', ((Date.now() - date) / 1000).toFixed(2), 'sec')
     }
 
+    getCurrentStartPoint () { 
+        return this._currentWay.startPoint
+    }
+
     private _createCollisionCenter() {
         const m = new THREE.Mesh(new THREE.BoxGeometry(7, 7, 7), this._root.materials.collision)
         m.name = 'collisionNextBuild'
