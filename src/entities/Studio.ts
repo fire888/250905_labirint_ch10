@@ -19,6 +19,7 @@ import { SSAOPass } from 'three/examples/jsm/postprocessing/SSAOPass.js'
 import { Root } from "../index"
 import { Tween, Easing } from '@tweenjs/tween.js'
 import { PLAYER_POS_START } from '../constants/CONSTANTS'
+import { START_THEME } from '../constants/CONSTANTS';
 
 // const params = {
 //     threshold: 0.65,
@@ -55,12 +56,10 @@ export class Studio {
         this.scene = new Scene()
         this.scene.add(this.camera)
 
-        const COLOR = 0x525c81
-        const COLOR_FOG = 0x4d67c1
+        const { colorB, colorF, fogFar } = START_THEME
 
-        // this.scene.environment = root.texturesCanvas.env
-        this.scene.background = new THREE.Color(COLOR)
-        this.fog = new THREE.Fog(COLOR_FOG, 90, 200)
+        this.scene.background = new THREE.Color().fromArray(colorB)
+        this.fog = new THREE.Fog(new THREE.Color().fromArray(colorF), 1, fogFar)
 
         this.dirLight = new DirectionalLight(0xffffff, 5.5)
         this.dirLight.position.set(-3, 3, 2)
@@ -96,9 +95,6 @@ export class Studio {
     }
 
     render () {
-        //this.camera.getWorldPosition(this.spotLight.position)
-        //this.spotLight.position.y += .1
-
         if (this.composer) {
             this.composer.render(140)
         } else {
