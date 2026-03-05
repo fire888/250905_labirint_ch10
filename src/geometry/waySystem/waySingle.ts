@@ -296,7 +296,7 @@ export type T_LONG_WAY = {
 
 type T_SEG_DECOR = 'ARC_HOUSE' | 'TREES' | 'LAST_BIG_HELIX' | 'SPHERE_HELIX' | null
 
-export const createWaySingle = (options: T_LONG_WAY, isLastHelix: boolean): { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
+export const createWaySingle = (options: T_LONG_WAY, isSideWay: boolean): { geomData: IArrayForBuffers, segments: T_ROOM[] } => {
     const { p0, dir0, p1, dir1 } = options
 
     const segments = breakDistanceToSegments(p0, dir0, p1, dir1)
@@ -333,14 +333,14 @@ export const createWaySingle = (options: T_LONG_WAY, isLastHelix: boolean): { ge
                     typeDecor = 'TREES'
                 }
             }
-            if (i === segments2.length - 1 && isLastHelix) {
+            if (i === segments2.length - 1 && isSideWay) {
                 typeDecor = 'LAST_BIG_HELIX' 
             } else {
                 if (s.w > 6 && s.d > 6 && i !== 0) {
                     typeDecor = 'SPHERE_HELIX'
                 }
             }
-            if (i === 0) {
+            if (i === 0 && !isSideWay) {
                 typeDecor = null
             }
 

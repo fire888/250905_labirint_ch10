@@ -40,7 +40,7 @@ export const pipelinePlay = async (root: Root, currentIndexLevel = 0) => {
     const themesKeys = Object.keys(THEMES)
     const makeRandomKeys = () => {
         const copyArr = [...themesKeys]
-        const newArr = ['GRAY_GRAY']
+        const newArr = []
         while (copyArr.length) {
             const index = Math.floor(Math.random() * copyArr.length)
             newArr.push(copyArr[index])
